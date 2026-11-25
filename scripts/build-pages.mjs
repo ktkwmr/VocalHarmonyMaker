@@ -25,7 +25,7 @@ import { fileURLToPath } from "node:url";
 import { renderPage, ORIGIN, APP_PATH, PUBLISHED, pagePath } from "./pages/layout.mjs";
 
 // Articles, in footer order (also listed in index.html: intro.body, and the top page ktkwmr/ktkwmr.com)
-const PAGES = ["guide", "minus-one", "learn-by-ear", "harmony", "chords-and-key", "how-it-works", "better-results", "faq"];
+const PAGES = ["guide", "harmony", "chords-and-key", "how-it-works", "faq"];
 // Site information (operator and privacy policy)
 const INFO_PAGES = ["about", "privacy"];
 
@@ -60,7 +60,7 @@ function jsonLdFor(lang, page) {
       url,
       inLanguage: lang,
       ...(page.modified ? { dateModified: page.modified } : {}),
-      isPartOf: { "@type": "WebSite", name: "Band Stem Mixer", url: ORIGIN + APP_PATH[lang] },
+      isPartOf: { "@type": "WebSite", name: "Vocal Harmony Maker", url: ORIGIN + APP_PATH[lang] },
     };
   }
   if (page.faq) {
@@ -88,7 +88,7 @@ function jsonLdFor(lang, page) {
     author,
     publisher: author,
     image: ORIGIN + "/vocalharmonymaker/og-image.png",
-    isPartOf: { "@type": "WebSite", name: "Band Stem Mixer", url: ORIGIN + APP_PATH[lang] },
+    isPartOf: { "@type": "WebSite", name: "Vocal Harmony Maker", url: ORIGIN + APP_PATH[lang] },
   };
 }
 

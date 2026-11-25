@@ -11,7 +11,7 @@ export default {
     description:
       "Make a harmony part a 3rd or a 5th above or below the vocal melody of a song, as a sung voice and as a guide tone, and practice singing it. How to read the screen, a step-by-step practice plan, editing the chords, and the limits.",
     body: () => `
-<p class="lead">Singing a harmony is hard mainly because the melody pulls you onto it. Band Stem Mixer can make a harmony part from the vocals of a song: it finds the chords, follows the melody, and adds the harmony as two extra parts in the mixer — the singer's own voice moved to the harmony notes, and a plain guide tone. You can then turn each one up or down while you learn.</p>
+<p class="lead">Singing a harmony is hard mainly because the melody pulls you onto it. Vocal Harmony Maker makes a harmony part from the vocals of a song: it finds the chords, follows the melody, and adds the harmony as two extra parts in the mixer — the singer's own voice moved to the harmony notes, and a plain guide tone. You can then turn each one up or down while you learn.</p>
 
 <nav class="toc" aria-label="Contents"><b>Contents</b><ol>
   <li><a href="#make">Making the harmony</a></li>
@@ -24,7 +24,7 @@ export default {
 
 <h2 id="make">Making the harmony</h2>
 <ol>
-  <li><b>Separate the song</b> into four parts (see <a href="../guide/">how to use</a>).</li>
+  <li><b>Separate the song</b> into the vocals and the backing (see <a href="../guide/">how to use</a>).</li>
   <li><b>Wait a little more.</b> Right after separating, the app finds the chords and makes the harmony on its own, with the part chosen next to the button (upper, a 3rd above, at first). It takes from a few seconds to about a minute, depending on the song and the device. You can already play the song while it works.</li>
   <li><b>To use another part</b>, choose it next to the button – upper (a 3rd above), lower (a 3rd below), or a 5th above or below – and press <b>“Remake the harmony”</b>.</li>
 </ol>
@@ -32,11 +32,11 @@ export default {
 
 <h2 id="screen">Reading the screen</h2>
 <figure class="shot">
-  ${img("en", "harmony", "The mixer after making a harmony: the key control (all parts but drums), the Remake the harmony button and the part (Upper, 3rd above), BPM 120, a scrolling view with chord names on top, the vocal melody as a grey line and the harmony notes as black bars, and two new rows: Harmony (voice) and Harmony guide tone. Numbers 1 to 7 mark them.")}
+  ${img("en", "harmony", "The mixer after making a harmony: the key control, the Remake the harmony button and the part (Upper, 3rd above), BPM 120, a scrolling view with chord names on top, the vocal melody as a grey line and the harmony notes as black bars, and two new rows: Harmony (voice) and Harmony guide tone. Numbers 1 to 7 mark them.")}
   <figcaption>The numbers match the list below. The song is a made-up one.</figcaption>
 </figure>
 <ol>
-  <li><b>Key</b> – Moves every part except the drums, and the harmony with them, by semitones. See <a href="../chords-and-key/">chords and key change</a>.</li>
+  <li><b>Key</b> – Moves the vocals and the backing, and the harmony with them, by semitones. See <a href="../chords-and-key/">chords and key change</a>.</li>
   <li><b>Remake the harmony</b> – Makes the harmony again with the part (3) or the chords you changed.</li>
   <li><b>The harmony part</b> – 3rd or 5th, above or below.</li>
   <li><b>BPM</b> – The tempo found in the song. The chords change on its beats.</li>
@@ -65,7 +65,7 @@ export default {
   <li><b>Listen.</b> Solo the guide tone (S) and listen to the harmony on its own a few times. Then add the vocals (S on both) to hear how the two lines fit.</li>
   <li><b>Sing with the guide.</b> Turn the guide tone on (its M; it starts muted) and keep the vocals on, and sing the harmony along with the guide. Turn the harmony voice off (M) for now.</li>
   <li><b>Lower the help.</b> Turn the guide tone down step by step — 60%, 30% — until you are carrying the harmony yourself against the lead vocal.</li>
-  <li><b>Sing it alone.</b> Mute the guide tone and the harmony voice and sing the harmony against the lead and the band. To check yourself, unmute the harmony voice for a moment.</li>
+  <li><b>Sing it alone.</b> Mute the guide tone and the harmony voice and sing the harmony against the lead and the backing. To check yourself, unmute the harmony voice for a moment.</li>
 </ol>
 <div class="note"><p>Want to sing the melody against a harmony instead? Mute the vocals and keep the harmony voice on. To fit your range, move the key (−/+); the harmony follows.</p></div>
 <p>Save what you made with ↓ or “Save this mix (MP3)” to practice on your phone. The harmony is not kept in the app after you reload.</p>
@@ -84,7 +84,7 @@ export default {
   <li><b>The harmony voice is processed sound.</b> Moving a voice a 3rd or more changes its character a little, and anything that leaked into the vocal part moves with it. Pitch correction keeps it steady; for a pure, exact pitch, use the guide tone.</li>
   <li><b>A harmony is a suggestion, not the record.</b> If the song has its own harmony part, learn that one by ear; the app's harmony is a starting point or a practice tool.</li>
 </ul>
-<p>Use songs you have the rights to use; see <a href="../minus-one/#rights">which songs you can use</a>.</p>
+<p>Use songs you have the rights to use; see <a href="../faq/#rights">which songs you can use</a>.</p>
 `,
   },
   ja: {
@@ -94,7 +94,7 @@ export default {
     description:
       "曲のボーカルの旋律の 3 度・5 度上（下）にハモリパートを作り、ハモリの声とガイド音で練習する方法。画面の見方、4 ステップの練習法、コードの直し方、限界まで。",
     body: () => `
-<p class="lead">ハモリが難しいのは、主旋律に引っぱられてしまうからです。Band Stem Mixer は、曲のボーカルからハモリパートを作れます。コードを推定し、旋律を追って、ハモリを 2 つのパートとしてミキサーに足します。歌い手の声をハモリの音程に変えた「ハモリ（声）」と、単純な「ガイド音」です。覚える段階に合わせて、それぞれの音量を上げ下げしながら練習できます。</p>
+<p class="lead">ハモリが難しいのは、主旋律に引っぱられてしまうからです。Vocal Harmony Maker は、曲のボーカルからハモリパートを作ります。コードを推定し、旋律を追って、ハモリを 2 つのパートとしてミキサーに足します。歌い手の声をハモリの音程に変えた「ハモリ（声）」と、単純な「ガイド音」です。覚える段階に合わせて、それぞれの音量を上げ下げしながら練習できます。</p>
 
 <nav class="toc" aria-label="目次"><b>目次</b><ol>
   <li><a href="#make">ハモリを作る</a></li>
@@ -115,11 +115,11 @@ export default {
 
 <h2 id="screen">画面の見方</h2>
 <figure class="shot">
-  ${img("ja", "harmony", "ハモリを作ったあとのミキサー。キー（ドラム以外）の − と ＋、「ハモリを再生成」ボタンとパート（上ハモ（3 度上））、BPM 120、上にコード名、灰色の線でボーカルの音程、黒い帯でハモリの音が流れる表示、増えた 2 行「ハモリ（声）」「ハモリのガイド音」。1〜7 の番号付き。")}
+  ${img("ja", "harmony", "ハモリを作ったあとのミキサー。キーの − と ＋、「ハモリを再生成」ボタンとパート（上ハモ（3 度上））、BPM 120、上にコード名、灰色の線でボーカルの音程、黒い帯でハモリの音が流れる表示、増えた 2 行「ハモリ（声）」「ハモリのガイド音」。1〜7 の番号付き。")}
   <figcaption>番号は下の説明と対応しています。曲は架空のものです。</figcaption>
 </figure>
 <ol>
-  <li><b>キー</b> – ドラム以外のパートと、ハモリを、半音ずつ上げ下げします。<a href="../chords-and-key/">コード表示とキー変更</a>をご覧ください。</li>
+  <li><b>キー</b> – ボーカルと伴奏、ハモリを一緒に、半音ずつ上げ下げします。<a href="../chords-and-key/">コード表示とキー変更</a>をご覧ください。</li>
   <li><b>ハモリを再生成</b> – 変えたパート（3）やコードで、ハモリを作り直します。</li>
   <li><b>ハモリのパート</b> – 3 度か 5 度、上か下か。</li>
   <li><b>BPM</b> – 曲から推定したテンポ。コードはこの拍の上で切り替わります。</li>
@@ -148,7 +148,7 @@ export default {
   <li><b>聞く</b> – ガイド音だけをソロ（S）にして、ハモリを何度か聞きます。次にボーカルも S にして、2 つの線の重なり方を聞きます。</li>
   <li><b>ガイドと一緒に歌う</b> – ガイド音の M を押してミュートを外し（最初はミュート）、ボーカルとガイド音を鳴らしたまま、ガイドに合わせてハモリを歌います。ハモリ（声）は、まずはミュート（M）しておきます。</li>
   <li><b>助けを減らす</b> – ガイド音を 60%、30% と少しずつ下げ、主旋律に対して自分でハモリを保てるようにします。</li>
-  <li><b>一人で歌う</b> – ガイド音とハモリ（声）をミュートし、主旋律とバンドに対してハモリを歌います。確かめたいときは、ハモリ（声）を少しだけ戻します。</li>
+  <li><b>一人で歌う</b> – ガイド音とハモリ（声）をミュートし、主旋律と伴奏に対してハモリを歌います。確かめたいときは、ハモリ（声）を少しだけ戻します。</li>
 </ol>
 <div class="note"><p>逆に、ハモリに対して主旋律を歌う練習もできます。ボーカルをミュートして、ハモリ（声）を鳴らします。声の高さが合わないときは、キー（− / ＋）を動かすと、ハモリも一緒に移ります。</p></div>
 <p>作ったものは ↓ や「このミックスを保存（MP3）」で保存すると、スマホでも練習できます。ハモリはページを読み込み直すと消えます。</p>
@@ -167,7 +167,7 @@ export default {
   <li><b>ハモリ（声）は加工した音です。</b>声の音程を 3 度以上動かすと声の感じが少し変わり、ボーカルのパートに残っているほかの音も一緒に動きます。音程補正で安定させていますが、混じりけのない正確な音程はガイド音で確かめてください。</li>
   <li><b>原曲のハモリとは限りません。</b>曲にハモリのパートがあるなら、それは耳で覚えてください。アプリのハモリは、練習のきっかけや練習用の素材です。</li>
 </ul>
-<p>使う曲は、使う権利のあるものにしてください。<a href="../minus-one/#rights">使える曲</a>もご覧ください。</p>
+<p>使う曲は、使う権利のあるものにしてください。<a href="../faq/#rights">使える曲</a>もご覧ください。</p>
 `,
   },
 };

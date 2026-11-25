@@ -1,154 +1,148 @@
-// Article: how AI music source separation works (Demucs htdemucs), and its limits.
-// Facts about Demucs are from its README and paper (Rouard, Massa, Défossez, ICASSP 2023) and
-// facebookresearch/demucs#327 (the weights' license); see docs/article-review.md.
-import { MODEL_MB, CHUNK_SEC, chunksFor } from "./app.mjs";
-
-const EXAMPLE_SEC = 4 * 60; // a 4-minute song
+// Article: how the app makes a harmony from a song: separating the vocals (Spleeter 2stems), the chords, the
+// melody, choosing the harmony notes, and shifting the voice. Facts about Spleeter are from its README and paper
+// (Hennequin, Khlif, Voituret, Moussallam, JOSS 2020); see docs/article-review.md.
+import { MODEL_MB, SPLIT_SEC, TOP_KHZ } from "./app.mjs";
 
 export default {
   slug: "how-it-works",
   en: {
-    title: "How AI Music Source Separation Works (Demucs) — and Why It Is Not Perfect",
-    heading: "How AI music separation works, and why it is not perfect",
-    nav: "How AI separation works",
+    title: "How a Harmony Is Made from a Song's Vocals: AI Separation, Chords, and Pitch Shifting",
+    heading: "How the harmony is made from the vocals",
+    nav: "How it works",
     description:
-      "How an AI model like Demucs splits a mixed song into vocals, drums, bass, and other: what it learns, why sounds leak between parts, why guitar and keys stay together, how Band Stem Mixer runs it in your browser, and how it finds chords, makes harmonies, and changes the key.",
+      "How Vocal Harmony Maker turns a song into a harmony part: separating the vocals with the AI model Spleeter, finding the beats and chords, following the melody, choosing harmony notes that fit the key and the chord, and moving the singer's voice to them.",
     body: () => `
-<p class="lead">Once a song is mixed, the instruments are added together into one waveform (two, in stereo). There is no switch that takes them apart again. AI separation works by <b>estimating</b> what each instrument must have sounded like — very well, but not perfectly. Knowing how helps you get the most out of it.</p>
+<p class="lead">Vocal Harmony Maker turns a mixed song into a second voice in five steps. Only the first uses AI; the others are classic signal-processing methods running in your browser. Knowing what each step does helps you understand when the result is good and when it needs your help.</p>
 
 <nav class="toc" aria-label="Contents"><b>Contents</b><ol>
-  <li><a href="#problem">Why separating a mix is hard</a></li>
-  <li><a href="#learn">How the AI learns to separate</a></li>
-  <li><a href="#demucs">The model: Demucs (htdemucs)</a></li>
-  <li><a href="#parts">Why four parts, and why guitar and keys stay together</a></li>
-  <li><a href="#leak">Why sounds leak between parts</a></li>
-  <li><a href="#browser">How it runs in your browser</a></li>
-  <li><a href="#chords">Chords, harmony, and key change (without AI)</a></li>
+  <li><a href="#separate">1. Separating the vocals (AI)</a></li>
+  <li><a href="#chords">2. Beats, tempo, and chords</a></li>
+  <li><a href="#melody">3. Following the melody</a></li>
+  <li><a href="#notes">4. Choosing the harmony notes</a></li>
+  <li><a href="#voice">5. Moving the voice to the harmony</a></li>
+  <li><a href="#browser">Running it all in your browser</a></li>
+  <li><a href="#limits">Why it is not perfect</a></li>
 </ol></nav>
 
-<h2 id="problem">Why separating a mix is hard</h2>
-<p>Instruments in a band share the same range of frequencies. A bass note's harmonics overlap the guitar; a snare hit spreads over almost every frequency; a singer and a guitar can play the same note at the same time. In the mixed recording these sounds are added together, and many different combinations of instruments could have produced the same mix. Older methods used simple tricks — for example removing what is in the center of a stereo mix to remove the vocals — which also removed the bass and the kick drum, and left the vocal reverb behind.</p>
-
-<h2 id="learn">How the AI learns to separate</h2>
-<p>A separation model is trained on songs for which the separate recordings of each part (the “stems”) are available. During training it hears the mix, makes its guess for each part, and is corrected by comparing the guess with the real stems — many thousands of times, across many songs. It learns what a voice, a bass, and a drum kit typically sound like, and uses that knowledge to pull them apart in songs it has never heard.</p>
-<p>Because the model learned from examples, it does best on music like what it was trained on — mainly pop and rock with a typical band setup — and can be less sure with unusual instruments or sounds.</p>
-
-<h2 id="demucs">The model: Demucs (htdemucs)</h2>
-<p>Band Stem Mixer uses <b>Demucs</b>, a music separation model published by Meta AI researchers, in its <b>Hybrid Transformer</b> version (<code>htdemucs</code>, Rouard, Massa, and Défossez, ICASSP 2023):</p>
+<h2 id="separate">1. Separating the vocals (AI)</h2>
+<p>Once a song is mixed, the voice and the instruments are added together into one waveform (two, in stereo), and there is no switch that takes them apart again. Older tricks, such as removing what sits in the center of a stereo mix, also removed the bass and the kick drum and left the reverb of the voice behind. An AI separation model instead <b>estimates</b> what the voice alone must have sounded like.</p>
+<p>The app uses <b>Spleeter</b>, a separation tool released by the music streaming service Deezer in 2019, in its two-part version (<b>2stems</b>: vocals and accompaniment). How it works, briefly:</p>
 <ul>
-  <li><b>Hybrid</b> – It looks at the sound in two ways at once: as a waveform (how the signal moves over time) and as a spectrogram (which frequencies are present at each moment). Each view is better at some sounds: sharp drum hits are clear in the waveform, held notes in the spectrogram.</li>
-  <li><b>Transformer</b> – In its middle, a Transformer (the type of neural network used in many recent AI models) relates every moment of the section to every other, and the two views to each other.</li>
-  <li><b>Training data</b> – According to the Demucs documentation, it was trained on the MUSDB HQ dataset plus 800 extra songs.</li>
-  <li><b>Accuracy</b> – The documentation reports a signal-to-distortion ratio (SDR) of 9.00 dB on the MUSDB HQ test set. SDR measures how close the separated parts are to the real stems; it is a standard way to compare models, not a measure of how good it sounds to you.</li>
+  <li>The sound is turned into a <b>spectrogram</b>: how strong each frequency is at each moment.</li>
+  <li>For each part, a neural network of the <b>U-Net</b> type (a 12-layer convolutional network: 6 layers that condense the picture and 6 that expand it again) looks at the spectrogram of the mix and estimates a <b>soft mask</b>: for every frequency at every moment, how much of the sound belongs to that part. Deezer trained it on its own internal collections of songs whose separate recordings were available, by comparing the masked mix with the real parts many times over.</li>
+  <li>The app compares the estimates of the two parts, so every frequency at every moment is shared between the vocals and the accompaniment, applies the shares to the mix, and turns the result back into sound.</li>
 </ul>
-<p>The trained model (its “weights”) is provided by Meta <b>for scientific purposes only</b> and is not covered by the MIT license of the Demucs code. This is why Band Stem Mixer is non-commercial, with no ads.</p>
+<p>Spleeter's code and trained models are released under the MIT License, so they can be used in any kind of project. The app uses the version converted to the ONNX format by the open-source speech toolkit sherpa-onnx (Apache License 2.0), and serves it from this site.</p>
+<p>The app only needs the vocals, so the two-part model is enough: it is light (about ${MODEL_MB} MB) and fast, which matters when it runs on a phone.</p>
 
-<h2 id="parts">Why four parts, and why guitar and keys stay together</h2>
-<p>The four parts — vocals, drums, bass, and other — come from the datasets the model was trained on, which provide stems in those four groups. “Other” is everything else: guitars, keys, synths, strings, horns. The model never learned to tell those apart, so they come out together.</p>
-<p>Demucs also has an experimental six-part version that adds guitar and piano. Its own documentation says guitar quality seems okay but piano has a lot of bleeding and artifacts, and it needs more memory; it ran out of memory in a browser during our tests, so Band Stem Mixer uses the four-part model.</p>
-
-<h2 id="leak">Why sounds leak between parts</h2>
-<p>The model's output is its best estimate, so some sounds end up in the wrong part, or in two parts at once (called <b>bleeding</b>):</p>
+<h2 id="chords">2. Beats, tempo, and chords</h2>
+<p>A harmony note has to fit the chord at that moment, so the app first finds the chords, from the separated accompaniment, where the voice no longer gets in the way:</p>
 <ul>
-  <li>Sounds that share frequencies and timing are hardest: the kick drum and the bass, a sung note doubled by a guitar.</li>
-  <li><b>Reverb and effects</b> blur instruments into each other, so the echo of a voice can stay in “Other”.</li>
-  <li>Loud, heavily compressed or distorted mixes give the model less to go on. Lossy files (low-bitrate MP3) have already lost detail.</li>
-  <li>Instruments the model rarely heard in training can be split between parts — a synth bass may land partly in “Bass” and partly in “Other”.</li>
+  <li><b>Beats and tempo</b> – the moments where new sounds start, the interval between them that repeats most (autocorrelation), and the chain of beats that fits both best (dynamic programming, after D. Ellis, 2007). This gives the BPM and one cell per beat.</li>
+  <li><b>Chords</b> – for each beat, the strength of each of the 12 notes (a “chroma”) in the accompaniment, compared with the 24 major and minor chords; the low notes, where the bass plays, help find the root. A hidden Markov model keeps the chords from changing on every beat without reason.</li>
+  <li><b>Key</b> – the chroma of the whole song compared with the major and minor key profiles of Krumhansl and Kessler, together with how long each possible tonic chord lasts.</li>
 </ul>
-<p>For practice — muting your part or hearing a line clearly — this is rarely a problem. For tips, see <a href="../better-results/">how to get better separation</a>.</p>
 
-<h2 id="browser">How it runs in your browser</h2>
-<p>Usually a model like this runs on a server. Band Stem Mixer runs it on your own device, so your song is never uploaded:</p>
-<ul>
-  <li>The browser downloads the model (about ${MODEL_MB} MB, converted to the ONNX format) once and keeps it.</li>
-  <li><b>ONNX Runtime Web</b> runs the model, on the graphics chip (GPU) through WebGPU when the browser supports it, otherwise on the processor (CPU).</li>
-  <li>This model takes ${CHUNK_SEC} seconds of sound at a time, so the song is cut into sections that overlap by a quarter, and the overlaps are cross-faded so no seams can be heard. A 4-minute song is ${chunksFor(EXAMPLE_SEC)} sections.</li>
-  <li>Each section needs a lot of memory — about 1 GB while the model runs. That is why computers are much faster, and why some phones cannot finish.</li>
-</ul>
-<p>Once separated, the four parts are played together in sync, and the mixer only changes their volumes, so moving a fader is instant.</p>
+<h2 id="melody">3. Following the melody</h2>
+<p>The pitch of the separated vocals is measured about 40 times a second with the <b>YIN</b> method (de Cheveigné and Kawahara, 2002), which finds how often the waveform repeats itself. The pitch line is then cut into notes where it moves to another semitone; very short notes, such as the slide into a note, are joined to their neighbour.</p>
 
-<h2 id="chords">Chords, harmony, and key change (without AI)</h2>
-<p>The chords, the harmony, and the key change do not use an AI model. They are classic signal-processing methods, written in JavaScript and run in the browser, that work much better on the separated parts than on the full mix:</p>
+<h2 id="notes">4. Choosing the harmony notes</h2>
+<p>For each melody note, the app takes the note a 3rd (or a 5th) above or below <b>in the key of the song</b>, so the interval is sometimes major and sometimes minor, as a singer would sing it. If that note would clash with the chord at that moment, it moves to the nearest chord tone. Notes closer together than a moment are joined into phrases, so the harmony moves smoothly instead of stopping and starting. See <a href="../harmony/#which">upper or lower, 3rd or 5th</a> for what each part sounds like.</p>
+
+<h2 id="voice">5. Moving the voice to the harmony</h2>
 <ul>
-  <li><b>Beats and tempo</b> – the moments where new sounds start, the interval between them that repeats most (autocorrelation), and the chain of beats that fits both best (dynamic programming, after D. Ellis, 2007).</li>
-  <li><b>Chords</b> – for each beat, the strength of each of the 12 notes (a “chroma”) in the bass and “Other” parts, compared with the 24 major and minor chords; a hidden Markov model keeps the chords from changing on every beat without reason. Without guitar and vocals mixed in, the bass part makes the root of each chord much clearer.</li>
-  <li><b>Melody</b> – the pitch of the separated vocals, found with the YIN method and cut into notes.</li>
-  <li><b>Harmony voice</b> – the vocals moved to the harmony notes with TD-PSOLA, which repeats or skips single cycles of the voice, so the voice keeps its character. Pitch correction (like Auto-Tune) then pulls it onto the exact harmony notes.</li>
-  <li><b>Key change</b> – a phase vocoder that stretches each part in time by the pitch ratio and plays it back at the original length.</li>
+  <li><b>TD-PSOLA</b> (time-domain pitch-synchronous overlap-add) cuts the vocals into pieces one cycle of the voice long and lays them down closer together (higher) or further apart (lower). The length does not change, and the voice keeps its words and much of its character.</li>
+  <li><b>Pitch correction</b>, like Auto-Tune, then pulls each note onto the exact harmony note: without it, the harmony would copy every slip of the lead singer's pitch.</li>
+  <li>The <b>guide tone</b> is a plain synthesized tone on the same notes, steady and exact.</li>
 </ul>
-<p>Like the separation, these are estimates. See <a href="../chords-and-key/#limits">what to expect from the chords</a> and <a href="../harmony/#limits">from the harmony</a>.</p>
+<p>A key change uses another method, a <b>phase vocoder</b>, which stretches each part in time by the pitch ratio and plays it back at the original length.</p>
+
+<h2 id="browser">Running it all in your browser</h2>
+<ul>
+  <li>The browser downloads the model (about ${MODEL_MB} MB) once and keeps it. <b>ONNX Runtime Web</b> runs it, on the graphics chip (GPU) through WebGPU when the browser supports it, otherwise on the processor (CPU).</li>
+  <li>The song is processed about ${SPLIT_SEC} seconds at a time, so the memory needed stays small even for a long song. Frequencies up to about ${TOP_KHZ} kHz go through the model (Spleeter's own 16 kHz setting); the very top of the spectrum, where there is mostly cymbal shimmer and air, is kept in the accompaniment.</li>
+  <li>The chords, the melody, the harmony, and the key change are plain JavaScript in background threads (Web Workers), so the page stays responsive.</li>
+</ul>
+<p>Your song is never uploaded. Once everything is made, the four parts play together in sync, and the mixer only changes their volumes.</p>
+
+<h2 id="limits">Why it is not perfect</h2>
+<ul>
+  <li><b>Separation leaks.</b> Sounds that share frequencies and timing with the voice — a guitar doubling the melody, backing vocals, reverb — can stay in the vocals, and are then moved with the harmony voice.</li>
+  <li><b>Chords are estimated</b> as major and minor only; 7ths, tensions, and quick changes can be missed. You can type the right chord.</li>
+  <li><b>One key for the whole song</b>: a song that changes key partway is treated as one key.</li>
+  <li><b>Backing vocals</b> in the vocal part can confuse the melody: the app follows one line.</li>
+</ul>
+<p>See <a href="../chords-and-key/#limits">what to expect from the chords</a> and <a href="../harmony/#limits">from the harmony</a>.</p>
 `,
   },
   ja: {
-    title: "AI 音源分離の仕組み（Demucs）と、完璧に分かれない理由",
-    heading: "AI 音源分離の仕組みと、完璧に分かれない理由",
-    nav: "AI 音源分離の仕組み",
+    title: "曲のボーカルからハモリを作る仕組み：AI による分離・コード推定・ピッチシフト",
+    heading: "ボーカルからハモリを作る仕組み",
+    nav: "仕組み",
     description:
-      "Demucs などの AI がミックスされた曲をボーカル・ドラム・ベース・その他に分ける仕組み。何を学習しているか、なぜパートの間で音が混ざるか、なぜギターと鍵盤が分かれないか、ブラウザでどう動かしているか。コード推定・ハモリ・キー変更の仕組みも。",
+      "Vocal Harmony Maker が曲からハモリのパートを作るまで。AI モデル Spleeter によるボーカルの分離、拍とコードの推定、旋律の追跡、キーとコードに合うハモリの音の選び方、歌っている人の声の音程を変える方法。",
     body: () => `
-<p class="lead">ミックスされた曲では、楽器の音が足し合わされて 1 つ（ステレオなら 2 つ）の波形になっています。元に戻すスイッチはありません。AI による音源分離は、各楽器がどんな音だったはずかを<b>推定</b>する方法です。とてもよく推定できますが、完璧ではありません。仕組みを知っておくと、上手に使えます。</p>
+<p class="lead">Vocal Harmony Maker は、ミックスされた曲から 5 つの段階でもう一つの声を作ります。AI を使うのは最初の段階だけで、残りは昔からある信号処理の方法をブラウザの中で動かしています。それぞれが何をしているかを知ると、うまくいく場合と、手を貸したほうがよい場合が分かります。</p>
 
 <nav class="toc" aria-label="目次"><b>目次</b><ol>
-  <li><a href="#problem">ミックスを分けるのが難しい理由</a></li>
-  <li><a href="#learn">AI が分け方を学ぶ方法</a></li>
-  <li><a href="#demucs">使っているモデル：Demucs（htdemucs）</a></li>
-  <li><a href="#parts">4 パートである理由と、ギターと鍵盤が分かれない理由</a></li>
-  <li><a href="#leak">パートの間で音が混ざる理由</a></li>
-  <li><a href="#browser">ブラウザの中で動かす仕組み</a></li>
-  <li><a href="#chords">コード・ハモリ・キー変更の仕組み（AI なし）</a></li>
+  <li><a href="#separate">1. ボーカルを分離する（AI）</a></li>
+  <li><a href="#chords">2. 拍・テンポ・コード</a></li>
+  <li><a href="#melody">3. 旋律を追う</a></li>
+  <li><a href="#notes">4. ハモリの音を選ぶ</a></li>
+  <li><a href="#voice">5. 声をハモリの音に動かす</a></li>
+  <li><a href="#browser">すべてをブラウザの中で動かす</a></li>
+  <li><a href="#limits">完全ではない理由</a></li>
 </ol></nav>
 
-<h2 id="problem">ミックスを分けるのが難しい理由</h2>
-<p>バンドの楽器は、同じ周波数の範囲を共有しています。ベースの倍音はギターと重なり、スネアの音はほぼすべての周波数に広がり、歌とギターが同時に同じ音を出すこともあります。ミックスではこれらが足し合わされていて、同じミックスになる楽器の組み合わせはいくらでも考えられます。昔ながらの方法は、たとえば「ステレオの中央にある音を消してボーカルを消す」といった単純なもので、ベースやキックまで消え、ボーカルの残響は残ってしまいました。</p>
-
-<h2 id="learn">AI が分け方を学ぶ方法</h2>
-<p>分離のモデルは、パートごとの録音（ステム）がそろっている曲で学習します。学習中はミックスを聞いて各パートを推定し、本物のステムと比べて修正されることを、たくさんの曲で何千回も繰り返します。そうして、声・ベース・ドラムがふつうどんな音かを覚え、初めて聞く曲でもその知識でパートを分けます。</p>
-<p>例から学んでいるので、学習した音楽に近いもの（主にポップス・ロックの一般的なバンド編成）ほどうまく分けられ、珍しい楽器や音は苦手なことがあります。</p>
-
-<h2 id="demucs">使っているモデル：Demucs（htdemucs）</h2>
-<p>Band Stem Mixer は、Meta の研究者が公開した音源分離モデル <b>Demucs</b> の <b>Hybrid Transformer</b> 版（<code>htdemucs</code>。Rouard、Massa、Défossez、ICASSP 2023）を使っています。</p>
+<h2 id="separate">1. ボーカルを分離する（AI）</h2>
+<p>曲は一度ミックスされると、声と楽器が足し合わされて 1 つの波形（ステレオなら 2 つ）になり、元に戻すスイッチはありません。ステレオの真ん中にある音を消すといった昔の方法では、ベースやバスドラムも消え、声の残響は残りました。AI の分離モデルは、声だけならどう聞こえたはずかを<b>推定</b>します。</p>
+<p>このアプリは、音楽配信サービスの Deezer が 2019 年に公開した分離ツール <b>Spleeter</b> の 2 パート版（<b>2stems</b>：ボーカルと伴奏）を使っています。仕組みは次のとおりです。</p>
 <ul>
-  <li><b>ハイブリッド</b> – 音を 2 つの見方で同時に扱います。波形（信号が時間とともにどう動くか）と、スペクトログラム（各瞬間にどの周波数があるか）です。ドラムの鋭い音は波形で、伸ばした音はスペクトログラムで捉えやすく、それぞれ得意な音が違います。</li>
-  <li><b>Transformer</b> – 中心部には Transformer（最近の多くの AI で使われるニューラルネットワークの一種）があり、区間の中のあらゆる時点どうし、また 2 つの見方どうしを関連づけます。</li>
-  <li><b>学習データ</b> – Demucs の説明によると、MUSDB HQ データセットと、それとは別の 800 曲で学習しています。</li>
-  <li><b>精度</b> – 説明では、MUSDB HQ のテスト用の曲で SDR（信号対歪み比）9.00 dB とされています。SDR は分離したパートが本物のステムにどれだけ近いかを測る指標で、モデルどうしを比べるための標準的な数字です。聞いたときの良さを表すものではありません。</li>
+  <li>音を<b>スペクトログラム</b>（各瞬間にどの周波数がどれだけ強いか）に変えます。</li>
+  <li>パートごとに、<b>U-Net</b> という形のニューラルネットワーク（絵を縮める 6 層と広げ直す 6 層の、12 層の畳み込みネットワーク）が、ミックスのスペクトログラムから<b>ソフトマスク</b>（各瞬間・各周波数の音のうち、そのパートの分がどれだけか）を推定します。Deezer が、パートごとの録音がある社内の曲のデータで、マスクを掛けたミックスと本物のパートを比べることを何度も繰り返して学習させたものです。</li>
+  <li>アプリは 2 つのパートの推定を比べて、各瞬間・各周波数の音をボーカルと伴奏に分け合い、ミックスに掛けて音に戻します。</li>
 </ul>
-<p>学習済みのモデル（重み）は、Meta が<b>科学研究目的に限って</b>提供しているもので、Demucs のコードの MIT ライセンスの対象外です。このため Band Stem Mixer は広告を付けず、非営利で運営しています。</p>
+<p>Spleeter のコードと学習済みモデルは MIT ライセンスで公開されていて、用途を問わず使えます。このアプリは、オープンソースの音声ツールキット sherpa-onnx（Apache License 2.0）が ONNX 形式に変換したものを、このサイトから配信しています。</p>
+<p>このアプリに必要なのはボーカルだけなので、2 パートのモデルで足ります。軽く（約 ${MODEL_MB} MB）速いので、スマホで動かすときにも助かります。</p>
 
-<h2 id="parts">4 パートである理由と、ギターと鍵盤が分かれない理由</h2>
-<p>ボーカル・ドラム・ベース・その他の 4 つは、モデルが学習したデータセットのステムの分け方から来ています。「その他」はギター・鍵盤・シンセ・ストリングス・管楽器など残りすべてで、モデルはこれらを区別することを学んでいないので、まとめて出てきます。</p>
-<p>Demucs にはギターとピアノを足した 6 パートの試験的な版もありますが、Demucs 自身の説明でも、ギターはまずまずの品質に見える一方、ピアノは音の混ざりやノイズが多いとされています。メモリも多く必要で、私たちのテストではブラウザでメモリが足りなくなったため、Band Stem Mixer では 4 パートのモデルを使っています。</p>
-
-<h2 id="leak">パートの間で音が混ざる理由</h2>
-<p>モデルの出力はあくまで推定なので、一部の音が違うパートに入ったり、2 つのパートに分かれて入ったりします（<b>かぶり</b>、ブリードと呼びます）。</p>
+<h2 id="chords">2. 拍・テンポ・コード</h2>
+<p>ハモリの音はその瞬間のコードに合っている必要があるので、まずコードを推定します。声がじゃまをしない、分離した伴奏を使います。</p>
 <ul>
-  <li>周波数もタイミングも重なる音ほど難しくなります（キックとベース、ギターが重ねた歌のメロディなど）。</li>
-  <li><b>リバーブやエフェクト</b>は楽器どうしをぼかすので、声の残響が「その他」に残ることがあります。</li>
-  <li>音圧を強く上げたミックスや歪んだ音は、手がかりが少なくなります。ビットレートの低い MP3 などは、すでに細かい情報が失われています。</li>
-  <li>学習であまり聞いていない楽器は、パートに分かれて入ることがあります（シンセベースが「ベース」と「その他」に分かれるなど）。</li>
+  <li><b>拍とテンポ</b> – 新しい音が鳴り始める位置と、その間隔でいちばん繰り返されるもの（自己相関）を調べ、両方にいちばん合う拍の並びを決めます（動的計画法。D. Ellis、2007 年の方法）。これで BPM と、1 拍ごとのマスが決まります。</li>
+  <li><b>コード</b> – 拍ごとに、伴奏で 12 の音それぞれがどれだけ鳴っているか（クロマ）を調べ、24 のメジャー・マイナーのコードと比べます。ベースが鳴る低い音域は、根音を見つける手がかりにします。隠れマルコフモデルで、理由なく 1 拍ごとにコードが変わらないようにします。</li>
+  <li><b>キー</b> – 曲全体のクロマを Krumhansl と Kessler の長調・短調のプロファイルと比べ、主和音になりうるコードがどれだけ長く鳴っているかも合わせて決めます。</li>
 </ul>
-<p>自分のパートを消す、フレーズを聞き取るといった練習では、ほとんど問題になりません。コツは<a href="../better-results/">うまく分離するコツ</a>にまとめています。</p>
 
-<h2 id="browser">ブラウザの中で動かす仕組み</h2>
-<p>このようなモデルは、ふつうはサーバーで動かします。Band Stem Mixer は自分の端末の中で動かすので、曲をアップロードしません。</p>
-<ul>
-  <li>ブラウザがモデル（ONNX 形式に変換したもの、約 ${MODEL_MB} MB）を 1 回だけダウンロードして保存します。</li>
-  <li><b>ONNX Runtime Web</b> がモデルを動かします。ブラウザが WebGPU に対応していればグラフィックス（GPU）で、そうでなければプロセッサ（CPU）で処理します。</li>
-  <li>このモデルは一度に ${CHUNK_SEC} 秒ずつしか扱えないので、曲を 4 分の 1 ずつ重ねた区間に分け、重なりをクロスフェードしてつなぎ目が聞こえないようにします。4 分の曲なら ${chunksFor(EXAMPLE_SEC)} 区間です。</li>
-  <li>1 区間の処理に約 1 GB のメモリを使います。パソコンのほうがずっと速く、スマホでは最後まで分離できない機種があるのはこのためです。</li>
-</ul>
-<p>分離が終わると 4 つのパートをそろえて再生し、ミキサーは音量だけを変えるので、フェーダーを動かすとすぐに反映されます。</p>
+<h2 id="melody">3. 旋律を追う</h2>
+<p>分離したボーカルの音程を、1 秒に約 40 回、<b>YIN</b> という方法（de Cheveigné・Kawahara、2002 年）で測ります。波形が何秒ごとに繰り返しているかを調べる方法です。音程の線は、別の半音に移ったところで音符に区切ります。音に入るときのしゃくりのような、とても短い音符は隣の音符にまとめます。</p>
 
-<h2 id="chords">コード・ハモリ・キー変更の仕組み（AI なし）</h2>
-<p>コードの推定・ハモリ・キーの変更には AI モデルを使っていません。昔からある信号処理の方法を JavaScript で書いて、ブラウザで動かしています。ミックス全体より、分離したパートに使うほうがずっとうまくいきます。</p>
+<h2 id="notes">4. ハモリの音を選ぶ</h2>
+<p>旋律の音符ごとに、<b>曲のキーの中で</b> 3 度（または 5 度）上か下の音を取ります。そのため音程は長 3 度のときも短 3 度のときもあり、人がハモるときと同じになります。その音がその瞬間のコードとぶつかるときは、いちばん近いコードの音に移します。間の短い音符どうしは 1 つのフレーズにつなぐので、ハモリが途切れずになめらかに動きます。パートごとの聞こえ方は<a href="../harmony/#which">上ハモか下ハモか、3 度か 5 度か</a>をご覧ください。</p>
+
+<h2 id="voice">5. 声をハモリの音に動かす</h2>
 <ul>
-  <li><b>拍とテンポ</b> – 新しい音が鳴り始める位置と、その間隔でいちばん繰り返されるもの（自己相関）を調べ、両方にいちばん合う拍の並びを決めます（動的計画法。D. Ellis、2007 年の方法）。</li>
-  <li><b>コード</b> – 拍ごとに、ベースと「その他」のパートで 12 の音それぞれがどれだけ鳴っているか（クロマ）を調べ、24 のメジャー・マイナーのコードと比べます。隠れマルコフモデルで、理由なく 1 拍ごとにコードが変わらないようにします。ギターや歌が混ざっていないベースのパートは、コードのルートを見つける大きな手がかりになります。</li>
-  <li><b>旋律</b> – 分離したボーカルの音程を YIN という方法で調べ、音符に区切ります。</li>
-  <li><b>ハモリ（声）</b> – TD-PSOLA という方法で、ボーカルの波の 1 周期ずつを重ねたり間引いたりして音程を変えるので、声の感じが残ります。さらに音程補正（Auto-Tune のような処理）で、正しいハモリの音に寄せます。</li>
-  <li><b>キーの変更</b> – フェーズボコーダーで、各パートを音程の比率だけ時間方向に伸ばし、元の長さで再生し直します。</li>
+  <li><b>TD-PSOLA</b>（時間領域のピッチ同期波形重畳加算）で、ボーカルを声の 1 周期ずつの断片に切り、間隔を詰めて（高く）または広げて（低く）並べ直します。長さは変わらず、歌詞と声の感じがかなり残ります。</li>
+  <li>続けて<b>音程補正</b>（Auto-Tune のような処理）で、各音を正確なハモリの音に寄せます。これがないと、主旋律の歌い手の音程のずれまでハモリがまねてしまいます。</li>
+  <li><b>ガイド音</b>は同じ音を単純な合成音で鳴らすもので、安定して正確です。</li>
 </ul>
-<p>分離と同じく、これらも推定です。<a href="../chords-and-key/#limits">コードの仕上がり</a>と<a href="../harmony/#limits">ハモリの仕上がり</a>もご覧ください。</p>
+<p>キーの変更には別の方法の<b>フェーズボコーダー</b>を使い、各パートを音程の比率だけ時間方向に伸ばして、元の長さで再生し直します。</p>
+
+<h2 id="browser">すべてをブラウザの中で動かす</h2>
+<ul>
+  <li>ブラウザがモデル（約 ${MODEL_MB} MB）を一度だけダウンロードして保存します。モデルは <b>ONNX Runtime Web</b> が動かします。ブラウザが WebGPU に対応していればグラフィックスのチップ（GPU）、そうでなければプロセッサー（CPU）で動きます。</li>
+  <li>曲は約 ${SPLIT_SEC} 秒ずつ処理するので、長い曲でも必要なメモリは小さく済みます。モデルに通すのは約 ${TOP_KHZ} kHz までの周波数（Spleeter 本家の 16 kHz の設定）で、それより上（主にシンバルの響きや空気感）は伴奏に残します。</li>
+  <li>コード・旋律・ハモリ・キーの変更は、裏で動くスレッド（Web Worker）の JavaScript で計算するので、処理中も画面は止まりません。</li>
+</ul>
+<p>曲はアップロードしません。すべてできあがると 4 つのパートをそろえて再生し、ミキサーは音量だけを変えます。</p>
+
+<h2 id="limits">完全ではない理由</h2>
+<ul>
+  <li><b>分離では音が混ざります。</b>主旋律をなぞるギター、コーラス、残響など、声と周波数やタイミングが重なる音はボーカルに残り、ハモリの声と一緒に動きます。</li>
+  <li><b>コードは推定です。</b>推定するのはメジャー・マイナーだけで、7th・テンション・速いコードチェンジは外れることがあります。正しいコードを入力できます。</li>
+  <li><b>キーは曲全体で 1 つ</b>として扱うので、途中で転調する曲はずれることがあります。</li>
+  <li><b>ボーカルにコーラスが入っている</b>と、旋律の追跡が迷うことがあります。アプリが追うのは 1 本の線です。</li>
+</ul>
+<p><a href="../chords-and-key/#limits">コードの仕上がり</a>と<a href="../harmony/#limits">ハモリの仕上がり</a>もご覧ください。</p>
 `,
   },
 };

@@ -1,23 +1,23 @@
 // Privacy policy (site information page, linked from the footer and from the app's Privacy dialog).
 // Includes the external-transmission notice required in Japan (電気通信事業法の外部送信規律).
 // Update `modified` and the dates at the end when the content changes (for example when a service is added).
-const ISSUES = "https://github.com/ktkwmr/BandStemMixer/issues";
+import { MODEL_MB } from "./app.mjs";
+const ISSUES = "https://github.com/ktkwmr/VocalHarmonyMaker/issues";
 const CLOUDFLARE = "https://www.cloudflare.com/privacypolicy/";
-const HUGGINGFACE = "https://huggingface.co/privacy";
 const JSDELIVR = "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net";
 
 export default {
   slug: "privacy",
   schemaType: "WebPage",
-  modified: "2026-10-31",
+  modified: "2026-11-25",
   en: {
     title: "Privacy Policy",
     heading: "Privacy policy",
     nav: "Privacy policy",
     description:
-      "How Band Stem Mixer handles information: your song is separated on your device and never uploaded, the AI model and library downloads (Hugging Face, jsDelivr), data saved in your browser, analytics without cookies, and no ads.",
+      "How Vocal Harmony Maker handles information: your song is separated on your device and never uploaded, the AI model (from this site) and library downloads (jsDelivr), data saved in your browser, analytics without cookies, and no ads.",
     body: () => `
-<p class="lead">This policy explains how Band Stem Mixer (https://ktkwmr.com/vocalharmonymaker/, "this site") handles information. In short: your song is separated on your device and never uploaded. To do that, your browser downloads an AI model and a library from external services.</p>
+<p class="lead">This policy explains how Vocal Harmony Maker (https://ktkwmr.com/vocalharmonymaker/, "this site") handles information. In short: your song is separated on your device and never uploaded. To do that, your browser downloads an AI model from this site and a library from an external service.</p>
 
 <nav class="toc" aria-label="Contents"><b>Contents</b><ol>
   <li><a href="#app">What you do in the app</a></li>
@@ -31,13 +31,13 @@ export default {
 </ol></nav>
 
 <h2 id="app">1. What you do in the app</h2>
-<p>The audio file you choose is read, separated into parts by the AI model, analyzed (tempo, chords, and the vocal melody, to make a harmony part), moved to another key when you ask, and played only in your browser. The file, the separated parts, the results of the analysis, and their names are never sent to our server or to anyone else. Saving a part or a mix as an MP3 file only saves it on your device. The app does not use the microphone. This site has no accounts, and we do not ask for your name, email address, or other personal information.</p>
+<p>The audio file you choose is read, separated into the vocals and the accompaniment by the AI model, analyzed (tempo, chords, and the vocal melody, to make a harmony part), moved to another key when you ask, and played only in your browser. The file, the separated parts, the results of the analysis, and their names are never sent to our server or to anyone else. Saving a part or a mix as an MP3 file only saves it on your device. The app does not use the microphone. This site has no accounts, and we do not ask for your name, email address, or other personal information.</p>
 
 <h2 id="storage">2. Data saved in your browser</h2>
 <p>The following data is saved in your browser's storage on your device. It is not sent to us.</p>
 <ul>
-  <li><b>The AI model:</b> the model file (about 170 MB) downloaded the first time you separate a song, so it is not downloaded again.</li>
-  <li><b>Mixer settings:</b> the level and mute of each part, the master volume, and whether the GPU is used.</li>
+  <li><b>The AI model:</b> the model files (about ${MODEL_MB} MB) downloaded the first time you separate a song, so it is not downloaded again.</li>
+  <li><b>Mixer settings:</b> the level and mute of each part, and the master volume.</li>
   <li><b>App files:</b> the pages and files of this site and the ONNX Runtime library, so the app works offline.</li>
 </ul>
 <p>Your songs, the separated parts, the chords, and the harmony are not saved in the browser; they are gone when you close or reload the page. To delete the data above, use “Reset mixer” and ⚙ → “Delete the AI model” in the app, or clear this site's data (site data, cookies, and storage for ktkwmr.com) in your browser settings.</p>
@@ -50,11 +50,12 @@ export default {
     <tbody>
       <tr><th scope="row"><a href="${CLOUDFLARE}" rel="noopener">Cloudflare</a> (Cloudflare, Inc.)</th><td data-label="When:">Every page and file request</td><td data-label="Information sent:">IP address, browser information (user agent), requested URL, date and time</td><td data-label="Purpose:">Hosting this site, security, and access logs for operation</td></tr>
       <tr><th scope="row"><a href="${CLOUDFLARE}" rel="noopener">Cloudflare Web Analytics</a> (Cloudflare, Inc.)</th><td data-label="When:">Every page view</td><td data-label="Information sent:">IP address, browser information (user agent), the URL of the page, referrer, page load time. No cookies are used.</td><td data-label="Purpose:">Counting page views (see "Analytics" below)</td></tr>
-      <tr><th scope="row"><a href="${HUGGINGFACE}" rel="noopener">Hugging Face</a> (Hugging Face, Inc.)</th><td data-label="When:">The first time you separate a song (until the model is saved in your browser)</td><td data-label="Information sent:">IP address, browser information (user agent), the URL of the model file, date and time. Nothing about your song is sent.</td><td data-label="Purpose:">Downloading the AI model (Demucs htdemucs)</td></tr>
-      <tr><th scope="row"><a href="${JSDELIVR}" rel="noopener">jsDelivr</a> (a CDN run by Prospect One and its partners)</th><td data-label="When:">When you separate a song (until the library is saved in your browser)</td><td data-label="Information sent:">IP address, browser information (user agent), the URL of the library file, the page that requested it (referrer), date and time</td><td data-label="Purpose:">Downloading ONNX Runtime Web, the library that runs the AI model, demucs-web, which prepares the audio for it, and (when you save a file) lamejs, which makes the MP3</td></tr>
+      <tr><th scope="row"><a href="${JSDELIVR}" rel="noopener">jsDelivr</a> (a CDN run by Prospect One and its partners)</th><td data-label="When:">When you separate a song (until the library is saved in your browser)</td><td data-label="Information sent:">IP address, browser information (user agent), the URL of the library file, the page that requested it (referrer), date and time</td><td data-label="Purpose:">Downloading ONNX Runtime Web, the library that runs the AI model, and (when you save a file) lamejs, which makes the MP3</td></tr>
     </tbody>
   </table>
 </div>
+
+<p>The AI model (Spleeter) is downloaded from this site itself, so that download goes only to Cloudflare (the first row).</p>
 
 <h2 id="cookies">4. Cookies and advertising</h2>
 <p>This site does not set cookies and does not show ads. If we add ads in the future, we will update this policy before they are shown.</p>
@@ -70,7 +71,7 @@ export default {
 
 <h2 id="changes">8. Changes to this policy</h2>
 <p>We may update this policy when the site changes, for example when we add or remove a service. The updated policy applies from the time it is posted on this page.</p>
-<p>Effective: October 28, 2026 (updated October 31, 2026: chord estimation, harmony, and key change added to section 1, all done in the browser)</p>
+<p>Effective: November 25, 2026</p>
 `,
   },
   ja: {
@@ -78,9 +79,9 @@ export default {
     heading: "プライバシーポリシー",
     nav: "プライバシーポリシー",
     description:
-      "Band Stem Mixer のプライバシーポリシー。曲は端末の中で分離してアップロードしないこと、AI モデルとライブラリのダウンロード（Hugging Face・jsDelivr）、ブラウザに保存するデータ、Cookie を使わないアクセス解析、広告がないことについて。",
+      "Vocal Harmony Maker のプライバシーポリシー。曲は端末の中で分離してアップロードしないこと、AI モデル（本サイトから）とライブラリ（jsDelivr）のダウンロード、ブラウザに保存するデータ、Cookie を使わないアクセス解析、広告がないことについて。",
     body: () => `
-<p class="lead">Band Stem Mixer（https://ktkwmr.com/vocalharmonymaker/、以下「本サイト」）での情報の取り扱いについて説明します。要点は、曲は端末の中で分離し、どこにもアップロードしないことです。そのために、ブラウザが外部のサービスから AI モデルとライブラリをダウンロードします。</p>
+<p class="lead">Vocal Harmony Maker（https://ktkwmr.com/vocalharmonymaker/、以下「本サイト」）での情報の取り扱いについて説明します。要点は、曲は端末の中で分離し、どこにもアップロードしないことです。そのために、ブラウザが本サイトから AI モデルを、外部のサービスからライブラリをダウンロードします。</p>
 
 <nav class="toc" aria-label="目次"><b>目次</b><ol>
   <li><a href="#app">アプリで行うこと</a></li>
@@ -94,13 +95,13 @@ export default {
 </ol></nav>
 
 <h2 id="app">1. アプリで行うこと</h2>
-<p>選んだ音声ファイルの読み込み、AI モデルによるパートへの分離、解析（ハモリを作るためのテンポ・コード・ボーカルの旋律の推定）、キーの変更、再生は、ブラウザの中だけで行います。ファイル、分離したパート、解析の結果、ファイル名が、運営者のサーバーやほかの誰かに送られることはありません。パートやミックスを MP3 ファイルで保存しても、端末に保存するだけです。マイクは使いません。本サイトにはアカウント登録はなく、氏名やメールアドレスなどの個人情報をお聞きすることもありません。</p>
+<p>選んだ音声ファイルの読み込み、AI モデルによるボーカルと伴奏への分離、解析（ハモリを作るためのテンポ・コード・ボーカルの旋律の推定）、キーの変更、再生は、ブラウザの中だけで行います。ファイル、分離したパート、解析の結果、ファイル名が、運営者のサーバーやほかの誰かに送られることはありません。パートやミックスを MP3 ファイルで保存しても、端末に保存するだけです。マイクは使いません。本サイトにはアカウント登録はなく、氏名やメールアドレスなどの個人情報をお聞きすることもありません。</p>
 
 <h2 id="storage">2. ブラウザに保存するデータ</h2>
 <p>次のデータを、お使いの端末のブラウザ内に保存します。運営者に送られることはありません。</p>
 <ul>
-  <li><b>AI モデル：</b>次から再びダウンロードしなくて済むよう、初めて分離したときにダウンロードしたモデルのファイル（約 170 MB）を保存します。</li>
-  <li><b>ミキサーの設定：</b>各パートの音量とミュート、全体の音量、GPU を使うかどうか。</li>
+  <li><b>AI モデル：</b>次から再びダウンロードしなくて済むよう、初めて分離したときにダウンロードしたモデルのファイル（約 ${MODEL_MB} MB）を保存します。</li>
+  <li><b>ミキサーの設定：</b>各パートの音量とミュート、全体の音量。</li>
   <li><b>アプリのファイル：</b>オフラインでも使えるよう、本サイトのページやファイルと ONNX Runtime のライブラリを保存します。</li>
 </ul>
 <p>曲・分離したパート・コード・ハモリはブラウザに保存しません。ページを閉じたり再読み込みしたりすると消えます。上のデータを消したいときは、アプリの「ミキサーを元に戻す」と ⚙ →「AI モデルを削除」を使うか、ブラウザの設定でこのサイト（ktkwmr.com）のデータ（サイトデータ・Cookie・ストレージ）を削除してください。</p>
@@ -113,11 +114,12 @@ export default {
     <tbody>
       <tr><th scope="row"><a href="${CLOUDFLARE}" rel="noopener">Cloudflare</a>（Cloudflare, Inc.）</th><td data-label="タイミング：">すべてのページ・ファイルの読み込み時</td><td data-label="送信される情報：">IP アドレス、ブラウザの情報（ユーザーエージェント）、アクセスした URL、日時</td><td data-label="利用目的：">本サイトの配信、セキュリティの確保、運用のためのアクセスログ</td></tr>
       <tr><th scope="row"><a href="${CLOUDFLARE}" rel="noopener">Cloudflare Web Analytics</a>（Cloudflare, Inc.）</th><td data-label="タイミング：">ページを開いたとき</td><td data-label="送信される情報：">IP アドレス、ブラウザの情報（ユーザーエージェント）、閲覧したページの URL、参照元、ページの表示速度。Cookie は使いません。</td><td data-label="利用目的：">ページの閲覧数の集計（「アクセス解析」の項目を参照）</td></tr>
-      <tr><th scope="row"><a href="${HUGGINGFACE}" rel="noopener">Hugging Face</a>（Hugging Face, Inc.）</th><td data-label="タイミング：">初めて曲を分離するとき（モデルがブラウザに保存されるまで）</td><td data-label="送信される情報：">IP アドレス、ブラウザの情報（ユーザーエージェント）、モデルのファイルの URL、日時。曲の情報は送りません。</td><td data-label="利用目的：">AI モデル（Demucs htdemucs）のダウンロード</td></tr>
-      <tr><th scope="row"><a href="${JSDELIVR}" rel="noopener">jsDelivr</a>（Prospect One とそのパートナーが運営する CDN）</th><td data-label="タイミング：">曲を分離するとき（ライブラリがブラウザに保存されるまで）</td><td data-label="送信される情報：">IP アドレス、ブラウザの情報（ユーザーエージェント）、ライブラリのファイルの URL、読み込んだページ（参照元）、日時</td><td data-label="利用目的：">AI モデルを動かすライブラリ ONNX Runtime Web、音声をモデル用に変換する demucs-web、（ファイルを保存するときは）MP3 を作る lamejs のダウンロード</td></tr>
+      <tr><th scope="row"><a href="${JSDELIVR}" rel="noopener">jsDelivr</a>（Prospect One とそのパートナーが運営する CDN）</th><td data-label="タイミング：">曲を分離するとき（ライブラリがブラウザに保存されるまで）</td><td data-label="送信される情報：">IP アドレス、ブラウザの情報（ユーザーエージェント）、ライブラリのファイルの URL、読み込んだページ（参照元）、日時</td><td data-label="利用目的：">AI モデルを動かすライブラリ ONNX Runtime Web と、（ファイルを保存するときは）MP3 を作る lamejs のダウンロード</td></tr>
     </tbody>
   </table>
 </div>
+
+<p>AI モデル（Spleeter）は本サイト自身からダウンロードするので、その通信は Cloudflare（表の 1 行目）にだけ届きます。</p>
 
 <h2 id="cookies">4. Cookie と広告</h2>
 <p>本サイトは Cookie を設定せず、広告も表示しません。今後広告を表示する場合は、表示を始める前に本ポリシーを改定します。</p>
@@ -133,7 +135,7 @@ export default {
 
 <h2 id="changes">8. 改定</h2>
 <p>サービスの追加・終了など本サイトの変更に合わせて、本ポリシーを改定することがあります。改定後のポリシーは、このページに掲載した時点から適用されます。</p>
-<p>制定日：2026 年 10 月 28 日（2026 年 10 月 31 日改定：1. にコードの推定・ハモリ・キーの変更を追加。いずれもブラウザの中で行います）</p>
+<p>制定日：2026 年 11 月 25 日</p>
 `,
   },
 };

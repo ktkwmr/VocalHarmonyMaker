@@ -1,20 +1,24 @@
 // Questions and answers. The answers are HTML; build-pages.mjs also puts a plain-text
-// copy in the FAQPage structured data.
+// copy in the FAQPage structured data. id: an anchor other pages link to (e.g. ../faq/#rights).
 import { MODEL_MB, MAX_MIN, MAX_MIN_LOW_MEM, KBPS } from "./app.mjs";
 
 const EN = [
-  { q: "Is Band Stem Mixer free?", a: "Yes. It is free, with no sign-up, no account, and no ads." },
+  { q: "Is Vocal Harmony Maker free?", a: "Yes. It is free, with no sign-up and no account." },
   {
     q: "Is my song uploaded?",
-    a: 'No. The song is read, separated, and played only in your browser. Nothing about it is sent anywhere. See the <a href="../privacy/">privacy policy</a>.',
+    a: 'No. The song is read, separated, analyzed, and played only in your browser. Nothing about it is sent anywhere. See the <a href="../privacy/">privacy policy</a>.',
   },
   {
-    q: "Which parts does it separate?",
-    a: "Four: vocals, drums, bass, and other. “Other” is everything else — guitars, keys, synths, strings — together. Backing vocals usually come out with the vocals.",
+    q: "What does it make?",
+    a: "From the song you choose, four parts with their own faders: the vocals and the backing (separated with AI), and a harmony part as two parts — the singer's voice moved to the harmony notes, and a plain guide tone on the same notes. It also shows the tempo (BPM), a chord on every beat, the melody, and the harmony notes.",
   },
   {
-    q: "Can it separate the guitar and the piano?",
-    a: 'No. They both go to “Other”. The model was trained to separate four parts; see <a href="../how-it-works/#parts">why guitar and keys stay together</a>.',
+    q: "Which harmony parts can it make?",
+    a: 'A 3rd above (the most common), a 3rd below, a 5th above, or a 5th below the melody. The notes are chosen in the key of the song and moved to a chord tone where they would clash, so a “3rd” is sometimes a 4th. See <a href="../harmony/#which">upper or lower, 3rd or 5th</a>.',
+  },
+  {
+    q: "Can it make two harmonies at once (three-part harmony)?",
+    a: "One at a time. To get two, make one part (for example a 3rd above) and save “Harmony (voice)” as MP3, then choose another part (a 3rd below), remake the harmony, and save it too. Layer the files in a recording app.",
   },
   {
     q: "Which files can I open?",
@@ -22,11 +26,15 @@ const EN = [
   },
   {
     q: "Can I use songs from Apple Music, Spotify, or YouTube?",
-    a: "No. Music from streaming services is protected and cannot be opened in other apps. Use audio files you have, such as recordings of your band or songs you bought as files.",
+    a: "No. Music from streaming services is protected and cannot be opened in other apps. Use audio files you have, such as your own recordings or songs you bought as files.",
+  },
+  {
+    q: "Can I use a recording of my own singing?",
+    a: "Yes, and it works well: with a voice alone (or a voice and a guitar), separation is easy, and the harmony is made from your own voice. A steady tempo and clear chords help the chords come out right.",
   },
   {
     q: "How long does it take?",
-    a: "On a recent computer, about the length of the song or a few times longer; faster with a browser that supports WebGPU. Phones and tablets take longer. The progress bar shows about how long is left.",
+    a: "On a recent computer, usually less than the length of the song; faster with a browser that supports WebGPU. Phones and tablets take longer. The harmony then takes a few more seconds.",
   },
   {
     q: "Why is there a large download?",
@@ -34,129 +42,123 @@ const EN = [
   },
   {
     q: "The page reloaded, or separation stopped partway.",
-    a: 'The device ran out of memory. Close other tabs and apps and try again: the app uses a lighter setting next time. If it keeps stopping, separate the song on a computer. See <a href="../better-results/#memory">if it stops partway</a>.',
+    a: "The device ran out of memory. Close other tabs and apps and try again: the app uses a lighter setting next time. If it keeps stopping, try a shorter song or use a computer.",
   },
   {
-    q: "Does it work on iPhone?",
-    a: "The mixer and saved MP3 files work, but separating may not: iPhones and iPads can run out of memory while separating, and the page reloads. We recommend separating on a computer and playing the saved MP3 files on the iPhone.",
+    q: "The harmony voice sounds strange in places.",
+    a: 'It is the separated vocals moved to other notes, so anything that stayed in the vocals (a guitar doubling the melody, backing vocals, reverb) moves too, and large moves make a voice sound a little different. The guide tone has exact, clean notes. See <a href="../how-it-works/#limits">why it is not perfect</a>.',
   },
   {
-    q: "I can still hear a little of the part I muted.",
-    a: 'AI separation is an estimate, so traces of a part can remain in the others. It is usually quieter than the rest; turning the other parts up a little helps. See <a href="../how-it-works/#leak">why sounds leak between parts</a>.',
+    q: "A harmony note sounds wrong.",
+    a: 'Usually the chord at that beat was estimated wrong. Tap the beat in the chord row, type the right chord, and press “Remake the harmony”. See <a href="../chords-and-key/#edit">editing the chords</a>.',
   },
   {
-    q: "Are the separated parts saved?",
-    a: `Not in the app: they are gone when you reload or choose another song, and so are the chords and the harmony. Save the ones you want as MP3 files (${KBPS} kbps) with the ↓ buttons or “Save this mix (MP3)”. The mixer settings (faders, mute, master volume) are remembered.`,
-  },
-  {
-    q: "Can it find the chords of a song?",
-    a: 'Yes. Right after separating, the app finds the tempo (BPM) and a chord on every beat. Only major and minor chords are found automatically, and they can be wrong, so each beat can be edited by hand (including 7, maj7, m7, add9, dim7, m7b5, aug, and sus4). See <a href="../chords-and-key/">chords and key change</a>.',
-  },
-  {
-    q: "Can it make a harmony part?",
-    a: 'Yes: a 3rd or a 5th above or below the vocal melody, as the singer\'s voice moved to the harmony notes and as a plain guide tone, each with its own fader. It is chosen to fit the key and the chords, and it is an estimate. See <a href="../harmony/">practicing harmonies</a>.',
+    q: "Is it the harmony of the original record?",
+    a: "No. The app writes its own harmony from the melody, the key, and the chords. If the record has a harmony part, learn that one by ear; the app's harmony is a starting point and a practice tool.",
   },
   {
     q: "Can I change the key?",
-    a: 'Yes, up to 12 semitones up or down, without changing the tempo. The vocals, bass, and other move; the drums do not. The chord names and the harmony follow. See <a href="../chords-and-key/#key">changing the key</a>.',
+    a: 'Yes, up to 12 semitones up or down, without changing the tempo. The vocals, the backing, the chord names, and the harmony all follow. See <a href="../chords-and-key/#key">changing the key</a>.',
   },
   {
-    q: "The chords or the harmony are wrong after a key change partway through the song.",
-    a: "The app treats a song as one key and one tempo. After a key change or a tempo change, the harmony and the beats can be off; fix the chords by hand where needed and press “Remake the harmony”.",
+    q: "Is the harmony saved?",
+    a: `Not in the app: the parts, the chords, and the harmony are gone when you reload or choose another song. Save the ones you want as MP3 files (${KBPS} kbps) with the ↓ buttons or “Save this mix (MP3)”. The mixer settings (faders, mute, master volume) are remembered.`,
   },
   {
-    q: "Can I publish the parts or a karaoke version I made?",
-    a: "Only for songs whose rights you have, such as your own band's recordings. Publishing or sharing separated parts of someone else's song usually needs the permission of the rights holders.",
+    id: "rights",
+    q: "Which songs can I use, and can I publish what I made?",
+    a: "Use your own recordings, or songs whose rights you have. For your own practice at home, using a song you bought is usually fine; publishing or sharing a separated or harmonized version of someone else's song usually needs the permission of the rights holders.",
   },
   {
     q: "Can I use it offline?",
-    a: "After your first separation, the app, the AI model, and the separation engine are kept on your device, so it opens and separates without a connection. You can also add it to your home screen.",
+    a: "After your first separation, the app, the AI model, and the separation engine are kept on your device, so it opens and works without a connection. You can also add it to your home screen.",
   },
 ];
 
 const JA = [
-  { q: "無料ですか？", a: "はい。無料で、登録やアカウントは不要、広告もありません。" },
+  { q: "無料ですか？", a: "はい。無料で、登録やアカウントは不要です。" },
   {
     q: "曲はアップロードされますか？",
-    a: 'いいえ。曲の読み込み・分離・再生はブラウザの中だけで行い、曲に関する情報はどこにも送りません。<a href="../privacy/">プライバシーポリシー</a>をご覧ください。',
+    a: 'いいえ。曲の読み込み・分離・解析・再生はブラウザの中だけで行い、曲に関する情報はどこにも送りません。<a href="../privacy/">プライバシーポリシー</a>をご覧ください。',
   },
   {
-    q: "どのパートに分かれますか？",
-    a: "ボーカル・ドラム・ベース・その他の 4 つです。「その他」はギター・鍵盤・シンセ・ストリングスなど残りすべてをまとめたものです。コーラスはふつうボーカルに入ります。",
+    q: "何ができあがりますか？",
+    a: "選んだ曲から、フェーダー付きの 4 つのパートができます。AI で分離したボーカルと伴奏、そしてハモリのパートが 2 つ（ボーカルの音程をハモリの音に変えた声と、同じ音を単純な音で鳴らすガイド音）です。テンポ（BPM）・拍ごとのコード・旋律・ハモリの音も表示します。",
   },
   {
-    q: "ギターとピアノを分けられますか？",
-    a: 'できません。どちらも「その他」に入ります。モデルが 4 パートに分けるように学習しているためです。<a href="../how-it-works/#parts">ギターと鍵盤が分かれない理由</a>をご覧ください。',
+    q: "どんなハモリを作れますか？",
+    a: '主旋律の 3 度上（いちばんよくあるもの）、3 度下、5 度上、5 度下です。音は曲のキーの中で選び、コードとぶつかるときはコードの音に移すので、「3 度」が 4 度になることもあります。<a href="../harmony/#which">上ハモか下ハモか、3 度か 5 度か</a>をご覧ください。',
+  },
+  {
+    q: "ハモリを 2 つ同時に（3 声で）作れますか？",
+    a: "一度に作るのは 1 つです。2 つ欲しいときは、1 つ目（たとえば 3 度上）を作って「ハモリ（声）」を MP3 で保存し、パートを変えて（3 度下）ハモリを再生成して、それも保存します。録音アプリでファイルを重ねてください。",
   },
   {
     q: "どんなファイルを開けますか？",
-    a: `ブラウザで再生できる形式（MP3・WAV・M4A（AAC）・FLAC・Ogg など）です。長さは ${MAX_MIN} 分まで（スマホ・タブレットでは ${MAX_MIN_LOW_MEM} 分まで）。`,
+    a: `MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式です。曲の長さは ${MAX_MIN} 分まで（スマホ・タブレットでは ${MAX_MIN_LOW_MEM} 分まで）。`,
   },
   {
     q: "Apple Music・Spotify・YouTube の曲は使えますか？",
-    a: "使えません。配信サービスの曲は保護されていて、ほかのアプリでは開けません。バンドの録音や、ファイルで購入した曲など、手持ちの音源ファイルを使ってください。",
+    a: "使えません。配信サービスの曲は保護されていて、ほかのアプリで開けません。自分の録音や、ファイルで購入した曲など、手元にある音声ファイルを使ってください。",
+  },
+  {
+    q: "自分の歌を録音したものでも使えますか？",
+    a: "はい、向いています。声だけ（または声とギターだけ）なら分離がしやすく、自分の声からハモリができます。テンポが一定で、コードがはっきりしているほど、コードが正しく出ます。",
   },
   {
     q: "どのくらい時間がかかりますか？",
-    a: "最近のパソコンで、曲の長さと同じくらいから数倍です。WebGPU に対応したブラウザなら速くなります。スマホ・タブレットではさらにかかります。残り時間の目安はバーの下に出ます。",
+    a: "最近のパソコンなら、たいてい曲の長さより短い時間で終わります。WebGPU に対応したブラウザではさらに速くなります。スマホ・タブレットではもっとかかります。そのあとハモリを作るのに数秒かかります。",
   },
   {
-    q: "大きなダウンロードがあるのはなぜですか？",
-    a: `AI モデル（約 ${MODEL_MB} MB）を端末の中で動かすので、最初に 1 回ダウンロードする必要があります。端末に保存するので、2 回目からはダウンロードしません。モバイルデータ通信のときは先に確認します。⚙ →「AI モデルを削除」で容量を空けられます。`,
+    q: "なぜ大きなダウンロードがあるのですか？",
+    a: `AI モデル（約 ${MODEL_MB} MB）を端末の中で動かすため、一度だけブラウザにダウンロードします。保存するので、次からはダウンロードしません。モバイルデータ通信のときは先に確認します。⚙ →「AI モデルを削除」で容量を空けられます。`,
   },
   {
     q: "ページが読み込み直された・分離が途中で止まりました。",
-    a: '端末のメモリが足りなくなっています。ほかのタブやアプリを閉じてもう一度試してください。次はより軽い設定で分離します。何度も止まるときはパソコンで分離してください。<a href="../better-results/#memory">途中で止まるときは</a>もご覧ください。',
+    a: "端末のメモリが足りなくなっています。ほかのタブやアプリを閉じてもう一度お試しください。次はより軽い設定で分離します。何度も止まるときは、短い曲にするか、パソコンでお試しください。",
   },
   {
-    q: "iPhone で使えますか？",
-    a: "ミキサーと保存した MP3 は使えますが、分離はできないことがあります。iPhone・iPad では分離中にメモリが足りなくなり、ページが読み込み直されることがあります。パソコンで分離して、保存した MP3 を iPhone で再生するのがおすすめです。",
+    q: "ハモリの声がところどころ変に聞こえます。",
+    a: 'ハモリの声は、分離したボーカルを別の音に動かしたものです。ボーカルに残った音（主旋律をなぞるギター、コーラス、残響）も一緒に動き、大きく動かすと声の感じも少し変わります。正確できれいな音はガイド音で確かめてください。<a href="../how-it-works/#limits">完全ではない理由</a>もご覧ください。',
   },
   {
-    q: "ミュートしたパートが少し聞こえます。",
-    a: 'AI の分離は推定なので、ほかのパートにその音が少し残ることがあります。たいていは周りより小さいので、ほかのパートを少し上げると目立たなくなります。<a href="../how-it-works/#leak">パートの間で音が混ざる理由</a>をご覧ください。',
+    q: "ハモリの音が外れて聞こえます。",
+    a: 'たいていは、その拍のコードの推定が違っています。上の段（コード）でその拍をタップし、正しいコードを入力して「ハモリを再生成」を押してください。<a href="../chords-and-key/#edit">コードの編集</a>をご覧ください。',
   },
   {
-    q: "分離したパートは保存されますか？",
-    a: `アプリには残りません。ページを読み込み直したり別の曲を選んだりすると、コードやハモリと一緒に消えます。残したいものは ↓ ボタンや「このミックスを保存（MP3）」で MP3（${KBPS} kbps）にしてください。ミキサーの設定（音量・ミュート・全体の音量）は次回も残ります。`,
-  },
-  {
-    q: "曲のコードを調べられますか？",
-    a: '調べられます。分離が終わると続けて、テンポ（BPM）と 1 拍ごとのコードを自動で推定します。自動で推定するのはメジャーとマイナーだけで、間違うこともあるので、拍ごとに手で直せます（7・maj7・m7・add9・dim7・m7b5・aug・sus4 も選べます）。<a href="../chords-and-key/">コード表示とキー変更</a>をご覧ください。',
-  },
-  {
-    q: "ハモリのパートを作れますか？",
-    a: '作れます。ボーカルの旋律の 3 度か 5 度の上か下に、歌い手の声をハモリの音程に変えたものと、単純なガイド音の 2 つを作り、それぞれ音量を変えられます。キーとコードに合うように選びますが、推定なので外れることもあります。<a href="../harmony/">ハモリの練習</a>をご覧ください。',
+    q: "原曲のハモリと同じですか？",
+    a: "いいえ。アプリが旋律・キー・コードから独自にハモリを作ります。原曲にハモリのパートがあるなら、それは耳で覚えてください。アプリのハモリは、練習のきっかけと練習用の素材です。",
   },
   {
     q: "キーを変えられますか？",
-    a: 'テンポはそのままで、上下 12 半音まで変えられます。ボーカル・ベース・その他が動き、ドラムは動きません。コード名とハモリも一緒に変わります。<a href="../chords-and-key/#key">キーを変える</a>をご覧ください。',
+    a: 'はい。テンポを変えずに、上下 12 半音まで変えられます。ボーカル・伴奏・コード名・ハモリがすべて一緒に変わります。<a href="../chords-and-key/#key">キーを変える</a>をご覧ください。',
   },
   {
-    q: "転調する曲で、途中からコードやハモリが合いません。",
-    a: "アプリは曲全体を 1 つのキー・1 つのテンポとして扱います。転調やテンポの変化のあとは、ハモリや拍がずれることがあります。必要なところのコードを手で直して「ハモリを再生成」を押してください。",
+    q: "ハモリは保存されますか？",
+    a: `アプリには残りません。ページを読み込み直したり別の曲を選んだりすると、パート・コード・ハモリは消えます。残したいものは ↓ ボタンか「このミックスを保存（MP3）」で MP3（${KBPS} kbps）に保存してください。ミキサーの設定（フェーダー・ミュート・全体の音量）は残ります。`,
   },
   {
-    q: "作ったパートやカラオケ音源を公開してもいいですか？",
-    a: "自分たちのバンドの録音など、権利を持っている曲だけにしてください。他人の曲を分離したパートを公開・配布するには、ふつう権利者の許可が必要です。",
+    id: "rights",
+    q: "どんな曲を使えますか？ 作ったものを公開してもいいですか？",
+    a: "自分の録音か、権利を持っている曲を使ってください。購入した曲を自宅で自分の練習に使うのは、ふつう問題ありません。他人の曲を分離したものやハモリを付けたものを公開・共有するには、ふつう権利者の許可が必要です。",
   },
   {
     q: "オフラインで使えますか？",
-    a: "一度分離すると、アプリ・AI モデル・分離のプログラムが端末に保存されるので、通信がなくても開いて分離できます。ホーム画面に追加することもできます。",
+    a: "一度分離すると、アプリ・AI モデル・分離のプログラムが端末に保存されるので、通信がなくても開いて使えます。ホーム画面に追加することもできます。",
   },
 ];
 
-const list = (items) => `<dl class="faq">\n${items.map((x) => `  <dt>${x.q}</dt>\n  <dd>${x.a}</dd>`).join("\n")}\n</dl>`;
+const list = (items) => `<dl class="faq">\n${items.map((x) => `  <dt${x.id ? ` id="${x.id}"` : ""}>${x.q}</dt>\n  <dd>${x.a}</dd>`).join("\n")}\n</dl>`;
 
 export default {
   slug: "faq",
   faq: true,
   en: {
-    title: "Band Stem Mixer FAQ",
+    title: "Vocal Harmony Maker FAQ",
     heading: "Frequently asked questions",
     nav: "FAQ",
     description:
-      "Answers to common questions about Band Stem Mixer: privacy, which parts it separates, supported files, how long it takes, the AI model download, iPhone, leftover sounds, chords, harmony, key change, saving MP3 files, and offline use.",
+      "Answers to common questions about Vocal Harmony Maker: privacy, what it makes, which harmony parts, supported files, how long it takes, the AI model download, wrong notes, key change, saving MP3 files, which songs you can use, and offline use.",
     faq: EN,
     body: () => `<p class="lead">Short answers to common questions. For step-by-step instructions, see the <a href="../guide/">guide</a>.</p>\n${list(EN)}`,
   },
@@ -165,7 +167,7 @@ export default {
     heading: "よくある質問",
     nav: "よくある質問",
     description:
-      "Band Stem Mixer についてのよくある質問。プライバシー、分離するパート、開けるファイル、かかる時間、AI モデルのダウンロード、iPhone、残る音、コード、ハモリ、キーの変更、MP3 の保存、オフライン。",
+      "Vocal Harmony Maker についてのよくある質問。プライバシー、できあがるもの、作れるハモリ、開けるファイル、かかる時間、AI モデルのダウンロード、外れた音、キーの変更、MP3 の保存、使える曲、オフライン。",
     faq: JA,
     body: () => `<p class="lead">よくある質問への短い回答です。詳しい手順は<a href="../guide/">使い方ガイド</a>をご覧ください。</p>\n${list(JA)}`,
   },
