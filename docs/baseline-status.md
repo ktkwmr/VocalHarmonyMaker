@@ -9,8 +9,8 @@
 | 変数 | 値 |
 |---|---|
 | アプリ名 | Band Stem Mixer |
-| スラッグ | `bandstemmixer` |
-| ドメイン | `ktkwmr.com`（§0 の A: 別 Worker + Route `ktkwmr.com/bandstemmixer*`） |
+| スラッグ | `vocalharmonymaker` |
+| ドメイン | `ktkwmr.com`（§0 の A: 別 Worker + Route `ktkwmr.com/vocalharmonymaker*`） |
 | リポジトリ | `ktkwmr/BandStemMixer`（公開） |
 | 運営者・問い合わせ | ktkwmr / GitHub Issues |
 | 言語 | en（既定）+ ja（`/ja/`） |
@@ -27,16 +27,16 @@
 | 2-2 | `/` の転送 | — | ドメイン直下は `ktkwmr/ktkwmr.com` |
 | 2-3 | 404.html | ✅ | |
 | 2-4〜2-10 | .gitignore・LF・`--check`・README・LICENSE・CLAUDE.md・バージョンなし | ✅ | |
-| 2-11 | Cloudflare に接続 | 👤 | Project name は `bandstemmixer`、Production branch は `main` |
+| 2-11 | Cloudflare に接続 | 👤 | Project name は `vocalharmonymaker`、Production branch は `main` |
 | 2-13 | 自動デプロイの確認 | 👤 | |
-| 2-14 | 2 つ目以降のアプリの Worker 設定 | ✅ | sitemap は `/bandstemmixer/sitemap.xml` |
+| 2-14 | 2 つ目以降のアプリの Worker 設定 | ✅ | sitemap は `/vocalharmonymaker/sitemap.xml` |
 | 2-16 | トップページへの追加 | ✅ | ktkwmr/ktkwmr.com#9（`APPS`・`ICON`・`PREVIEW`、`robots.txt` の `Sitemap:` 行）。アプリ名・説明・アイコン・画面を変えたら、そちらも直す |
 | 3-1〜3-5 | manifest・アイコン・meta・sw.js・SW 登録 | ✅ | |
 | 3-6 | `file://` の注意 | ✅ | README |
 | 3-7 | インストールの案内 | ❌ | 任意 |
 | 3-8 | アイコンの生成 | ✅ | `scripts/render-icons.mjs` |
 | 3-9 | COEP とワーカーのスクリプト | ✅ | SW はネットワークの応答（元のヘッダー付き）をそのままキャッシュするので、2 回目以降も `separator.js`・`mixer.js` に COEP が付く。E2E で SW が制御する 2 回目の分離を確認 |
-| 3-10 | CDN のオフライン対応 | ✅ | `sw.js` の `CDN` に ONNX Runtime Web 1.30.0 の 6 ファイルと demucs-web 1.0.2 の 3 ファイル。AI モデルは `separator.js` が `bandstemmixer-model-v2` に保存（`KEEP` で activate 時に消さない） |
+| 3-10 | CDN のオフライン対応 | ✅ | `sw.js` の `CDN` に ONNX Runtime Web 1.30.0 の 6 ファイルと demucs-web 1.0.2 の 3 ファイル。AI モデルは `separator.js` が `vocalharmonymaker-model-v2` に保存（`KEEP` で activate 時に消さない） |
 | 4-1〜4-3 | I18N・言語の決め方・日本語ページの生成 | ✅ | |
 | 4-4 | 日本語の検索用タイトル・説明 | 👤 | `scripts/build-ja.mjs` 冒頭の案を確認 |
 | 4-7 | `<base>` と URL | ✅ | Worker・AudioWorklet・ライセンスはすべて相対 URL（`<base>` で解決）。E2E で `/ja/` の分離を確認 |

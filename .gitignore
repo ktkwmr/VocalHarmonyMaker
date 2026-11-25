@@ -2,3 +2,5 @@ node_modules/
 package-lock.json
 .wrangler/
 .preview/
+# The Spleeter model files are fetched by scripts/fetch-model.mjs in the build (too large for Git)
+public/vocalharmonymaker/models/

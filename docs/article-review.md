@@ -66,7 +66,7 @@ PR を出すと Cloudflare のプレビュー URL ができるので、そこで
 
 1. 直す点があれば Claude に伝える（Claude が直して PR を更新 → もう一度確認）。
 2. 問題なければ「マージして」と伝える。マージ後、本番に反映されたかを確かめる。
-3. 公開後、Search Console でサイトマップ（`https://ktkwmr.com/bandstemmixer/sitemap.xml`）を再送信する。
+3. 公開後、Search Console でサイトマップ（`https://ktkwmr.com/vocalharmonymaker/sitemap.xml`）を再送信する。
 4. トップページ（`ktkwmr/ktkwmr.com` の `home.mjs`）のガイド一覧に記事を足す PR を別に出す（ベースライン §2-16）。
 
 ## 今回（2026-11-01、分離のあとハモリまで自動で作る）特に見てほしいところ

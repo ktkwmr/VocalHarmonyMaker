@@ -17,7 +17,7 @@ export default {
     description:
       "How Band Stem Mixer handles information: your song is separated on your device and never uploaded, the AI model and library downloads (Hugging Face, jsDelivr), data saved in your browser, analytics without cookies, and no ads.",
     body: () => `
-<p class="lead">This policy explains how Band Stem Mixer (https://ktkwmr.com/bandstemmixer/, "this site") handles information. In short: your song is separated on your device and never uploaded. To do that, your browser downloads an AI model and a library from external services.</p>
+<p class="lead">This policy explains how Band Stem Mixer (https://ktkwmr.com/vocalharmonymaker/, "this site") handles information. In short: your song is separated on your device and never uploaded. To do that, your browser downloads an AI model and a library from external services.</p>
 
 <nav class="toc" aria-label="Contents"><b>Contents</b><ol>
   <li><a href="#app">What you do in the app</a></li>
@@ -80,7 +80,7 @@ export default {
     description:
       "Band Stem Mixer のプライバシーポリシー。曲は端末の中で分離してアップロードしないこと、AI モデルとライブラリのダウンロード（Hugging Face・jsDelivr）、ブラウザに保存するデータ、Cookie を使わないアクセス解析、広告がないことについて。",
     body: () => `
-<p class="lead">Band Stem Mixer（https://ktkwmr.com/bandstemmixer/、以下「本サイト」）での情報の取り扱いについて説明します。要点は、曲は端末の中で分離し、どこにもアップロードしないことです。そのために、ブラウザが外部のサービスから AI モデルとライブラリをダウンロードします。</p>
+<p class="lead">Band Stem Mixer（https://ktkwmr.com/vocalharmonymaker/、以下「本サイト」）での情報の取り扱いについて説明します。要点は、曲は端末の中で分離し、どこにもアップロードしないことです。そのために、ブラウザが外部のサービスから AI モデルとライブラリをダウンロードします。</p>
 
 <nav class="toc" aria-label="目次"><b>目次</b><ol>
   <li><a href="#app">アプリで行うこと</a></li>

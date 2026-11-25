@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Generates public/bandstemmixer/ja/index.html (the Japanese page) from
-// public/bandstemmixer/index.html, so only index.html is edited by hand.
+// Generates public/vocalharmonymaker/ja/index.html (the Japanese page) from
+// public/vocalharmonymaker/index.html, so only index.html is edited by hand.
 //
 // - <head>: lang, title, description, canonical, Open Graph, and JSON-LD are
-//   replaced with the Japanese versions below. <base href="/bandstemmixer/">
+//   replaced with the Japanese versions below. <base href="/vocalharmonymaker/">
 //   is added so relative URLs (icons, manifest, sw.js, separator.js, mixer.js, THIRD_PARTY_LICENSES.md)
-//   still point to the files in public/bandstemmixer/.
+//   still point to the files in public/vocalharmonymaker/.
 // - <body>: the text of data-i18n / data-i18n-html / data-i18n-attr elements
 //   is replaced with the Japanese strings from the I18N object in index.html,
 //   so search engines see Japanese text without running JavaScript.
@@ -24,19 +24,19 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-const SRC = fileURLToPath(new URL("../public/bandstemmixer/index.html", import.meta.url));
-const OUT = fileURLToPath(new URL("../public/bandstemmixer/ja/index.html", import.meta.url));
+const SRC = fileURLToPath(new URL("../public/vocalharmonymaker/index.html", import.meta.url));
+const OUT = fileURLToPath(new URL("../public/vocalharmonymaker/ja/index.html", import.meta.url));
 const CHECK = process.argv.includes("--check");
 
-const BASE_URL = "https://ktkwmr.com/bandstemmixer/";
+const BASE_URL = "https://ktkwmr.com/vocalharmonymaker/";
 const JA_URL = BASE_URL + "ja/";
 
 // Japanese text for search results and social media shares
-const TITLE = "バンドの曲をボーカル・ドラム・ベース・その他に分離｜無料のAIパート分離ツール – Band Stem Mixer";
-const DESCRIPTION = "バンドの曲をAIでボーカル・ドラム・ベース・その他（ギター・鍵盤など）の4パートに分離する無料ツール。パートごとにミュート・ソロ・音量調整ができ、自分のパートを消したマイナスワン音源やカラオケ音源、耳コピに使えます。コードとBPMの表示、ハモリパートの作成、キーの変更も。各パートはMP3で保存。ブラウザの中で処理するので曲はアップロードしません。登録不要。";
-const OG_DESCRIPTION = "AIで曲をボーカル・ドラム・ベース・その他に分離し、パートごとにミュート・ソロして練習できます。無料・アップロードなし・登録不要。";
-const OG_IMAGE_ALT = "Band Stem Mixer：ボーカル・ベース・ドラム・その他の4本のフェーダー（ベースをミュート）";
-const LD_DESCRIPTION = "バンドの曲をAIで4パート（ボーカル・ドラム・ベース・その他）に端末の中で分離し、ミュート・ソロ・ミックスやMP3保存ができるWebアプリ。コードとテンポの推定、ボーカルからのハモリの作成、キーの変更もできる。";
+const TITLE = "曲のボーカルにハモリを自動で付ける｜無料のAIハモリ作成ツール – Vocal Harmony Maker";
+const DESCRIPTION = "曲のボーカルにハモリを自動で付ける無料ツール。AIでボーカルと伴奏を分離し、キー・コード・BPMを推定して、3度・5度の上ハモ・下ハモを歌っている人の声のまま作ります。練習用のガイド音つきで、ハモリの練習に。コードの修正、キーの変更、MP3保存も。ブラウザの中で処理するので曲はアップロードしません。登録不要。";
+const OG_DESCRIPTION = "AIでボーカルを分離して、歌っている人の声のままのハモリと練習用のガイド音を作ります。無料・アップロードなし・登録不要。";
+const OG_IMAGE_ALT = "Vocal Harmony Maker：コード・ボーカルの旋律・ハモリの音のピアノロールと、4本のフェーダー";
+const LD_DESCRIPTION = "曲のボーカルをAIで端末の中で分離し、キー・テンポ・コードを推定して、歌っている人の声のままのハモリ（3度・5度の上か下）とガイド音を作るWebアプリ。コードの修正、キーの変更、各パートのMP3保存もできる。";
 
 const escapeAttr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 const escapeText = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -57,7 +57,7 @@ function replaceOnce(pattern, replacement, label) {
 
 // ---------- <head> ----------
 replaceOnce(/<html lang="en">/, '<html lang="ja" data-page-lang="ja">', "html lang");
-replaceOnce(/(<meta charset="UTF-8" \/>\n)/, '$1  <base href="/bandstemmixer/" />\n', "base");
+replaceOnce(/(<meta charset="UTF-8" \/>\n)/, '$1  <base href="/vocalharmonymaker/" />\n', "base");
 replaceOnce(/<title>[^<]*<\/title>/, `<title>${escapeText(TITLE)}</title>`, "title");
 replaceOnce(/(<meta name="description" content=")[^"]*(")/, `$1${escapeAttr(DESCRIPTION)}$2`, "description");
 replaceOnce(/(<link rel="canonical" href=")[^"]*(")/, `$1${JA_URL}$2`, "canonical");
@@ -67,7 +67,7 @@ replaceOnce(/(<meta property="og:locale" content=")[^"]*(")/, "$1ja_JP$2", "og:l
 replaceOnce(/(<meta property="og:locale:alternate" content=")[^"]*(")/, "$1en_US$2", "og:locale:alternate");
 replaceOnce(/(<meta property="og:url" content=")[^"]*(")/, `$1${JA_URL}$2`, "og:url");
 replaceOnce(/(<meta property="og:image:alt" content=")[^"]*(")/, `$1${escapeAttr(OG_IMAGE_ALT)}$2`, "og:image:alt");
-replaceOnce(/("url": ")https:\/\/ktkwmr\.com\/bandstemmixer\/(")/, `$1${JA_URL}$2`, "JSON-LD url");
+replaceOnce(/("url": ")https:\/\/ktkwmr\.com\/vocalharmonymaker\/(")/, `$1${JA_URL}$2`, "JSON-LD url");
 replaceOnce(/("description": ")[^"]*(")/, `$1${LD_DESCRIPTION}$2`, "JSON-LD description");
 replaceOnce(/"inLanguage": "en"/, '"inLanguage": "ja"', "JSON-LD inLanguage");
 

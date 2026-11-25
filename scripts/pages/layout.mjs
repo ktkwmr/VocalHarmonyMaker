@@ -1,8 +1,8 @@
-// Shared HTML template for the guide and info pages (public/bandstemmixer/<slug>/ and ja/<slug>/).
+// Shared HTML template for the guide and info pages (public/vocalharmonymaker/<slug>/ and ja/<slug>/).
 // Used by scripts/build-pages.mjs.
 
 export const ORIGIN = "https://ktkwmr.com";
-export const APP_PATH = { en: "/bandstemmixer/", ja: "/bandstemmixer/ja/" };
+export const APP_PATH = { en: "/vocalharmonymaker/", ja: "/vocalharmonymaker/ja/" };
 export const PUBLISHED = "2026-10-28";
 
 export const pagePath = (lang, slug) => APP_PATH[lang] + slug + "/";
@@ -47,7 +47,7 @@ const UI = {
 };
 
 const MARK =
-  '<svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"><path d="M4.5 11.5v5M7.5 8.5v11"/><path d="M10.5 14C14 14 14.5 6.5 18.5 6.5H20M10.5 14C14 14 14.5 11.5 18.5 11.5H20M10.5 14C14 14 14.5 16.5 18.5 16.5H20M10.5 14C14 14 14.5 21.5 18.5 21.5H20"/></g><g fill="#fff"><circle cx="22.5" cy="6.5" r="2"/><circle cx="22.5" cy="11.5" r="2"/><circle cx="22.5" cy="16.5" r="2"/><circle cx="22.5" cy="21.5" r="2"/></g></svg>';
+  '<svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-linecap="round" fill="none"><path stroke-width="2" d="M5 20.5h3M10.5 18.5h3M16 16h2.5M21 18h2"/><path stroke-width="3" d="M5 13h3M10.5 11h3M16 8.5h2.5M21 10.5h2"/></g></svg>';
 
 const CSS = `
     :root {
@@ -189,8 +189,8 @@ export function renderPage({ lang, page, pages, infoPages = [], body, jsonLd }) 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
-  <link rel="icon" type="image/svg+xml" href="/bandstemmixer/icons/icon.svg" />
-  <link rel="apple-touch-icon" href="/bandstemmixer/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="/vocalharmonymaker/icons/icon.svg" />
+  <link rel="apple-touch-icon" href="/vocalharmonymaker/icons/apple-touch-icon.png" />
   <title>${escapeHtml(fullTitle)}</title>
   <meta name="description" content="${escapeHtml(t.description)}" />
   <link rel="canonical" href="${url}" />
@@ -204,7 +204,7 @@ export function renderPage({ lang, page, pages, infoPages = [], body, jsonLd }) 
   <meta property="og:locale" content="${ui.locale}" />
   <meta property="og:locale:alternate" content="${UI[otherLang].locale}" />
   <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${ORIGIN}/bandstemmixer/og-image.png" />
+  <meta property="og:image" content="${ORIGIN}/vocalharmonymaker/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />

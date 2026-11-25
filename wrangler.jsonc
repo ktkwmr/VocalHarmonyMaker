@@ -1,9 +1,10 @@
 {
   "name": "vocalharmonymaker",
-  "compatibility_date": "2026-10-01",
+  "compatibility_date": "2026-11-01",
   "observability": { "enabled": true },
-  // Regenerates ja/index.html, the info pages, and sitemap.xml before deploy / dev
-  "build": { "command": "node scripts/build-ja.mjs && node scripts/build-pages.mjs" },
+  // Puts the Spleeter model files in public/vocalharmonymaker/models/ (downloaded once; not committed), then
+  // regenerates ja/index.html, the guide / info pages, and sitemap.xml before deploy / dev
+  "build": { "command": "node scripts/fetch-model.mjs && node scripts/build-ja.mjs && node scripts/build-pages.mjs" },
   // Required by `wrangler preview`, which Workers Builds runs for non-production branches
   "previews": {},
   // One of several apps on ktkwmr.com: this Worker only serves /vocalharmonymaker/*.

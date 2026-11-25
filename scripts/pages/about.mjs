@@ -16,7 +16,7 @@ export default {
   <table class="text stack">
     <tbody>
       <tr><th scope="row">Site name</th><td>Band Stem Mixer</td></tr>
-      <tr><th scope="row">URL</th><td><a href="/bandstemmixer/">https://ktkwmr.com/bandstemmixer/</a></td></tr>
+      <tr><th scope="row">URL</th><td><a href="/vocalharmonymaker/">https://ktkwmr.com/vocalharmonymaker/</a></td></tr>
       <tr><th scope="row">Operator</th><td>ktkwmr (individual developer)</td></tr>
       <tr><th scope="row">What we offer</th><td>A free, non-commercial web app that separates a band song into 4 parts (vocals, drums, bass, and other) with AI on your device and mixes them for practice, with chord estimation, a harmony part, and key change</td></tr>
       <tr><th scope="row">Contact</th><td><a href="${ISSUES}" rel="noopener">GitHub Issues</a></td></tr>
@@ -59,7 +59,7 @@ export default {
   <table class="text stack">
     <tbody>
       <tr><th scope="row">サイト名</th><td>Band Stem Mixer</td></tr>
-      <tr><th scope="row">URL</th><td><a href="/bandstemmixer/ja/">https://ktkwmr.com/bandstemmixer/ja/</a></td></tr>
+      <tr><th scope="row">URL</th><td><a href="/vocalharmonymaker/ja/">https://ktkwmr.com/vocalharmonymaker/ja/</a></td></tr>
       <tr><th scope="row">運営者</th><td>ktkwmr（個人開発者）</td></tr>
       <tr><th scope="row">内容</th><td>バンドの曲を AI で端末の中で 4 つのパート（ボーカル・ドラム・ベース・その他）に分離し、練習用にミックスできる、無料・非営利の Web アプリ（コードの推定・ハモリの作成・キーの変更つき）</td></tr>
       <tr><th scope="row">お問い合わせ</th><td><a href="${ISSUES}" rel="noopener">GitHub の Issues</a></td></tr>

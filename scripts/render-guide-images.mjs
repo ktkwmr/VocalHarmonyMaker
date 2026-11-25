@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Takes the app screenshots used in the guide and the harmony / chords articles:
-//   public/bandstemmixer/images/guide/{en,ja}-{song,progress,mixer,harmony,chord,network,phone}.png
+//   public/vocalharmonymaker/images/guide/{en,ja}-{song,progress,mixer,harmony,chord,network,phone}.png
 // The song is made up (scripts/guide-song.mjs), so there is no copyright issue. The AI model is not
 // used: a stand-in for separator.js returns the song's four parts, which are known exactly, after a
 // short fake progress. Everything else is the real app.
@@ -20,9 +20,9 @@ const require = createRequire(import.meta.url);
 const { chromium, devices } = require("playwright");
 const PUBLIC = fileURLToPath(new URL("../public/", import.meta.url));
 const SONG_JS = fileURLToPath(new URL("./guide-song.mjs", import.meta.url));
-const OUT = join(PUBLIC, "bandstemmixer/images/guide/");
+const OUT = join(PUBLIC, "vocalharmonymaker/images/guide/");
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".md": "text/markdown; charset=utf-8" };
-const PATH = { en: "/bandstemmixer/?lang=en", ja: "/bandstemmixer/ja/" };
+const PATH = { en: "/vocalharmonymaker/?lang=en", ja: "/vocalharmonymaker/ja/" };
 const SECONDS = 60;
 
 // Stand-in for separator.js: reports the GPU, counts through the chunks like the real worker
@@ -50,7 +50,7 @@ self.onmessage = async (e) => {
 // Minimal static server for public/ (the app needs http:// for its workers), with the stand-in
 const server = createServer(async (req, res) => {
   let path = decodeURIComponent(new URL(req.url, "http://x").pathname);
-  if (path === "/bandstemmixer/separator.js") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(STUB);
+  if (path === "/vocalharmonymaker/separator.js") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(STUB);
   if (path === "/__guide/guide-song.mjs") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(await readFile(SONG_JS));
   if (path.endsWith("/")) path += "index.html";
   const file = normalize(join(PUBLIC, path));

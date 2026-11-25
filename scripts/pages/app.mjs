@@ -2,7 +2,7 @@
 // disagree with it (WEBAPP_BASELINE.md §10-8). The build stops if a value cannot be found.
 import { readFileSync } from "node:fs";
 
-const read = (file) => readFileSync(new URL(`../../public/bandstemmixer/${file}`, import.meta.url), "utf8");
+const read = (file) => readFileSync(new URL(`../../public/vocalharmonymaker/${file}`, import.meta.url), "utf8");
 function num(src, re, file) {
   const m = src.match(re);
   if (!m) throw new Error(`scripts/pages/app.mjs: ${re} not found in ${file}`);

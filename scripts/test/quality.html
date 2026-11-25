@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Separation and harmony check</title>
+</head>
+<body>
+<pre id="out">running…</pre>
+<script type="module">
+// Test page (served only by scripts/test/serve.mjs, never deployed): separates /__audio/song.wav (the song of
+// scripts/guide-song.mjs) with the app's separator.js, then runs harmony.js's analyze() on
+//   a. the true parts of the song (vocals, and drums + bass + other)
+//   b. the separated parts
+// and reports the chord of each bar, the BPM, how much of the melody was found on the right note, the harmony notes,
+// and how much of the true vocals ended up in the separated vocals. Read by scripts/test/e2e.mjs (window.result).
+import { analyze } from "/vocalharmonymaker/harmony.js";
+import { SR, makeParts, twoStems } from "/__scripts/guide-song.mjs";
+
+const NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const toI16 = (f) => { const o = new Int16Array(f.length); for (let i = 0; i < f.length; i++) o[i] = Math.max(-32768, Math.min(32767, Math.round(f[i] * 32767))); return o; };
+const BEAT = 0.5, BAR = 2;
+// The melody of scripts/guide-song.mjs: [MIDI, start beat, length], every 16 beats from beat 16
+const MELODY = [[69, 0, 1.5], [72, 1.5, 0.5], [71, 2, 1], [69, 3, 1], [65, 4, 2], [67, 6, 1], [69, 7, 1],
+  [64, 8, 1.5], [67, 9.5, 0.5], [72, 10, 2], [71, 12, 1], [67, 13, 1], [69, 14, 2]];
+function trueNote(t) {
+  if (t < 16 * BEAT) return 0;
+  const b = ((t / BEAT) - 16) % 16;
+  for (const [m, s, l] of MELODY) if (b >= s + 0.1 && b < s + l - 0.1) return m;
+  return 0;
+}
+
+function report(res, sec) {
+  const bars = [];
+  for (let b = 0; b * BAR < sec - 0.5; b++) {
+    const t = b * BAR + BAR / 2;
+    const c = res.chords.find((x) => x.t0 <= t && t < x.t1);
+    bars.push(!c || c.root < 0 ? "N" : NAMES[c.root] + c.q);
+  }
+  // Melody: frames where the true note is known and the tracked pitch rounds to it (octave errors count as wrong)
+  let known = 0, right = 0;
+  for (let f = 0; f < res.pitch.length; f++) {
+    const n = trueNote(f * res.frame);
+    if (!n) continue;
+    known++;
+    if (Math.round(res.pitch[f]) === n) right++;
+  }
+  const iv = {};
+  for (const n of res.notes) { const d = n.harm - n.midi; iv[d] = (iv[d] || 0) + 1; }
+  return { key: NAMES[res.key.tonic] + (res.key.minor ? "m" : ""), bpm: Math.round(res.bpm * 10) / 10, bars, melody: known ? right / known : 0, notes: res.notes.length, intervals: iv };
+}
+
+async function decode(url) {
+  const data = await (await fetch(url)).arrayBuffer();
+  const ctx = new OfflineAudioContext(2, SR, SR);
+  const buf = await ctx.decodeAudioData(data);
+  return [new Float32Array(buf.getChannelData(0)), new Float32Array(buf.getChannelData(1))];
+}
+
+function separate(L, R) {
+  return new Promise((resolve, reject) => {
+    const w = new Worker("/vocalharmonymaker/separator.js", { type: "module" });
+    w.onmessage = (e) => {
+      if (e.data.type === "done") { w.terminate(); resolve(e.data.stems); }
+      else if (e.data.type === "error") { w.terminate(); reject(new Error(e.data.message)); }
+    };
+    w.onerror = (e) => reject(new Error(e.message || "worker"));
+    w.postMessage({ type: "run", left: L, right: R, gpu: false, safe: false });
+  });
+}
+
+try {
+  const [L, R] = await decode("/__audio/song.wav");
+  const sec = L.length / SR;
+  const truth = twoStems(makeParts(L.length));
+  const run = (vocals, acc) => analyze({ type: "run", vocals, accompaniment: acc, dir: 1, interval: 3, correct: 2, semis: 0 });
+  const t0 = performance.now();
+  const a = report(run(truth.vocals.map(toI16), truth.accompaniment.map(toI16)), sec);
+  const stems = await separate(L.slice(), R.slice());
+  const sepSec = (performance.now() - t0) / 1000;
+  const b = report(run(stems[0], stems[1]), sec);
+  // How close the separated vocals are to the true vocals (signal-to-distortion ratio of the left channel, dB)
+  let sig = 0, err = 0;
+  for (let i = 0; i < L.length; i++) { const v = truth.vocals[0][i], e = stems[0][0][i] / 32768 - v; sig += v * v; err += e * e; }
+  const sdr = 10 * Math.log10(sig / (err || 1e-12));
+  window.result = { truth: a, separated: b, sdr, sepSec };
+} catch (e) {
+  window.result = { error: String(e && e.stack || e) };
+}
+document.getElementById("out").textContent = JSON.stringify(window.result, null, 1);
+</script>
+</body>
+</html>
