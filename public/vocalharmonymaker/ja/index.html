@@ -276,15 +276,14 @@
         <div class="panel-body">
           <label class="drop" id="drop">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-            <b data-i18n="file.choose">音声ファイルを選ぶ</b>
-            <span data-i18n="file.hint">またはここにドロップ · MP3・WAV・M4A・FLAC など、12 分まで</span>
-            <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus,.webm" />
+            <b data-i18n="file.choose">曲のファイルを選ぶ</b>
+            <span data-i18n="file.hint">またはここにドロップ · MP3・WAV・M4A・FLAC・MP4 動画など、12 分まで</span>
+            <input type="file" id="fileInput" accept="audio/*,video/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus,.webm,.mp4,.m4v,.mov,.mkv" />
           </label>
           <div class="song" id="songInfo" hidden>
             <span class="name" id="songName"></span>
             <span class="meta" id="songMeta"></span>
           </div>
-          <button class="primary big" id="runBtn" type="button" disabled data-i18n="run">ボーカルを分離してハモリを作る</button>
           <div class="progress" id="progress" hidden>
             <span class="stage" id="stage"></span>
             <div class="bar" id="bar"><div></div></div>
@@ -310,10 +309,11 @@
         </div>
         <div id="mixer" class="ghost" inert>
           <div class="transport">
-            <button class="play" id="playBtn" type="button" aria-label="再生" data-i18n-attr="aria-label:play">
+            <button class="play" id="playBtn" type="button" aria-label="再生" title="再生" data-i18n-attr="aria-label:play;title:play">
               <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>
-              <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><rect x="6" y="6" width="12" height="12" rx="1.5"></rect></svg>
+              <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
             </button>
+            <button class="chip sq" id="stopBtn" type="button" aria-label="停止（最初に戻る）" title="停止（最初に戻る）" data-i18n-attr="aria-label:stop;title:stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5"></rect></svg></button>
             <div class="seek">
               <input type="range" id="seek" min="0" max="1" step="0.1" value="0" aria-label="再生位置" data-i18n-attr="aria-label:position" />
               <div class="time"><span id="timeNow">0:00</span><span id="timeEnd">0:00</span></div>
@@ -354,7 +354,7 @@
               <button class="chip save-btn" id="saveMix" type="button" data-i18n="mix.save">このミックスを保存（MP3）</button>
             </div>
           </div>
-          <p class="keys" data-i18n-html="keys"><kbd>Space</kbd> 再生 / 一時停止 · <kbd>1</kbd>–<kbd>4</kbd> パートをミュート · <kbd>←</kbd> <kbd>→</kbd> 5 秒戻る / 進む</p>
+          <p class="keys" data-i18n-html="keys"><kbd>Space</kbd> 再生 / 一時停止 · <kbd>Home</kbd> 停止 · <kbd>1</kbd>–<kbd>4</kbd> パートをミュート · <kbd>←</kbd> <kbd>→</kbd> 5 秒戻る / 進む</p>
         </div>
       </section>
     </div>
@@ -363,7 +363,7 @@
     <section class="intro" aria-labelledby="introTitle">
       <h1 id="introTitle" data-i18n="intro.title">曲のボーカルにハモリを自動で付ける</h1>
       <div data-i18n-html="intro.body"><p>Vocal Harmony Maker は、選んだ曲に<b>ハモリのパート</b>を付けるアプリです。AI でボーカルと伴奏を分け、キー・テンポ（BPM）・拍ごとのコードを推定し、ボーカルの旋律を追って、3 度か 5 度の上（または下）のハモリを書きます。ハモリは 2 通りで鳴ります。ボーカルの音程を変えた<b>歌っている人の声のままのハモリ</b>と、練習用の<b>ガイド音</b>です。</p>
-<p>MP3・WAV・M4A などの音声ファイルを選んで「ボーカルを分離してハモリを作る」を押してください。ボーカル・伴奏・ハモリの声・ガイド音のそれぞれにフェーダーとミュート（M）・ソロ（S）が付きます。ボーカルを下げてハモリの上で主旋律を歌ったり、ハモリの声をミュートしてガイド音を頼りに自分でハモったりできます。コードと音符はピアノロールのようにフェーダーの上を流れます。</p>
+<p>MP3・WAV・M4A・MP4 などの音声・動画ファイルを選ぶと、すぐに分離が始まります。ボーカル・伴奏・ハモリの声・ガイド音のそれぞれにフェーダーとミュート（M）・ソロ（S）が付きます。ボーカルを下げてハモリの上で主旋律を歌ったり、ハモリの声をミュートしてガイド音を頼りに自分でハモったりできます。コードと音符はピアノロールのようにフェーダーの上を流れます。</p>
 <p>コードは自動の推定なので間違うこともあります。拍をタップして正しいコード（Am7・F#m7b5・C/E など。| C | G | Am | F | のような小節の書き方も可）を入力し、ハモリを作り直せます。「キー」で曲全体・コード・ハモリを、テンポを変えずに 1 オクターブまで上げ下げできます。各パートと自分で作ったミックスは MP3 で保存できます。</p>
 <p>処理はすべて<b>ブラウザの中</b>で行い、曲はどこにもアップロードしません。初回は AI モデル（約 75 MB。次回のために端末に保存）をダウンロードするので Wi-Fi をおすすめします（モバイルデータ通信のときは事前に確認します）。モデルは Deezer の Spleeter（2 パート）です。この種のモデルは完全ではなく、ボーカルに伴奏が少し残ることがあり、それはハモリの声にも出ます。無料・登録不要です。</p>
 <h2>ガイド</h2>
@@ -404,7 +404,7 @@
     <h2 id="helpTitle" data-i18n="menu.help">使い方</h2>
     <div class="help-body">
       <ol class="help-list" data-i18n-html="help.body"><li><b>曲を選ぶ</b> – 枠をタップして音声ファイルを選ぶか、枠にドロップします。MP3・WAV・M4A（AAC）・FLAC など、ブラウザで再生できる形式の 12 分までの曲に対応しています。</li>
-<li><b>分離する</b> – 「ボーカルを分離してハモリを作る」を押します。初回は AI モデル（約 75 MB）をダウンロードして端末に保存します。Wi-Fi でないときは先に確認します。バーに進み具合と残り時間の目安が出ます。</li>
+<li><b>分離する</b> – ファイルを読み込むと、すぐに分離が始まります。初回は AI モデル（約 75 MB）をダウンロードして端末に保存します。Wi-Fi でないときは先に確認します。バーに進み具合と残り時間の目安が出ます。</li>
 <li><b>ハモリ</b> – 分離が終わると続けて、キーとコードを推定し、メニューで選んだパート（最初は 3 度上）のハモリを作ります。パートを変えたら「ハモリを再生成」を押してください。作れなかったときは「コード推定＆ハモリ生成」を押します。「ハモリ（声）」はボーカルの音程をハモリの音に変えて音程補正（Auto-Tune のような）をかけたもの、「ハモリのガイド音」は同じ音を単純な音で鳴らすもので、ハモリを歌う練習に使えます。</li>
 <li><b>コード</b> – テンポ（BPM）と拍も推定し、拍（4 分音符）ごとにコードを持てます。上の段（コード）の拍をタップしてコード名を入力すると、次のコードまでそのコードになります（| C | G | Am | F | のように小節で書くと、その拍から流し込みます）。「ハモリを再生成」で入力したコードを使います。コードと音符は横にドラッグして先や前を見られます。どれも自動の推定なので、間違うこともあります。</li>
 <li><b>ミックス</b> – 再生して、パートごとのフェーダーを動かします。<b>M</b> でミュート、<b>S</b> を押したパートだけを鳴らします。ハモリを練習するときは「ハモリ（声）」をミュートして、ガイド音に合わせて歌ってみてください。</li>
@@ -486,14 +486,12 @@
         en: {
           "settings": "Settings",
           "song": "Song",
-          "file.choose": "Choose an audio file",
-          "file.hint": "or drop it here · MP3, WAV, M4A, FLAC… up to 12 min",
+          "file.choose": "Choose a song file",
+          "file.hint": "or drop it here · MP3, WAV, M4A, FLAC, MP4 video… up to 12 min",
           "file.reading": "Reading the file…",
           "file.meta": "{time} · {ch}",
           "file.mono": "mono",
           "file.stereo": "stereo",
-          "run": "Separate the vocals & make a harmony",
-          "run.again": "Separate again",
           "cancel": "Cancel",
           "close": "Close",
           "keepOpen": "Keep this screen open until it finishes. On a phone, separation stops while the screen is off or another app is open.",
@@ -509,7 +507,7 @@
           "crash": "The last separation stopped partway ({where}{progress}) and the page was reloaded. The device most likely ran out of memory. Close other apps and tabs and try again, try a shorter song, or use a computer.",
           "crash.progress": ", {pct}% done",
           "crash.song": " · song: {time}",
-          "crash.next": " Next time, this device separates with different settings: choose the song again and press “Separate the vocals & make a harmony”.",
+          "crash.next": " Next time, this device separates with different settings: choose the song again.",
           "crash.none": " Every setting has stopped on this device, so it probably cannot separate songs. Separate the song on a computer and use the saved MP3 files here.",
           "where.download": "while downloading the AI model",
           "where.init": "while loading the AI model",
@@ -531,7 +529,8 @@
           "empty.title": "After separating, your harmony appears here",
           "empty": "Choose a song: the app separates the vocals, finds the chords, and adds a harmony part sung in the singer's own voice (a 3rd or a 5th above or below), with a guide tone to practice along. Edit the chords, change the key, and save MP3 files.",
           "play": "Play",
-          "pause": "Stop",
+          "pause": "Pause",
+          "stop": "Stop (back to the start)",
           "position": "Position",
           "master": "Master",
           "mix.reset": "Reset mixer",
@@ -581,7 +580,7 @@
           "harm.roll": "Chords, the vocal melody (grey line), and the harmony notes (black bars)",
           "stem.harmony": "Harmony (voice)",
           "stem.guide": "Harmony guide tone",
-          "keys": "<kbd>Space</kbd> play / pause · <kbd>1</kbd>–<kbd>4</kbd> mute a part · <kbd>←</kbd> <kbd>→</kbd> 5 seconds back / forward",
+          "keys": "<kbd>Space</kbd> play / pause · <kbd>Home</kbd> stop · <kbd>1</kbd>–<kbd>4</kbd> mute a part · <kbd>←</kbd> <kbd>→</kbd> 5 seconds back / forward",
           "foot": "Your song is separated on this device and never uploaded. No account needed.",
           "net.title.cellular": "You seem to be on mobile data",
           "net.title.saveData": "Data Saver is on",
@@ -592,7 +591,8 @@
           "net.size": "Download: about {mb} MB (the AI model and the separation engine). Only the first time; it is kept on this device.",
           "net.later": "Not now",
           "net.ok": "Download and separate",
-          "err.decode": "This file could not be read. Try another format such as MP3, WAV, or M4A.",
+          "net.later.note": "Not downloaded. To separate, choose the song again (on Wi-Fi if you can).",
+          "err.decode": "This file could not be read. Try another format such as MP3, WAV, M4A, or MP4.",
           "err.tooLong": "Songs up to {max} minutes can be separated on this device. This one is {time}. Cut it shorter and try again.",
           "err.offline": "You are offline. The AI model needs to be downloaded the first time; connect to the internet and try again.",
           "err.download": "The AI model could not be downloaded. Check your connection and try again.",
@@ -602,7 +602,7 @@
           "err.audio": "Sound could not be played in this browser.",
           "err.save": "The file could not be saved.",
           "intro.title": "Add a harmony to the vocals of any song",
-          "intro.body": "<p>Vocal Harmony Maker makes a <b>harmony part</b> for the song you choose. AI separates the vocals from the backing, the app finds the key, the tempo (BPM), and a chord on every beat, follows the vocal melody, and writes a harmony a 3rd or a 5th above or below it. You hear it twice: as <b>the singer's own voice</b> moved to the harmony notes, and as a plain <b>guide tone</b> for practicing.</p>\n<p>Choose an audio file such as MP3, WAV, or M4A and press “Separate the vocals &amp; make a harmony”. The vocals, the backing, the harmony voice, and the guide tone each get a fader with mute (M) and solo (S). Turn the vocals down and sing the melody over the harmony, or mute the harmony voice and sing the harmony yourself with the guide tone. The chords and notes scroll above the faders like a piano roll.</p>\n<p>The chords are estimated, so they can be wrong: tap a beat and type the right chord (Am7, F#m7b5, C/E…, or bars like | C | G | Am | F |), then remake the harmony. “Key” moves the whole song, chords, and harmony up or down by up to an octave without changing the tempo. Each part, and your own mix, can be saved as an MP3 file.</p>\n<p>Everything runs <b>in your browser</b>. Your song is not uploaded anywhere. The first time, the app downloads the AI model (about 75 MB; it is kept on your device for next time), so use Wi-Fi; on mobile data the app asks first. The model is Spleeter (2 stems) by Deezer. Like all such models it is not perfect: some backing can remain in the vocals, which then shows in the harmony voice too. Free, with no sign-up.</p>\n<h2>Guides</h2>\n<ul>\n  <li><a href=\"/vocalharmonymaker/guide/\" target=\"_blank\" rel=\"noopener\">How to use Vocal Harmony Maker</a></li>\n  <li><a href=\"/vocalharmonymaker/harmony/\" target=\"_blank\" rel=\"noopener\">Practicing harmonies: thirds, fifths, upper and lower parts</a></li>\n  <li><a href=\"/vocalharmonymaker/chords-and-key/\" target=\"_blank\" rel=\"noopener\">Chords, tempo, and key change</a></li>\n  <li><a href=\"/vocalharmonymaker/how-it-works/\" target=\"_blank\" rel=\"noopener\">How the harmony is made from the vocals</a></li>\n  <li><a href=\"/vocalharmonymaker/faq/\" target=\"_blank\" rel=\"noopener\">Frequently asked questions</a></li>\n</ul>",
+          "intro.body": "<p>Vocal Harmony Maker makes a <b>harmony part</b> for the song you choose. AI separates the vocals from the backing, the app finds the key, the tempo (BPM), and a chord on every beat, follows the vocal melody, and writes a harmony a 3rd or a 5th above or below it. You hear it twice: as <b>the singer's own voice</b> moved to the harmony notes, and as a plain <b>guide tone</b> for practicing.</p>\n<p>Choose an audio or video file such as MP3, WAV, M4A, or MP4: separation starts right away. The vocals, the backing, the harmony voice, and the guide tone each get a fader with mute (M) and solo (S). Turn the vocals down and sing the melody over the harmony, or mute the harmony voice and sing the harmony yourself with the guide tone. The chords and notes scroll above the faders like a piano roll.</p>\n<p>The chords are estimated, so they can be wrong: tap a beat and type the right chord (Am7, F#m7b5, C/E…, or bars like | C | G | Am | F |), then remake the harmony. “Key” moves the whole song, chords, and harmony up or down by up to an octave without changing the tempo. Each part, and your own mix, can be saved as an MP3 file.</p>\n<p>Everything runs <b>in your browser</b>. Your song is not uploaded anywhere. The first time, the app downloads the AI model (about 75 MB; it is kept on your device for next time), so use Wi-Fi; on mobile data the app asks first. The model is Spleeter (2 stems) by Deezer. Like all such models it is not perfect: some backing can remain in the vocals, which then shows in the harmony voice too. Free, with no sign-up.</p>\n<h2>Guides</h2>\n<ul>\n  <li><a href=\"/vocalharmonymaker/guide/\" target=\"_blank\" rel=\"noopener\">How to use Vocal Harmony Maker</a></li>\n  <li><a href=\"/vocalharmonymaker/harmony/\" target=\"_blank\" rel=\"noopener\">Practicing harmonies: thirds, fifths, upper and lower parts</a></li>\n  <li><a href=\"/vocalharmonymaker/chords-and-key/\" target=\"_blank\" rel=\"noopener\">Chords, tempo, and key change</a></li>\n  <li><a href=\"/vocalharmonymaker/how-it-works/\" target=\"_blank\" rel=\"noopener\">How the harmony is made from the vocals</a></li>\n  <li><a href=\"/vocalharmonymaker/faq/\" target=\"_blank\" rel=\"noopener\">Frequently asked questions</a></li>\n</ul>",
           "menu.help": "How to use",
           "menu.guide": "Guides & articles",
           "guide.url": "/vocalharmonymaker/guide/",
@@ -613,7 +613,7 @@
           "home.url": "https://ktkwmr.com/",
           "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>\n<a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">About this site</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">Source code on GitHub</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">Feedback</a>\n<a href=\"https://ktkwmr.com/\" target=\"_blank\" rel=\"noopener\">More apps by ktkwmr</a>",
           "menu.model": "Delete the AI model",
-          "help.body": "<li><b>Choose a song</b> – Tap the box and choose an audio file, or drop it on the box. MP3, WAV, M4A (AAC), FLAC, and most formats your browser can play work, up to 12 minutes.</li>\n<li><b>Separate</b> – Press “Separate the vocals &amp; make a harmony”. The first time, the AI model (about 75 MB) is downloaded and kept on your device. If you are not on Wi-Fi, the app asks first. The bar shows how far it is and about how long is left.</li>\n<li><b>Harmony</b> – Right after separating, the app finds the key and chords and makes a harmony a 3rd or a 5th above (or below) the vocal melody: the part chosen in the menu (3rd above at first). To change the part, choose it and press “Remake the harmony”. If it could not be made, press “Find chords &amp; make harmony”. “Harmony (voice)” is the vocals shifted to the harmony notes and pitch-corrected (like Auto-Tune); “Harmony guide tone” plays the same notes as a plain tone, to practice singing the harmony.</li>\n<li><b>Chords</b> – The tempo (BPM) and the beats are found too, and each beat (quarter note) can have its own chord: tap a beat in the chord row and type a chord (it lasts until the next chord; bars like | C | G | Am | F | fill the beats from there), then press “Remake the harmony” to use your chords. Drag the chords and notes sideways to look ahead or back. Everything is estimated automatically and can be wrong.</li>\n<li><b>Mix</b> – Play, then use each part's fader. <b>M</b> mutes a part; <b>S</b> plays only the parts with S on. To practice the harmony, mute “Harmony (voice)” and sing it with the guide tone.</li>\n<li><b>Key</b> – − / + moves every part up or down a semitone (up to an octave), with the chords and the harmony.</li>\n<li><b>Save</b> – The ↓ button on each part saves that part as an MP3 file. “Save this mix (MP3)” saves what you hear now (faders, mute, and solo).</li>\n<li><b>Good to know</b> – The parts are not saved in the app: when you reload or choose another song, separate again or use the MP3 files you saved. A computer is faster than a phone. Keep the screen on while separating.</li>\n<li><b>Use songs you may use</b> – Use your own recordings, or songs you have the rights to use. Do not publish separated or harmonized versions of songs by others without permission.</li>",
+          "help.body": "<li><b>Choose a song</b> – Tap the box and choose an audio or video file, or drop it on the box. MP3, WAV, M4A (AAC), FLAC, MP4 and MOV videos (their sound is used), and most formats your browser can play work, up to 12 minutes.</li>\n<li><b>Separate</b> – Separation starts as soon as the file is read. The first time, the AI model (about 75 MB) is downloaded and kept on your device. If you are not on Wi-Fi, the app asks first. The bar shows how far it is and about how long is left.</li>\n<li><b>Harmony</b> – Right after separating, the app finds the key and chords and makes a harmony a 3rd or a 5th above (or below) the vocal melody: the part chosen in the menu (3rd above at first). To change the part, choose it and press “Remake the harmony”. If it could not be made, press “Find chords &amp; make harmony”. “Harmony (voice)” is the vocals shifted to the harmony notes and pitch-corrected (like Auto-Tune); “Harmony guide tone” plays the same notes as a plain tone, to practice singing the harmony.</li>\n<li><b>Chords</b> – The tempo (BPM) and the beats are found too, and each beat (quarter note) can have its own chord: tap a beat in the chord row and type a chord (it lasts until the next chord; bars like | C | G | Am | F | fill the beats from there), then press “Remake the harmony” to use your chords. Drag the chords and notes sideways to look ahead or back. Everything is estimated automatically and can be wrong.</li>\n<li><b>Mix</b> – Play, then use each part's fader. <b>M</b> mutes a part; <b>S</b> plays only the parts with S on. To practice the harmony, mute “Harmony (voice)” and sing it with the guide tone.</li>\n<li><b>Key</b> – − / + moves every part up or down a semitone (up to an octave), with the chords and the harmony.</li>\n<li><b>Save</b> – The ↓ button on each part saves that part as an MP3 file. “Save this mix (MP3)” saves what you hear now (faders, mute, and solo).</li>\n<li><b>Good to know</b> – The parts are not saved in the app: when you reload or choose another song, separate again or use the MP3 files you saved. A computer is faster than a phone. Keep the screen on while separating.</li>\n<li><b>Use songs you may use</b> – Use your own recordings, or songs you have the rights to use. Do not publish separated or harmonized versions of songs by others without permission.</li>",
           "privacy.body": "<li><b>Your song stays on your device</b> – The audio file you choose is read, separated, and analyzed (chords, harmony, key change) only in your browser. It is never sent to a server. Saving MP3 files only saves them on your device. This app has no accounts and does not use cookies or the microphone.</li>\n<li><b>Downloads</b> – To separate, your browser downloads the AI model from this site and the ONNX Runtime library (and, when you save, the lamejs MP3 encoder) from jsDelivr (a CDN). Like any download, they receive your IP address and browser information. Nothing about your song is sent.</li>\n<li><b>Data saved in your browser</b> – The AI model (so it is downloaded only once), the mixer settings (fader levels, mute, master volume), and the app itself (to work offline) are saved in your browser. Reset the mixer with “Reset mixer”, delete the model with ⚙ → “Delete the AI model”, or clear this site's data in your browser settings.</li>\n<li><b>Server logs and page views</b> – This site is hosted on Cloudflare. Standard access logs (such as IP address, time, and the requested page) are kept for operation and security. Cloudflare Web Analytics counts page views without cookies (the page URL, referrer, browser information, and page load time).</li>\n<li><b>Contact</b> – Questions and feedback: <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a>.</li>\n<li><b>Full policy</b> – See the <a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">privacy policy</a> and <a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">about this site</a>.</li>",
           "model.del.title": "Delete the AI model?",
           "model.del.body": "This deletes the AI model (about 75 MB) saved in this browser, to free up space. It is downloaded again the next time you separate a song.",
@@ -626,14 +626,12 @@
         ja: {
           "settings": "設定",
           "song": "曲",
-          "file.choose": "音声ファイルを選ぶ",
-          "file.hint": "またはここにドロップ · MP3・WAV・M4A・FLAC など、12 分まで",
+          "file.choose": "曲のファイルを選ぶ",
+          "file.hint": "またはここにドロップ · MP3・WAV・M4A・FLAC・MP4 動画など、12 分まで",
           "file.reading": "ファイルを読み込んでいます…",
           "file.meta": "{time} · {ch}",
           "file.mono": "モノラル",
           "file.stereo": "ステレオ",
-          "run": "ボーカルを分離してハモリを作る",
-          "run.again": "もう一度分離する",
           "cancel": "キャンセル",
           "close": "閉じる",
           "keepOpen": "終わるまでこの画面を開いたままにしてください。スマホでは、画面が消えたりほかのアプリに切り替えたりすると分離が止まります。",
@@ -649,7 +647,7 @@
           "crash": "前回の分離は途中で止まり、ページが読み込み直されました（{where}{progress}）。端末のメモリが足りなくなった可能性が高いです。ほかのアプリやタブを閉じてもう一度試すか、短い曲にするか、パソコンでお試しください。",
           "crash.progress": "、{pct}% まで完了",
           "crash.song": " · 曲の長さ {time}",
-          "crash.next": "次からは、この端末では別の設定で分離します。曲を選び直して、もう一度「ボーカルを分離してハモリを作る」を押してください。",
+          "crash.next": "次からは、この端末では別の設定で分離します。曲を選び直してください。",
           "crash.none": "この端末では、どの設定でも途中で止まりました。分離できない可能性が高いので、パソコンで分離して、保存した MP3 をこの端末で使ってください。",
           "where.download": "AI モデルのダウンロード中",
           "where.init": "AI モデルの読み込み中",
@@ -671,7 +669,8 @@
           "empty.title": "分離すると、ここにハモリが表示されます",
           "empty": "曲を選ぶと、ボーカルを分離してコードを推定し、歌っている人の声のままのハモリ（3 度・5 度の上か下）と、練習用のガイド音を作ります。コードの修正、キーの変更、MP3 での保存もできます。",
           "play": "再生",
-          "pause": "停止",
+          "pause": "一時停止",
+          "stop": "停止（最初に戻る）",
           "position": "再生位置",
           "master": "全体",
           "mix.reset": "ミキサーを元に戻す",
@@ -721,7 +720,7 @@
           "harm.roll": "コード、ボーカルの音程（灰色の線）、ハモリの音（黒い帯）",
           "stem.harmony": "ハモリ（声）",
           "stem.guide": "ハモリのガイド音",
-          "keys": "<kbd>Space</kbd> 再生 / 一時停止 · <kbd>1</kbd>–<kbd>4</kbd> パートをミュート · <kbd>←</kbd> <kbd>→</kbd> 5 秒戻る / 進む",
+          "keys": "<kbd>Space</kbd> 再生 / 一時停止 · <kbd>Home</kbd> 停止 · <kbd>1</kbd>–<kbd>4</kbd> パートをミュート · <kbd>←</kbd> <kbd>→</kbd> 5 秒戻る / 進む",
           "foot": "曲はこの端末の中で分離し、どこにもアップロードしません。登録も不要です。",
           "net.title.cellular": "モバイルデータ通信に接続しているようです",
           "net.title.saveData": "データセーバーがオンになっています",
@@ -732,7 +731,8 @@
           "net.size": "ダウンロード：約 {mb} MB（AI モデルと分離のプログラム）。初回だけで、この端末に保存します。",
           "net.later": "やめておく",
           "net.ok": "ダウンロードして分離する",
-          "err.decode": "このファイルは読み込めませんでした。MP3・WAV・M4A など、ほかの形式でお試しください。",
+          "net.later.note": "ダウンロードしませんでした。分離するときは、曲を選び直してください（できれば Wi-Fi で）。",
+          "err.decode": "このファイルは読み込めませんでした。MP3・WAV・M4A・MP4 など、ほかの形式でお試しください。",
           "err.tooLong": "この端末で分離できるのは {max} 分までの曲です。この曲は {time} あります。短く切ってからお試しください。",
           "err.offline": "オフラインです。初回は AI モデルのダウンロードが必要です。インターネットに接続してからもう一度お試しください。",
           "err.download": "AI モデルをダウンロードできませんでした。接続を確認して、もう一度お試しください。",
@@ -742,7 +742,7 @@
           "err.audio": "このブラウザでは音を再生できませんでした。",
           "err.save": "ファイルを保存できませんでした。",
           "intro.title": "曲のボーカルにハモリを自動で付ける",
-          "intro.body": "<p>Vocal Harmony Maker は、選んだ曲に<b>ハモリのパート</b>を付けるアプリです。AI でボーカルと伴奏を分け、キー・テンポ（BPM）・拍ごとのコードを推定し、ボーカルの旋律を追って、3 度か 5 度の上（または下）のハモリを書きます。ハモリは 2 通りで鳴ります。ボーカルの音程を変えた<b>歌っている人の声のままのハモリ</b>と、練習用の<b>ガイド音</b>です。</p>\n<p>MP3・WAV・M4A などの音声ファイルを選んで「ボーカルを分離してハモリを作る」を押してください。ボーカル・伴奏・ハモリの声・ガイド音のそれぞれにフェーダーとミュート（M）・ソロ（S）が付きます。ボーカルを下げてハモリの上で主旋律を歌ったり、ハモリの声をミュートしてガイド音を頼りに自分でハモったりできます。コードと音符はピアノロールのようにフェーダーの上を流れます。</p>\n<p>コードは自動の推定なので間違うこともあります。拍をタップして正しいコード（Am7・F#m7b5・C/E など。| C | G | Am | F | のような小節の書き方も可）を入力し、ハモリを作り直せます。「キー」で曲全体・コード・ハモリを、テンポを変えずに 1 オクターブまで上げ下げできます。各パートと自分で作ったミックスは MP3 で保存できます。</p>\n<p>処理はすべて<b>ブラウザの中</b>で行い、曲はどこにもアップロードしません。初回は AI モデル（約 75 MB。次回のために端末に保存）をダウンロードするので Wi-Fi をおすすめします（モバイルデータ通信のときは事前に確認します）。モデルは Deezer の Spleeter（2 パート）です。この種のモデルは完全ではなく、ボーカルに伴奏が少し残ることがあり、それはハモリの声にも出ます。無料・登録不要です。</p>\n<h2>ガイド</h2>\n<ul>\n  <li><a href=\"/vocalharmonymaker/ja/guide/\" target=\"_blank\" rel=\"noopener\">Vocal Harmony Maker の使い方</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/harmony/\" target=\"_blank\" rel=\"noopener\">ハモリの練習：3 度・5 度、上ハモと下ハモ</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/chords-and-key/\" target=\"_blank\" rel=\"noopener\">コード・テンポの推定とキーの変更</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/how-it-works/\" target=\"_blank\" rel=\"noopener\">ボーカルからハモリを作る仕組み</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/faq/\" target=\"_blank\" rel=\"noopener\">よくある質問</a></li>\n</ul>",
+          "intro.body": "<p>Vocal Harmony Maker は、選んだ曲に<b>ハモリのパート</b>を付けるアプリです。AI でボーカルと伴奏を分け、キー・テンポ（BPM）・拍ごとのコードを推定し、ボーカルの旋律を追って、3 度か 5 度の上（または下）のハモリを書きます。ハモリは 2 通りで鳴ります。ボーカルの音程を変えた<b>歌っている人の声のままのハモリ</b>と、練習用の<b>ガイド音</b>です。</p>\n<p>MP3・WAV・M4A・MP4 などの音声・動画ファイルを選ぶと、すぐに分離が始まります。ボーカル・伴奏・ハモリの声・ガイド音のそれぞれにフェーダーとミュート（M）・ソロ（S）が付きます。ボーカルを下げてハモリの上で主旋律を歌ったり、ハモリの声をミュートしてガイド音を頼りに自分でハモったりできます。コードと音符はピアノロールのようにフェーダーの上を流れます。</p>\n<p>コードは自動の推定なので間違うこともあります。拍をタップして正しいコード（Am7・F#m7b5・C/E など。| C | G | Am | F | のような小節の書き方も可）を入力し、ハモリを作り直せます。「キー」で曲全体・コード・ハモリを、テンポを変えずに 1 オクターブまで上げ下げできます。各パートと自分で作ったミックスは MP3 で保存できます。</p>\n<p>処理はすべて<b>ブラウザの中</b>で行い、曲はどこにもアップロードしません。初回は AI モデル（約 75 MB。次回のために端末に保存）をダウンロードするので Wi-Fi をおすすめします（モバイルデータ通信のときは事前に確認します）。モデルは Deezer の Spleeter（2 パート）です。この種のモデルは完全ではなく、ボーカルに伴奏が少し残ることがあり、それはハモリの声にも出ます。無料・登録不要です。</p>\n<h2>ガイド</h2>\n<ul>\n  <li><a href=\"/vocalharmonymaker/ja/guide/\" target=\"_blank\" rel=\"noopener\">Vocal Harmony Maker の使い方</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/harmony/\" target=\"_blank\" rel=\"noopener\">ハモリの練習：3 度・5 度、上ハモと下ハモ</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/chords-and-key/\" target=\"_blank\" rel=\"noopener\">コード・テンポの推定とキーの変更</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/how-it-works/\" target=\"_blank\" rel=\"noopener\">ボーカルからハモリを作る仕組み</a></li>\n  <li><a href=\"/vocalharmonymaker/ja/faq/\" target=\"_blank\" rel=\"noopener\">よくある質問</a></li>\n</ul>",
           "menu.help": "使い方",
           "menu.guide": "ガイド・記事",
           "guide.url": "/vocalharmonymaker/ja/guide/",
@@ -753,7 +753,7 @@
           "home.url": "https://ktkwmr.com/ja/",
           "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>\n<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">GitHub のソースコード</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">フィードバック</a>\n<a href=\"https://ktkwmr.com/ja/\" target=\"_blank\" rel=\"noopener\">ktkwmr のほかのアプリ</a>",
           "menu.model": "AI モデルを削除",
-          "help.body": "<li><b>曲を選ぶ</b> – 枠をタップして音声ファイルを選ぶか、枠にドロップします。MP3・WAV・M4A（AAC）・FLAC など、ブラウザで再生できる形式の 12 分までの曲に対応しています。</li>\n<li><b>分離する</b> – 「ボーカルを分離してハモリを作る」を押します。初回は AI モデル（約 75 MB）をダウンロードして端末に保存します。Wi-Fi でないときは先に確認します。バーに進み具合と残り時間の目安が出ます。</li>\n<li><b>ハモリ</b> – 分離が終わると続けて、キーとコードを推定し、メニューで選んだパート（最初は 3 度上）のハモリを作ります。パートを変えたら「ハモリを再生成」を押してください。作れなかったときは「コード推定＆ハモリ生成」を押します。「ハモリ（声）」はボーカルの音程をハモリの音に変えて音程補正（Auto-Tune のような）をかけたもの、「ハモリのガイド音」は同じ音を単純な音で鳴らすもので、ハモリを歌う練習に使えます。</li>\n<li><b>コード</b> – テンポ（BPM）と拍も推定し、拍（4 分音符）ごとにコードを持てます。上の段（コード）の拍をタップしてコード名を入力すると、次のコードまでそのコードになります（| C | G | Am | F | のように小節で書くと、その拍から流し込みます）。「ハモリを再生成」で入力したコードを使います。コードと音符は横にドラッグして先や前を見られます。どれも自動の推定なので、間違うこともあります。</li>\n<li><b>ミックス</b> – 再生して、パートごとのフェーダーを動かします。<b>M</b> でミュート、<b>S</b> を押したパートだけを鳴らします。ハモリを練習するときは「ハモリ（声）」をミュートして、ガイド音に合わせて歌ってみてください。</li>\n<li><b>キー</b> – − / + で全パートを半音ずつ（1 オクターブまで）上げ下げします。コードとハモリも一緒に変わります。</li>\n<li><b>保存</b> – 各パートの ↓ ボタンでそのパートを MP3 で保存します。「このミックスを保存（MP3）」は、いま聞こえている状態（フェーダー・ミュート・ソロ）で保存します。</li>\n<li><b>知っておくこと</b> – 分離したパートはアプリに保存されません。再読み込みしたり別の曲を選んだりしたら、もう一度分離するか、保存した MP3 を使ってください。スマホよりパソコンのほうが速く終わります。分離中は画面を消さないでください。</li>\n<li><b>使ってよい曲で</b> – 自分の録音や、使う権利のある曲でお使いください。他人の曲を分離・ハモリを付けたものを、許可なく公開しないでください。</li>",
+          "help.body": "<li><b>曲を選ぶ</b> – 枠をタップして音声ファイルを選ぶか、枠にドロップします。MP3・WAV・M4A（AAC）・FLAC など、ブラウザで再生できる形式の 12 分までの曲に対応しています。</li>\n<li><b>分離する</b> – ファイルを読み込むと、すぐに分離が始まります。初回は AI モデル（約 75 MB）をダウンロードして端末に保存します。Wi-Fi でないときは先に確認します。バーに進み具合と残り時間の目安が出ます。</li>\n<li><b>ハモリ</b> – 分離が終わると続けて、キーとコードを推定し、メニューで選んだパート（最初は 3 度上）のハモリを作ります。パートを変えたら「ハモリを再生成」を押してください。作れなかったときは「コード推定＆ハモリ生成」を押します。「ハモリ（声）」はボーカルの音程をハモリの音に変えて音程補正（Auto-Tune のような）をかけたもの、「ハモリのガイド音」は同じ音を単純な音で鳴らすもので、ハモリを歌う練習に使えます。</li>\n<li><b>コード</b> – テンポ（BPM）と拍も推定し、拍（4 分音符）ごとにコードを持てます。上の段（コード）の拍をタップしてコード名を入力すると、次のコードまでそのコードになります（| C | G | Am | F | のように小節で書くと、その拍から流し込みます）。「ハモリを再生成」で入力したコードを使います。コードと音符は横にドラッグして先や前を見られます。どれも自動の推定なので、間違うこともあります。</li>\n<li><b>ミックス</b> – 再生して、パートごとのフェーダーを動かします。<b>M</b> でミュート、<b>S</b> を押したパートだけを鳴らします。ハモリを練習するときは「ハモリ（声）」をミュートして、ガイド音に合わせて歌ってみてください。</li>\n<li><b>キー</b> – − / + で全パートを半音ずつ（1 オクターブまで）上げ下げします。コードとハモリも一緒に変わります。</li>\n<li><b>保存</b> – 各パートの ↓ ボタンでそのパートを MP3 で保存します。「このミックスを保存（MP3）」は、いま聞こえている状態（フェーダー・ミュート・ソロ）で保存します。</li>\n<li><b>知っておくこと</b> – 分離したパートはアプリに保存されません。再読み込みしたり別の曲を選んだりしたら、もう一度分離するか、保存した MP3 を使ってください。スマホよりパソコンのほうが速く終わります。分離中は画面を消さないでください。</li>\n<li><b>使ってよい曲で</b> – 自分の録音や、使う権利のある曲でお使いください。他人の曲を分離・ハモリを付けたものを、許可なく公開しないでください。</li>",
           "privacy.body": "<li><b>曲は端末の中だけ</b> – 選んだ音声ファイルの読み込み・分離・解析（コード・ハモリ・キーの変更）は、ブラウザの中だけで行います。サーバーには送りません。MP3 の保存も端末に保存するだけです。アカウントはなく、Cookie とマイクも使いません。</li>\n<li><b>ダウンロード</b> – 分離のために、ブラウザがこのサイトから AI モデルを、jsDelivr（CDN）から ONNX Runtime のライブラリ（保存するときは MP3 を作る lamejs も）をダウンロードします。通常のダウンロードと同じく、IP アドレスとブラウザの情報が相手に届きます。曲の情報は送りません。</li>\n<li><b>ブラウザに保存するもの</b> – AI モデル（ダウンロードを 1 回で済ませるため）、ミキサーの設定（フェーダー・ミュート・全体の音量）、オフラインで使うためのアプリ本体。ミキサーは「ミキサーを元に戻す」、モデルは ⚙ →「AI モデルを削除」で消せます。ブラウザの設定でこのサイトのデータを消すこともできます。</li>\n<li><b>サーバーのログとアクセス数</b> – このサイトは Cloudflare で配信しています。運用とセキュリティのため、標準的なアクセスログ（IP アドレス・日時・ページなど）が残ります。閲覧数は Cookie を使わない Cloudflare Web Analytics で数えています（ページの URL・参照元・ブラウザの情報・読み込み時間）。</li>\n<li><b>お問い合わせ</b> – ご質問・ご意見は <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a> へ。</li>\n<li><b>詳しくは</b> – <a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>と<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>をご覧ください。</li>",
           "model.del.title": "AI モデルを削除しますか？",
           "model.del.body": "このブラウザに保存した AI モデル（約 75 MB）を削除して、容量を空けます。次に分離するときに、もう一度ダウンロードします。",
@@ -987,8 +987,6 @@
         $("songInfo").hidden = false;
         $("songName").textContent = f.name;
         $("songMeta").textContent = t("file.reading");
-        $("runBtn").disabled = true;
-        $("runBtn").textContent = t("run");
         try {
           const d = await decode(f);
           if (file !== f) return;
@@ -1000,7 +998,8 @@
           mix = d;
           fileOk = true;
           songSec = d.duration;
-          $("runBtn").disabled = false;
+          // No separate button: separation starts as soon as the file is read
+          run();
         } catch (e) {
           if (file !== f) return;
           $("songMeta").textContent = "";
@@ -1075,7 +1074,6 @@
       function setBusy(on) {
         busy = on;
         recordRun(on ? { stage: "download" } : null);
-        $("runBtn").disabled = on || !fileOk;
         $("drop").style.pointerEvents = on ? "none" : "";
         $("drop").style.opacity = on ? ".5" : "";
         if (!on) $("progress").hidden = true;
@@ -1126,7 +1124,7 @@
         showError("");
         await checkModel();
         if (!modelCached && navigator.onLine === false) { showError(t("err.offline")); return; }
-        if (!(await askNetwork())) return;
+        if (!(await askNetwork())) { showError(t("net.later.note")); return; }
         stopPlayback();
         releaseStems();
         setBusy(true);
@@ -1189,7 +1187,6 @@
           } else if (m.type === "done") {
             stopWorker();
             setBusy(false);
-            $("runBtn").textContent = t("run.again");
             toast(t("done", { time: fmtTime((Date.now() - startedAt) / 1000) }));
             loadStems(m.stems);
             // Then the chords and the harmony at once, with the part chosen in the menu (3rd above by default)
@@ -1236,7 +1233,6 @@
         }
         return decode(file);
       }
-      $("runBtn").addEventListener("click", run);
       $("cancelBtn").addEventListener("click", function () {
         stopWorker();
         setBusy(false);
@@ -1384,6 +1380,7 @@
         $("playIcon").toggleAttribute("hidden", on);
         $("pauseIcon").toggleAttribute("hidden", !on);
         $("playBtn").setAttribute("aria-label", t(on ? "pause" : "play"));
+        $("playBtn").title = t(on ? "pause" : "play");
         if (!on) meters.forEach(function (m) { m.style.width = "0"; });
         if (on) { posAt = performance.now(); viewStart = null; animateRoll(); } else drawRoll();
       }
@@ -1416,7 +1413,14 @@
         $("timeNow").textContent = fmtTime(pos / SR);
         drawRoll();
       }
+      // ■: stop and go back to the start (WEBAPP_BASELINE §9-15); ❚❚ keeps the position
+      function stopToStart() {
+        if (!stems) return;
+        stopPlayback();
+        seekTo(0);
+      }
       $("playBtn").addEventListener("click", togglePlay);
+      $("stopBtn").addEventListener("click", stopToStart);
       const seek = $("seek");
       seek.addEventListener("input", function () {
         seeking = true;
@@ -2196,6 +2200,9 @@
         if (e.key === " " && tag !== "BUTTON") {
           e.preventDefault();
           togglePlay();
+        } else if (e.key === "Home" && tag !== "INPUT") {
+          e.preventDefault();
+          stopToStart();
         } else if (/^[1-9]$/.test(e.key) && tracks[Number(e.key) - 1]) {
           const p = tracks[Number(e.key) - 1];
           store.parts[p.key].mute = !store.parts[p.key].mute;
@@ -2309,7 +2316,7 @@
           if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
         });
       });
-      $("netDlg").addEventListener("close", function () { $("runBtn").focus(); });
+      $("netDlg").addEventListener("close", function () { $("fileInput").focus(); });
 
       applyI18n();
       buildStrips();

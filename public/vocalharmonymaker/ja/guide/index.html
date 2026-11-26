@@ -197,27 +197,23 @@
 
 <h2 id="quick">3 ステップで始める</h2>
 <ol>
-  <li><b>曲を選びます。</b>「音声ファイルを選ぶ」をタップして MP3・WAV・M4A・FLAC などのファイルを選ぶか、枠にドロップします。</li>
-  <li><b>「ボーカルを分離してハモリを作る」を押します。</b>バーがいっぱいになるまで待つと、数秒後にハモリも自動でできます。画面は開いたままにしてください。</li>
-  <li><b>再生します。</b>主旋律の 3 度上のハモリが付いた曲が流れます。ほかのパート（3 度・5 度の上か下）は「ハモリを再生成」の横で選べます。</li>
+  <li><b>曲を選びます。</b>「曲のファイルを選ぶ」をタップして音声ファイル（MP3・WAV・M4A・FLAC など）か動画（MP4・MOV など）を選ぶか、枠にドロップします。</li>
+  <li><b>待ちます。</b>分離が自動で始まります。バーがいっぱいになると、数秒後にハモリもできます。画面は開いたままにしてください。</li>
+  <li><b>▶ を押します。</b>主旋律の 3 度上のハモリが付いた曲が流れます。ほかのパート（3 度・5 度の上か下）は「ハモリを再生成」の横で選べます。</li>
 </ol>
 
 <h2 id="song">曲を選んで分離する</h2>
 <figure class="shot">
-  <a href="/vocalharmonymaker/images/guide/ja-song.png"><img src="/vocalharmonymaker/images/guide/ja-song.png" alt="曲の欄。音声ファイルを選ぶ枠、選んだファイル 練習曲.wav（1:00・ステレオ）、「ボーカルを分離してハモリを作る」ボタン、初回は約 75 MB の AI モデルをダウンロードするという案内。1〜4 の番号付き。" width="688" height="740" loading="lazy" decoding="async"></a>
+  <a href="/vocalharmonymaker/images/guide/ja-song.png"><img src="/vocalharmonymaker/images/guide/ja-song.png" alt="分離の途中の曲の欄。ファイルを選ぶ枠、選んだファイル 練習曲.wav（1:00・ステレオ）、16% で残り約 30 秒の進み具合のバーとキャンセルボタン、初回は約 75 MB の AI モデルをダウンロードするという案内、「分離に使っている設定：GPU（WebGPU）」。1〜4 の番号付き。" width="688" height="991" loading="lazy" decoding="async"></a>
   <figcaption>番号は下の説明に対応しています。画像はタップで拡大できます。</figcaption>
 </figure>
 <ol>
-  <li><b>音声ファイルを選ぶ</b> – MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式に対応しています。曲の長さは 12 分まで（メモリの少ないスマホ・タブレットでは 8 分まで）。ファイルはブラウザの中で読み込み、アップロードしません。</li>
+  <li><b>曲のファイルを選ぶ</b> – MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式と、MP4・MOV などの動画（音声を使います）に対応しています。曲の長さは 12 分まで（メモリの少ないスマホ・タブレットでは 8 分まで）。ファイルはブラウザの中で読み込み、アップロードしません。<b>ファイルを選ぶとすぐに分離が始まります</b>（押すボタンはありません）。別の曲にするときは、別のファイルを選びます。</li>
   <li><b>曲</b> – ファイル名、長さ、ステレオかモノラルか。</li>
-  <li><b>ボーカルを分離してハモリを作る</b> – 曲をボーカルと伴奏（それ以外のすべて）に分け、続けてコードを推定してハモリを作ります。終わるとボタンは「もう一度分離する」に変わります。</li>
-  <li><b>AI モデル</b> – AI モデルがこの端末に保存済みかどうか。まだなら、ボタンを押したときにダウンロードします。</li>
+  <li><b>進み具合</b> – 分離の進み具合（%）と残り時間の目安、キャンセル。曲をボーカルと伴奏（それ以外のすべて）に分け、続けてコードとハモリを作ります。</li>
+  <li><b>分離のしかた</b> – ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。その上に、AI モデルがこの端末に保存済みかどうかが出ます。</li>
 </ol>
-<figure class="shot">
-  <a href="/vocalharmonymaker/images/guide/ja-progress.png"><img src="/vocalharmonymaker/images/guide/ja-progress.png" alt="分離の途中。バーに進み具合と残り時間の目安、キャンセルボタン、画面を開いたままにする案内、「分離に使っている設定：GPU（WebGPU）」の表示。" width="688" height="1119" loading="lazy" decoding="async"></a>
-  <figcaption>分離の途中の画面。</figcaption>
-</figure>
-<p>バーには進み具合（%）と残り時間の目安が出ます。最近のパソコンなら、たいてい曲の長さよりかなり短い時間で終わります。スマホではもっとかかります。バーの下には分離のしかたが出ます。ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。</p>
+<p>最近のパソコンなら、たいてい曲の長さよりかなり短い時間で終わります。スマホではもっとかかります。</p>
 <div class="note"><p>終わるまで画面を開いたままにしてください。スマホでは、画面が消えたりほかのアプリに切り替えたりすると分離が止まります。メモリ不足で止まったときは、メモリを節約する設定で自動的にやり直します。</p></div>
 
 <h2 id="first">初回：AI モデルのダウンロード</h2>
@@ -226,7 +222,7 @@
   <a href="/vocalharmonymaker/images/guide/ja-network.png"><img src="/vocalharmonymaker/images/guide/ja-network.png" alt="スマホで出る確認のダイアログ。「Wi-Fi に接続していますか？」このブラウザでは、Wi-Fi とモバイルデータ通信のどちらに接続しているかを確かめられません。ダウンロード：約 89 MB（初回だけ）。ボタンは「やめておく」と「ダウンロードして分離する」。" width="1082" height="2202" loading="lazy" decoding="async" style="max-width:541px"></a>
   <figcaption>スマホ・タブレットでは、初回のダウンロードの前に確認します。</figcaption>
 </figure>
-<p>ダウンロードは合わせて約 89 MB と大きいので、モバイルデータ通信やデータセーバーのとき、また接続の種類が分からないスマホ・タブレット（iPhone・iPad など）では、先に確認します。Wi-Fi でなければ「やめておく」を選んで、Wi-Fi に接続してください。</p>
+<p>ダウンロードは合わせて約 89 MB と大きいので、モバイルデータ通信やデータセーバーのとき、また接続の種類が分からないスマホ・タブレット（iPhone・iPad など）では、先に確認します。Wi-Fi でなければ「やめておく」を選んで Wi-Fi に接続し、曲を選び直してください。</p>
 <p>容量を空けたいときは ⚙ →「AI モデルを削除」を選びます。次に分離するときに、もう一度ダウンロードします。</p>
 
 <h2 id="harmony">ハモリとコード</h2>
@@ -247,11 +243,12 @@
 
 <h2 id="mixer">ミキサー</h2>
 <figure class="shot">
-  <a href="/vocalharmonymaker/images/guide/ja-mixer.png"><img src="/vocalharmonymaker/images/guide/ja-mixer.png" alt="再生中のミキサー。停止ボタンと再生位置、ボーカル（80%）・伴奏・ハモリ（声）（ミュート）・ハモリのガイド音の 4 行と、それぞれのレベルメーター・M と S のボタン・フェーダー・保存ボタン、その下に全体の音量・「ミキサーを元に戻す」・「このミックスを保存（MP3）」。1〜10 の番号付き。" width="1548" height="1615" loading="lazy" decoding="async"></a>
+  <a href="/vocalharmonymaker/images/guide/ja-mixer.png"><img src="/vocalharmonymaker/images/guide/ja-mixer.png" alt="再生中のミキサー。一時停止と停止のボタンと再生位置、ボーカル（80%）・伴奏・ハモリ（声）（ミュート）・ハモリのガイド音の 4 行と、それぞれのレベルメーター・M と S のボタン・フェーダー・保存ボタン、その下に全体の音量・「ミキサーを元に戻す」・「このミックスを保存（MP3）」。1〜11 の番号付き。" width="1548" height="1615" loading="lazy" decoding="async"></a>
   <figcaption>ハモリを自分で歌う練習の設定です。ハモリ（声）をミュート（M）し、ガイド音を鳴らし、ボーカルを 80% に下げています。</figcaption>
 </figure>
 <ol>
-  <li><b>再生／停止</b> – 再生中は ■ になります。もう一度押すと止まり、次の再生は止めた位置から始まります。</li>
+  <li><b>▶ 再生／❚❚ 一時停止</b> – 再生中は ❚❚ になります。押すと一時停止し、次の再生は止めた位置から始まります。</li>
+  <li><b>■ 停止</b> – 止めて、曲の最初に戻ります。</li>
   <li><b>再生位置</b> – ドラッグして曲の中を移動します。</li>
   <li><b>パートとレベル</b> – 名前の下のバーが、そのパートの音に合わせて動きます。</li>
   <li><b>M（ミュート）</b> – そのパートを消します。ここでは自分でハモるために、ハモリ（声）をミュートしています。</li>
@@ -297,7 +294,8 @@
   <table class="text stack">
     <thead><tr><th scope="col">キー</th><th scope="col">操作</th></tr></thead>
     <tbody>
-      <tr><th scope="row"><code>Space</code></th><td>再生／停止</td></tr>
+      <tr><th scope="row"><code>Space</code></th><td>再生／一時停止</td></tr>
+      <tr><th scope="row"><code>Home</code></th><td>停止して最初に戻る</td></tr>
       <tr><th scope="row"><code>1</code>〜<code>4</code></th><td>ボーカル・伴奏・ハモリ（声）・ガイド音のミュートを切り替え</td></tr>
       <tr><th scope="row"><code>←</code> <code>→</code></th><td>5 秒戻る／進む</td></tr>
     </tbody>

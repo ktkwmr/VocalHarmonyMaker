@@ -2,15 +2,16 @@
 //   - ONNX Runtime Web and lamejs come from the npm packages, routed in place of jsDelivr (routes.mjs)
 //   - the model is whatever scripts/fetch-model.mjs put in public/vocalharmonymaker/models/ (the real one, or the
 //     small fake: python3 scripts/test/make-fake-model.py <dir> && node scripts/fetch-model.mjs --from <dir> --force)
-// Steps: the greyed-out demo → choose song.wav → separation → chords and harmony → play → save the mix as MP3 →
+// Steps: the greyed-out demo → choose song.wav (separation starts by itself) → chords and harmony → play / pause / stop →
+// save the mix as MP3 →
 // key +1 → another harmony part → reload (model cached, Service Worker in control) → the Japanese page, separating
-// again there.
+// again there, and from MP4 / WebM videos.
 //
 // Usage: node scripts/test/e2e.mjs <base url, e.g. http://localhost:8788> <dir with song.wav> <onnxruntime-web dist dir> <lamejs.js> [shots dir]
 
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { statSync } from "node:fs";
+import { statSync, existsSync } from "node:fs";
 import { routeCdn, ORT_URL, LAME_URL } from "./routes.mjs";
 const { chromium } = createRequire(import.meta.url)("playwright");
 
@@ -34,13 +35,14 @@ page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 page.on("pageerror", (e) => errors.push(String(e)));
 const toastIs = (re, timeout) => page.waitForFunction((src) => new RegExp(src).test(document.querySelector("#toast").textContent), re.source, { timeout: timeout || 120000 });
 
-async function separateAndHarmonize(label) {
+// Choosing a file starts the separation by itself (there is no separate button)
+async function separateAndHarmonize(label, file = "song.wav") {
   const t0 = Date.now();
-  await page.setInputFiles("#fileInput", join(AUDIO, "song.wav"));
-  await page.waitForSelector("#runBtn:not([disabled])");
-  await page.click("#runBtn");
+  await page.setInputFiles("#fileInput", join(AUDIO, file));
+  // The previous song is released (the mixer greys out) when the new separation starts
+  await page.waitForFunction((f) => document.getElementById("songName").textContent === f && document.getElementById("mixer").classList.contains("ghost"), file, { timeout: 60000 });
   await page.waitForSelector("#mixer:not(.ghost)", { timeout: 300000 });
-  ok(label + ": separated in " + ((Date.now() - t0) / 1000).toFixed(1) + " s; " + (await page.textContent("#backend")));
+  ok(label + " (" + file + "): separated in " + ((Date.now() - t0) / 1000).toFixed(1) + " s; " + (await page.textContent("#backend")));
   // Then the chords and the harmony, by themselves
   await page.waitForFunction(() => document.querySelectorAll("#strips .strip").length === 4 && document.querySelector("#harmProgress").hidden, null, { timeout: 300000 });
   ok(label + ": harmony made in " + ((Date.now() - t0) / 1000).toFixed(1) + " s from the start");
@@ -65,12 +67,23 @@ check(!(await page.isHidden("#harmView")), "piano roll shown");
 check((await page.getAttribute("#harmBtn", "class")) === "chip", "harmony button is grey once made");
 if (SHOTS) await page.screenshot({ path: join(SHOTS, "2-harmony.png") });
 
-// ---- Play
+// ---- Play (▶), pause (❚❚) keeps the position, stop (■) goes back to the start (WEBAPP_BASELINE §9-15)
+const iconShown = () => page.evaluate(() => (document.getElementById("playIcon").hasAttribute("hidden") ? "pause" : "play"));
+check((await iconShown()) === "play" && (await page.getAttribute("#playBtn", "aria-label")) === "Play", "▶ before playing");
 await page.click("#playBtn");
 await page.waitForTimeout(1500);
 const now = await page.textContent("#timeNow");
 check(now !== "0:00", "playing: " + now);
+check((await iconShown()) === "pause" && (await page.getAttribute("#playBtn", "title")) === "Pause", "❚❚ while playing");
 await page.click("#playBtn");
+await page.waitForTimeout(300);
+const paused = await page.textContent("#timeNow");
+check(paused !== "0:00" && (await iconShown()) === "play", "pause keeps the position: " + paused);
+await page.click("#playBtn");
+await page.waitForTimeout(500);
+await page.click("#stopBtn");
+await page.waitForTimeout(300);
+check((await page.textContent("#timeNow")) === "0:00" && (await iconShown()) === "play", "■ stops and goes back to 0:00");
 
 // ---- Save the mix as MP3
 const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 120000 }), page.click("#saveMix")]);
@@ -99,11 +112,18 @@ check(await page.evaluate(() => !!navigator.serviceWorker.controller), "Service 
 // ---- The Japanese page (workers and fetches resolved against <base>)
 await page.goto(APP + "ja/");
 await page.waitForSelector("#mixer.ghost");
-check((await page.textContent("#runBtn")).trim() === "ボーカルを分離してハモリを作る", "Japanese page: " + (await page.title()));
+check((await page.textContent("[data-i18n='file.choose']")).trim() === "曲のファイルを選ぶ", "Japanese page: " + (await page.title()));
 await separateAndHarmonize("ja");
 const jaNames = await page.$$eval("#strips .sname", (els) => els.map((e) => e.textContent.trim()));
 check(jaNames.join("|") === "ボーカル|伴奏|ハモリ（声）|ハモリのガイド音", "ja strips: " + jaNames.join(", "));
 if (SHOTS) await page.screenshot({ path: join(SHOTS, "3-ja.png") });
+
+// ---- Video files: the sound of an MP4 (H.264 / AAC) and a WebM (VP8 / Opus) video, made by make-test-song.mjs with ffmpeg
+for (const v of ["song.mp4", "song.webm"]) {
+  if (!existsSync(join(AUDIO, v))) { console.log("skip " + v + " (not made: ffmpeg missing)"); continue; }
+  await separateAndHarmonize("ja", v);
+  check((await page.textContent("#bpmVal")).includes("120"), v + ": " + (await page.textContent("#bpmVal")));
+}
 
 check(!errors.length, "no console errors", errors.join("\n"));
 check(!external.length, "no other outside requests", external.join("\n"));

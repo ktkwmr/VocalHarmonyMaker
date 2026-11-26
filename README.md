@@ -22,8 +22,10 @@ Add a harmony part to the vocals of any song, right in your browser. AI separate
   各パートとミックスを MP3（192 kbps）で保存
 - **Large-download warning** before the first separation on mobile data or when the connection type is unknown on a phone; the model (about 75 MB) is kept in Cache Storage (`vocalharmonymaker-model-v2`). ⚙ → “Delete the AI model” removes it
   初回のダウンロード（約 75 MB）の前に、モバイルデータ通信や接続の種類が分からないスマホでは確認する。モデルは Cache Storage に保存
-- Songs up to 12 minutes (8 on phones and tablets); WebGPU when available, several CPU threads otherwise
-  12 分まで（スマホ・タブレットは 8 分）。WebGPU があれば GPU、なければ CPU の複数スレッド
+- **Choose a file and it starts**: no separate button. Audio files (MP3, WAV, M4A, FLAC, Ogg…) and videos (MP4, MOV, WebM…: the sound is used), up to 12 minutes (8 on phones and tablets); WebGPU when available, several CPU threads otherwise
+  ファイルを選ぶとすぐに分離が始まる（分離ボタンなし）。音声ファイルと動画（MP4・MOV・WebM など。音声を使う）、12 分まで（スマホ・タブレットは 8 分）
+- **Transport**: ▶ / ❚❚ in one button, ■ stops and goes back to the start (WEBAPP_BASELINE §9-15); Space / Home
+  再生ボタンは ▶ と ❚❚ の切り替え、■ で止めて最初に戻る
 - **Installable PWA**, English / Japanese UI (`/vocalharmonymaker/ja/`, `?lang=en|ja`)
 
 The separation (`separator.js`, `dsp.js`, `scripts/fetch-model.mjs`) is copied from [Karaoke Trainer](https://github.com/ktkwmr/KaraokeTrainer), and the harmony, the key change, the mixer, and the MP3 encoder from [Band Stem Mixer](https://github.com/ktkwmr/BandStemMixer) (same author). A bug fixed in one should be fixed in the other.
@@ -93,13 +95,13 @@ Tests (Playwright with the Chromium in your environment; the CDN files come from
 
 ```sh
 npm pack onnxruntime-web@1.30.0 @breezystack/lamejs@1.2.7   # then extract both .tgz files
-node scripts/test/make-test-song.mjs /tmp/audio               # song.wav (the made-up song, Am F C G at 120 BPM)
+node scripts/test/make-test-song.mjs /tmp/audio               # song.wav (the made-up song, Am F C G at 120 BPM), and song.mp4 / song.webm with ffmpeg
 node scripts/test/serve.mjs 8788 /tmp/audio &                 # public/ with the headers of public/_headers
 node scripts/test/e2e.mjs http://localhost:8788 /tmp/audio <onnxruntime-web>/package/dist <lamejs>/package/dist/lamejs.js
 node scripts/test/quality.mjs http://localhost:8788 <onnxruntime-web>/package/dist <lamejs>/package/dist/lamejs.js
 ```
 
-`e2e.mjs` goes through the app (separation, harmony, play, MP3, key change, another part, reload, the Japanese page). `quality.mjs` separates the test song and compares the chords, the BPM, and the melody found from the separated parts with those found from the true parts. They run with the real model, or with a small fake one (`python3 scripts/test/make-fake-model.py <dir> && node scripts/fetch-model.mjs --from <dir> --force`; the separation is then meaningless, but everything around it runs).
+`e2e.mjs` goes through the app (choosing a file starts the separation, harmony, play / pause / stop, MP3, key change, another part, reload, the Japanese page, MP4 and WebM videos). `quality.mjs` separates the test song and compares the chords, the BPM, and the melody found from the separated parts with those found from the true parts. They run with the real model, or with a small fake one (`python3 scripts/test/make-fake-model.py <dir> && node scripts/fetch-model.mjs --from <dir> --force`; the separation is then meaningless, but everything around it runs).
 
 To change the model or the library versions, update `MODEL_DIR` / `MODEL_CACHE` in `index.html` and `separator.js`, `ORT_BASE` in `separator.js`, `CDN` / `KEEP` in `sw.js`, and `scripts/fetch-model.mjs` together.
 

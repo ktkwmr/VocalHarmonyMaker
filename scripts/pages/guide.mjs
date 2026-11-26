@@ -29,27 +29,23 @@ export default {
 
 <h2 id="quick">Start in three steps</h2>
 <ol>
-  <li><b>Choose a song.</b> Tap “Choose an audio file” and pick an MP3, WAV, M4A, or FLAC file, or drop it on the box.</li>
-  <li><b>Press “Separate the vocals &amp; make a harmony”.</b> Wait until the bar is full; the harmony follows by itself a few seconds later. Keep the screen open.</li>
-  <li><b>Press play.</b> You hear the song with a harmony a 3rd above the melody. Choose another part (3rd or 5th, above or below) next to “Remake the harmony”.</li>
+  <li><b>Choose a song.</b> Tap “Choose a song file” and pick an audio file (MP3, WAV, M4A, FLAC…) or a video (MP4, MOV…), or drop it on the box.</li>
+  <li><b>Wait.</b> Separation starts by itself. When the bar is full, the harmony follows a few seconds later. Keep the screen open.</li>
+  <li><b>Press ▶.</b> You hear the song with a harmony a 3rd above the melody. Choose another part (3rd or 5th, above or below) next to “Remake the harmony”.</li>
 </ol>
 
 <h2 id="song">Choosing a song and separating it</h2>
 <figure class="shot">
-  ${img("en", "song", `The song panel: a box to choose an audio file, the chosen file practice-song.wav (1:00, stereo), the Separate the vocals and make a harmony button, and a note that the AI model of about ${MODEL_MB} MB is downloaded the first time. Numbers 1 to 4 mark them.`)}
+  ${img("en", "song", `The song panel while separating: the box to choose a file, the chosen file practice-song.wav (1:00, stereo), the progress bar at 16% with about 30 seconds left and a Cancel button, a note that the AI model of about ${MODEL_MB} MB is downloaded the first time, and the line Separating with: GPU (WebGPU). Numbers 1 to 4 mark them.`)}
   <figcaption>The numbers match the list below. Tap the image to enlarge it.</figcaption>
 </figure>
 <ol>
-  <li><b>Choose an audio file</b> – Any format your browser can play: MP3, WAV, M4A (AAC), FLAC, Ogg, and others. Songs up to ${MAX_MIN} minutes (${MAX_MIN_LOW_MEM} minutes on phones and tablets, which have less memory). The file is read in your browser and never uploaded.</li>
+  <li><b>Choose a song file</b> – Any format your browser can play: MP3, WAV, M4A (AAC), FLAC, Ogg, and others, and videos such as MP4 and MOV (their sound is used). Songs up to ${MAX_MIN} minutes (${MAX_MIN_LOW_MEM} minutes on phones and tablets, which have less memory). The file is read in your browser and never uploaded. <b>Separation starts as soon as you choose the file</b>; there is no button to press. To separate another song, choose another file.</li>
   <li><b>The song</b> – The file name, the length, and whether it is stereo or mono.</li>
-  <li><b>Separate the vocals &amp; make a harmony</b> – Splits the song into the vocals and the backing (everything else), then finds the chords and makes the harmony. After it finishes, the button becomes “Separate again”.</li>
-  <li><b>The AI model</b> – Whether the AI model is already saved on this device. If not, it is downloaded when you press the button.</li>
+  <li><b>Progress</b> – How far the separation is (in %) and about how long is left, with Cancel. The song is split into the vocals and the backing (everything else); then the chords and the harmony are made.</li>
+  <li><b>How it runs</b> – On the <b>GPU (WebGPU)</b> when the browser supports it, otherwise on the CPU. Above it, whether the AI model is already saved on this device.</li>
 </ol>
-<figure class="shot">
-  ${img("en", "progress", "Separation in progress: the bar shows how far it is and about how long is left, with a Cancel button, a note to keep the screen open, and the line Separating with: GPU (WebGPU).")}
-  <figcaption>While it separates.</figcaption>
-</figure>
-<p>The bar shows how far it is (in %) and about how long is left. On a recent computer it usually takes well under the length of the song; on a phone, longer. The line under the bar shows how the separation runs: on the <b>GPU (WebGPU)</b> when the browser supports it, otherwise on the CPU.</p>
+<p>On a recent computer it usually takes well under the length of the song; on a phone, longer.</p>
 <div class="note"><p>Keep the screen open until it finishes. On a phone, separation stops when the screen turns off or you switch to another app. If it stops with a memory error, the app tries again with settings that use less memory.</p></div>
 
 <h2 id="first">The first time: downloading the AI model</h2>
@@ -58,7 +54,7 @@ export default {
   ${img("en", "network", `On a phone, a dialog asks: Are you on Wi-Fi? This browser does not tell the app whether you are on Wi-Fi or mobile data. Download: about ${FIRST_MB} MB, only the first time. Buttons: Not now, and Download and separate.`, { half: true })}
   <figcaption>On a phone or tablet, the app asks before the first download.</figcaption>
 </figure>
-<p>Because the download is large (about ${FIRST_MB} MB in all), the app asks first when you seem to be on mobile data or have Data Saver on, and on phones and tablets whose browser does not say what kind of connection it has (such as iPhone and iPad). Choose “Not now” and connect to Wi-Fi if you are not on Wi-Fi.</p>
+<p>Because the download is large (about ${FIRST_MB} MB in all), the app asks first when you seem to be on mobile data or have Data Saver on, and on phones and tablets whose browser does not say what kind of connection it has (such as iPhone and iPad). Choose “Not now” and connect to Wi-Fi if you are not on Wi-Fi, then choose the song again.</p>
 <p>To free the space, open ⚙ → “Delete the AI model”. It is downloaded again the next time you separate a song.</p>
 
 <h2 id="harmony">The harmony and the chords</h2>
@@ -79,11 +75,12 @@ export default {
 
 <h2 id="mixer">The mixer</h2>
 <figure class="shot">
-  ${img("en", "mixer", "The mixer while playing: the stop button and the position, four rows for Vocals (at 80%), Backing, Harmony (voice) (muted), and Harmony guide tone, each with a level meter, M and S buttons, a fader, and a save button, and under them the Master fader, Reset mixer, and Save this mix (MP3). Numbers 1 to 10 mark the controls.")}
+  ${img("en", "mixer", "The mixer while playing: the pause and stop buttons and the position, four rows for Vocals (at 80%), Backing, Harmony (voice) (muted), and Harmony guide tone, each with a level meter, M and S buttons, a fader, and a save button, and under them the Master fader, Reset mixer, and Save this mix (MP3). Numbers 1 to 11 mark the controls.")}
   <figcaption>Set up to practice singing the harmony: the harmony voice is muted (M), the guide tone is on, and the vocals are turned down to 80%.</figcaption>
 </figure>
 <ol>
-  <li><b>Play / Stop</b> – The button shows ■ while it plays. Press it again to stop; the next play starts from where it stopped.</li>
+  <li><b>▶ Play / ❚❚ Pause</b> – Shows ❚❚ while it plays. Press it to pause; the next play starts from where it paused.</li>
+  <li><b>■ Stop</b> – Stops and goes back to the start of the song.</li>
   <li><b>Position</b> – Drag to move through the song.</li>
   <li><b>The part and its level</b> – The bar under the name moves with the sound of that part.</li>
   <li><b>M (mute)</b> – Silences that part. Here the harmony voice is muted, to sing the harmony yourself.</li>
@@ -129,7 +126,8 @@ export default {
   <table class="text stack">
     <thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead>
     <tbody>
-      <tr><th scope="row"><code>Space</code></th><td>Play / stop</td></tr>
+      <tr><th scope="row"><code>Space</code></th><td>Play / pause</td></tr>
+      <tr><th scope="row"><code>Home</code></th><td>Stop and go back to the start</td></tr>
       <tr><th scope="row"><code>1</code>–<code>4</code></th><td>Mute or unmute the vocals, the backing, the harmony voice, and the guide tone</td></tr>
       <tr><th scope="row"><code>←</code> <code>→</code></th><td>5 seconds back / forward</td></tr>
     </tbody>
@@ -168,27 +166,23 @@ export default {
 
 <h2 id="quick">3 ステップで始める</h2>
 <ol>
-  <li><b>曲を選びます。</b>「音声ファイルを選ぶ」をタップして MP3・WAV・M4A・FLAC などのファイルを選ぶか、枠にドロップします。</li>
-  <li><b>「ボーカルを分離してハモリを作る」を押します。</b>バーがいっぱいになるまで待つと、数秒後にハモリも自動でできます。画面は開いたままにしてください。</li>
-  <li><b>再生します。</b>主旋律の 3 度上のハモリが付いた曲が流れます。ほかのパート（3 度・5 度の上か下）は「ハモリを再生成」の横で選べます。</li>
+  <li><b>曲を選びます。</b>「曲のファイルを選ぶ」をタップして音声ファイル（MP3・WAV・M4A・FLAC など）か動画（MP4・MOV など）を選ぶか、枠にドロップします。</li>
+  <li><b>待ちます。</b>分離が自動で始まります。バーがいっぱいになると、数秒後にハモリもできます。画面は開いたままにしてください。</li>
+  <li><b>▶ を押します。</b>主旋律の 3 度上のハモリが付いた曲が流れます。ほかのパート（3 度・5 度の上か下）は「ハモリを再生成」の横で選べます。</li>
 </ol>
 
 <h2 id="song">曲を選んで分離する</h2>
 <figure class="shot">
-  ${img("ja", "song", `曲の欄。音声ファイルを選ぶ枠、選んだファイル 練習曲.wav（1:00・ステレオ）、「ボーカルを分離してハモリを作る」ボタン、初回は約 ${MODEL_MB} MB の AI モデルをダウンロードするという案内。1〜4 の番号付き。`)}
+  ${img("ja", "song", `分離の途中の曲の欄。ファイルを選ぶ枠、選んだファイル 練習曲.wav（1:00・ステレオ）、16% で残り約 30 秒の進み具合のバーとキャンセルボタン、初回は約 ${MODEL_MB} MB の AI モデルをダウンロードするという案内、「分離に使っている設定：GPU（WebGPU）」。1〜4 の番号付き。`)}
   <figcaption>番号は下の説明に対応しています。画像はタップで拡大できます。</figcaption>
 </figure>
 <ol>
-  <li><b>音声ファイルを選ぶ</b> – MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式に対応しています。曲の長さは ${MAX_MIN} 分まで（メモリの少ないスマホ・タブレットでは ${MAX_MIN_LOW_MEM} 分まで）。ファイルはブラウザの中で読み込み、アップロードしません。</li>
+  <li><b>曲のファイルを選ぶ</b> – MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式と、MP4・MOV などの動画（音声を使います）に対応しています。曲の長さは ${MAX_MIN} 分まで（メモリの少ないスマホ・タブレットでは ${MAX_MIN_LOW_MEM} 分まで）。ファイルはブラウザの中で読み込み、アップロードしません。<b>ファイルを選ぶとすぐに分離が始まります</b>（押すボタンはありません）。別の曲にするときは、別のファイルを選びます。</li>
   <li><b>曲</b> – ファイル名、長さ、ステレオかモノラルか。</li>
-  <li><b>ボーカルを分離してハモリを作る</b> – 曲をボーカルと伴奏（それ以外のすべて）に分け、続けてコードを推定してハモリを作ります。終わるとボタンは「もう一度分離する」に変わります。</li>
-  <li><b>AI モデル</b> – AI モデルがこの端末に保存済みかどうか。まだなら、ボタンを押したときにダウンロードします。</li>
+  <li><b>進み具合</b> – 分離の進み具合（%）と残り時間の目安、キャンセル。曲をボーカルと伴奏（それ以外のすべて）に分け、続けてコードとハモリを作ります。</li>
+  <li><b>分離のしかた</b> – ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。その上に、AI モデルがこの端末に保存済みかどうかが出ます。</li>
 </ol>
-<figure class="shot">
-  ${img("ja", "progress", "分離の途中。バーに進み具合と残り時間の目安、キャンセルボタン、画面を開いたままにする案内、「分離に使っている設定：GPU（WebGPU）」の表示。")}
-  <figcaption>分離の途中の画面。</figcaption>
-</figure>
-<p>バーには進み具合（%）と残り時間の目安が出ます。最近のパソコンなら、たいてい曲の長さよりかなり短い時間で終わります。スマホではもっとかかります。バーの下には分離のしかたが出ます。ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。</p>
+<p>最近のパソコンなら、たいてい曲の長さよりかなり短い時間で終わります。スマホではもっとかかります。</p>
 <div class="note"><p>終わるまで画面を開いたままにしてください。スマホでは、画面が消えたりほかのアプリに切り替えたりすると分離が止まります。メモリ不足で止まったときは、メモリを節約する設定で自動的にやり直します。</p></div>
 
 <h2 id="first">初回：AI モデルのダウンロード</h2>
@@ -197,7 +191,7 @@ export default {
   ${img("ja", "network", `スマホで出る確認のダイアログ。「Wi-Fi に接続していますか？」このブラウザでは、Wi-Fi とモバイルデータ通信のどちらに接続しているかを確かめられません。ダウンロード：約 ${FIRST_MB} MB（初回だけ）。ボタンは「やめておく」と「ダウンロードして分離する」。`, { half: true })}
   <figcaption>スマホ・タブレットでは、初回のダウンロードの前に確認します。</figcaption>
 </figure>
-<p>ダウンロードは合わせて約 ${FIRST_MB} MB と大きいので、モバイルデータ通信やデータセーバーのとき、また接続の種類が分からないスマホ・タブレット（iPhone・iPad など）では、先に確認します。Wi-Fi でなければ「やめておく」を選んで、Wi-Fi に接続してください。</p>
+<p>ダウンロードは合わせて約 ${FIRST_MB} MB と大きいので、モバイルデータ通信やデータセーバーのとき、また接続の種類が分からないスマホ・タブレット（iPhone・iPad など）では、先に確認します。Wi-Fi でなければ「やめておく」を選んで Wi-Fi に接続し、曲を選び直してください。</p>
 <p>容量を空けたいときは ⚙ →「AI モデルを削除」を選びます。次に分離するときに、もう一度ダウンロードします。</p>
 
 <h2 id="harmony">ハモリとコード</h2>
@@ -218,11 +212,12 @@ export default {
 
 <h2 id="mixer">ミキサー</h2>
 <figure class="shot">
-  ${img("ja", "mixer", "再生中のミキサー。停止ボタンと再生位置、ボーカル（80%）・伴奏・ハモリ（声）（ミュート）・ハモリのガイド音の 4 行と、それぞれのレベルメーター・M と S のボタン・フェーダー・保存ボタン、その下に全体の音量・「ミキサーを元に戻す」・「このミックスを保存（MP3）」。1〜10 の番号付き。")}
+  ${img("ja", "mixer", "再生中のミキサー。一時停止と停止のボタンと再生位置、ボーカル（80%）・伴奏・ハモリ（声）（ミュート）・ハモリのガイド音の 4 行と、それぞれのレベルメーター・M と S のボタン・フェーダー・保存ボタン、その下に全体の音量・「ミキサーを元に戻す」・「このミックスを保存（MP3）」。1〜11 の番号付き。")}
   <figcaption>ハモリを自分で歌う練習の設定です。ハモリ（声）をミュート（M）し、ガイド音を鳴らし、ボーカルを 80% に下げています。</figcaption>
 </figure>
 <ol>
-  <li><b>再生／停止</b> – 再生中は ■ になります。もう一度押すと止まり、次の再生は止めた位置から始まります。</li>
+  <li><b>▶ 再生／❚❚ 一時停止</b> – 再生中は ❚❚ になります。押すと一時停止し、次の再生は止めた位置から始まります。</li>
+  <li><b>■ 停止</b> – 止めて、曲の最初に戻ります。</li>
   <li><b>再生位置</b> – ドラッグして曲の中を移動します。</li>
   <li><b>パートとレベル</b> – 名前の下のバーが、そのパートの音に合わせて動きます。</li>
   <li><b>M（ミュート）</b> – そのパートを消します。ここでは自分でハモるために、ハモリ（声）をミュートしています。</li>
@@ -268,7 +263,8 @@ export default {
   <table class="text stack">
     <thead><tr><th scope="col">キー</th><th scope="col">操作</th></tr></thead>
     <tbody>
-      <tr><th scope="row"><code>Space</code></th><td>再生／停止</td></tr>
+      <tr><th scope="row"><code>Space</code></th><td>再生／一時停止</td></tr>
+      <tr><th scope="row"><code>Home</code></th><td>停止して最初に戻る</td></tr>
       <tr><th scope="row"><code>1</code>〜<code>4</code></th><td>ボーカル・伴奏・ハモリ（声）・ガイド音のミュートを切り替え</td></tr>
       <tr><th scope="row"><code>←</code> <code>→</code></th><td>5 秒戻る／進む</td></tr>
     </tbody>

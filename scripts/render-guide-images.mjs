@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Takes the app screenshots used in the guide and the harmony / chords articles:
-//   public/vocalharmonymaker/images/guide/{en,ja}-{song,progress,mixer,harmony,chord,network,phone}.png
+//   public/vocalharmonymaker/images/guide/{en,ja}-{song,mixer,harmony,chord,network,phone}.png
 // The song is made up (scripts/guide-song.mjs), so there is no copyright issue. The AI model is not
 // used: a stand-in for separator.js returns the song's two parts (vocals, accompaniment), which are known
 // exactly, after a short fake progress. Everything else is the real app (the chords and the harmony too).
@@ -111,13 +111,12 @@ async function addMarkers(page, targets) {
 async function open(page, lang) {
   await page.route("https://static.cloudflareinsights.com/**", (r) => r.fulfill({ status: 200, contentType: "text/javascript", body: "" }));
   await page.goto(origin + PATH[lang]);
+  // Choosing the file starts the separation (on a phone, after the question about the download)
   await page.setInputFiles("#fileInput", SONG[lang]);
-  await page.waitForFunction(() => !document.getElementById("runBtn").disabled);
 }
 // Separate (the chords and the harmony follow on their own), then set up the mixer to practice singing the harmony:
 // the harmony voice muted, the guide tone on, the vocals a little lower
-async function separate(page, { progressShot, started } = {}) {
-  if (!started) await page.click("#runBtn");
+async function separate(page, { progressShot } = {}) {
   if (progressShot) {
     await page.waitForFunction(() => /^\d+%/.test(document.getElementById("detail").textContent) && !/^0%/.test(document.getElementById("detail").textContent));
     await progressShot();
@@ -155,14 +154,16 @@ for (const lang of ["en", "ja"]) {
   const ctx = await browser.newContext({ serviceWorkers: "block", viewport: { width: 1100, height: 900 }, deviceScaleFactor: 2, locale });
   const page = await ctx.newPage();
   await open(page, lang);
-  await addMarkers(page, [["#drop", 1, "inside"], ["#songInfo", 2, "inside"], ["#runBtn", 3, "inside"], [".model", 4, "below"]]);
-  await shot(page, ".panel:not(.out)", `${lang}-song.png`, 12);
-  await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
-  await separate(page, { progressShot: () => shot(page, ".panel:not(.out)", `${lang}-progress.png`, 12) });
+  // The song panel while it separates (the file was just chosen)
+  await separate(page, { progressShot: async () => {
+    await addMarkers(page, [["#drop", 1, "inside"], ["#songInfo", 2, "inside"], ["#progress", 3, "inside"], ["#backend", 4, "below"]]);
+    await shot(page, ".panel:not(.out)", `${lang}-song.png`, 12);
+    await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
+  } });
   await addMarkers(page, [
-    ["#playBtn", 1, "left"], ["#timeNow", 2, "right"], [".strip .sname", 3, "left"], [".strip:nth-child(3) .ms .chip", 4, "left"],
-    [".strip .ms .chip + .chip", 5, "corner"], [".strip .vol input", 6, "below"], [".strip .save-btn", 7, "corner"],
-    [".mix-foot .vol > span", 8, "left"], ["#resetMix", 9, "corner"], ["#saveMix", 10, "corner"],
+    ["#playBtn", 1, "left"], ["#stopBtn", 2, "corner"], ["#timeNow", 3, "right"], [".strip .sname", 4, "left"], [".strip:nth-child(3) .ms .chip", 5, "left"],
+    [".strip .ms .chip + .chip", 6, "corner"], [".strip .vol input", 7, "below"], [".strip .save-btn", 8, "corner"],
+    [".mix-foot .vol > span", 9, "left"], ["#resetMix", 10, "corner"], ["#saveMix", 11, "corner"],
   ]);
   await shot(page, ".panel.out", `${lang}-mixer.png`);
   // Chords and harmony (the harmony article): the key, the button, the roll, and the two added parts
@@ -175,7 +176,7 @@ for (const lang of ["en", "ja"]) {
   ]);
   await shot(page, ".panel.out", `${lang}-harmony.png`);
   await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
-  // The chord editor: stop, then tap the chord row at the play position
+  // The chord editor: pause, then tap the chord row at the play position
   await page.click("#playBtn");
   const rb = await page.locator("#roll").boundingBox();
   await page.mouse.click(rb.x + rb.width * 0.21, rb.y + 10);
@@ -191,13 +192,12 @@ for (const lang of ["en", "ja"]) {
   const phone = await browser.newContext({ ...devices["Pixel 7"], serviceWorkers: "block", locale });
   const pp = await phone.newPage();
   await open(pp, lang);
-  await pp.click("#runBtn");
   await pp.waitForSelector("#netDlg[open]");
   await pp.waitForTimeout(300);
   await pp.screenshot({ path: join(OUT, `${lang}-network.png`) });
   console.log(`Wrote images/guide/${lang}-network.png`);
   await pp.click("#netOk");
-  await separate(pp, { started: true });
+  await separate(pp);
   await pp.evaluate(() => {
     const top = document.querySelector(".panel.out").getBoundingClientRect().top + scrollY;
     const head = document.querySelector(".topbar").offsetHeight;

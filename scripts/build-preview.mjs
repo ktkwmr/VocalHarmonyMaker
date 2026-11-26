@@ -42,7 +42,7 @@ self.onmessage = async (e) => {
   self.postMessage({ type: "done", stems }, stems.flatMap((s) => [s[0].buffer, s[1].buffer]));
 };
 `;
-const NOTE = '<p style="margin:0;padding:10px 16px;background:#fff7d6;border-bottom:1px solid #e5d58a;font:14px/1.5 system-ui,sans-serif">Preview: the AI separation is replaced by a made-up demo song (Am F C G, 120 BPM). Choose any audio file and press the button to see the chords and the harmony. / プレビュー：AI の分離の代わりに、架空のデモ曲（Am F C G・BPM 120）を使います。どの音声ファイルでも選んでボタンを押すと、コードとハモリを確かめられます。</p>';
+const NOTE = '<p style="margin:0;padding:10px 16px;background:#fff7d6;border-bottom:1px solid #e5d58a;font:14px/1.5 system-ui,sans-serif">Preview: the AI separation is replaced by a made-up demo song (Am F C G, 120 BPM). Choose any audio file to see the chords and the harmony. / プレビュー：AI の分離の代わりに、架空のデモ曲（Am F C G・BPM 120）を使います。どの音声ファイルでも選ぶと、コードとハモリを確かめられます。</p>';
 
 const src = new URL(`../public/${SLUG}/`, import.meta.url);
 const out = new URL("../.preview/", import.meta.url);
