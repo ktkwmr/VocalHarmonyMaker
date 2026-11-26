@@ -1,14 +1,14 @@
 name: Build generated pages
 
-# Regenerates public/bandstemmixer/ja/index.html from
-# public/bandstemmixer/index.html, and the info pages and
-# public/bandstemmixer/sitemap.xml from scripts/pages/, then commits the changes.
+# Regenerates public/vocalharmonymaker/ja/index.html from
+# public/vocalharmonymaker/index.html, and the info pages and
+# public/vocalharmonymaker/sitemap.xml from scripts/pages/, then commits the changes.
 on:
   push:
     branches: [main]
     paths:
-      - "public/bandstemmixer/index.html"
-      - "public/bandstemmixer/ja/index.html"
+      - "public/vocalharmonymaker/index.html"
+      - "public/vocalharmonymaker/ja/index.html"
       - "scripts/build-ja.mjs"
       - "scripts/build-pages.mjs"
       - "scripts/pages/**"
@@ -45,6 +45,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/bandstemmixer
+          git add public/vocalharmonymaker
           git commit -m "生成ページ（ja/index.html・情報ページ・sitemap.xml）を再生成"
           git push

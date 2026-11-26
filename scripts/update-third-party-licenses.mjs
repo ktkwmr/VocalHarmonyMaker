@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Adds libraries loaded from a CDN (jsDelivr / unpkg) in public/ to
-// public/bandstemmixer/THIRD_PARTY_LICENSES.md.
+// public/vocalharmonymaker/THIRD_PARTY_LICENSES.md.
 //
 // - Scans public/**/*.{html,js,mjs} for https://cdn.jsdelivr.net/npm/<pkg>
 //   and https://unpkg.com/<pkg> URLs.
@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SCAN_DIR = join(ROOT, "public");
-const MD = join(ROOT, "public/bandstemmixer/THIRD_PARTY_LICENSES.md");
+const MD = join(ROOT, "public/vocalharmonymaker/THIRD_PARTY_LICENSES.md");
 const MARKER = "<!-- New libraries are added above this line by scripts/update-third-party-licenses.mjs -->";
 const CHECK = process.argv.includes("--check");
 

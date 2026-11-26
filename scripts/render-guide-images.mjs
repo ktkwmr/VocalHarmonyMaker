@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Takes the app screenshots used in the guide and the harmony / chords articles:
-//   public/bandstemmixer/images/guide/{en,ja}-{song,progress,mixer,harmony,chord,network,phone}.png
+//   public/vocalharmonymaker/images/guide/{en,ja}-{song,mixer,harmony,chord,network,phone}.png
 // The song is made up (scripts/guide-song.mjs), so there is no copyright issue. The AI model is not
-// used: a stand-in for separator.js returns the song's four parts, which are known exactly, after a
-// short fake progress. Everything else is the real app.
+// used: a stand-in for separator.js returns the song's two parts (vocals, accompaniment), which are known
+// exactly, after a short fake progress. Everything else is the real app (the chords and the harmony too).
 // Requires Playwright and a Chromium browser:
 //   npm install --no-save playwright && npx playwright install chromium
 // Then:
@@ -20,25 +20,25 @@ const require = createRequire(import.meta.url);
 const { chromium, devices } = require("playwright");
 const PUBLIC = fileURLToPath(new URL("../public/", import.meta.url));
 const SONG_JS = fileURLToPath(new URL("./guide-song.mjs", import.meta.url));
-const OUT = join(PUBLIC, "bandstemmixer/images/guide/");
+const OUT = join(PUBLIC, "vocalharmonymaker/images/guide/");
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".md": "text/markdown; charset=utf-8" };
-const PATH = { en: "/bandstemmixer/?lang=en", ja: "/bandstemmixer/ja/" };
+const PATH = { en: "/vocalharmonymaker/?lang=en", ja: "/vocalharmonymaker/ja/" };
 const SECONDS = 60;
 
-// Stand-in for separator.js: reports the GPU, counts through the chunks like the real worker
-// (7.8 s chunks that overlap by a quarter), then returns the parts of the made-up song
-const STUB = `import { makeParts } from "/__guide/guide-song.mjs";
+// Stand-in for separator.js: reports the GPU, counts through the splits like the real worker
+// (512 frames × 1024 samples, about 11.9 s each), then returns the two parts of the made-up song
+const STUB = `import { makeParts, twoStems } from "/__guide/guide-song.mjs";
 self.onmessage = async (e) => {
   const msg = e.data;
   if (!msg || msg.type !== "run") return;
   self.postMessage({ type: "backend", name: "webgpu", threads: 0, safe: false });
-  const n = msg.left.length, chunks = Math.ceil(n / 257985);
+  const n = msg.left.length, chunks = Math.ceil((n + 3072) / 524288);
   for (let i = 0; i < chunks; i++) {
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 600));
     self.postMessage({ type: "progress", stage: "separate", done: i + 1, chunks, elapsed: (i + 1) * 6000 });
   }
-  const parts = makeParts(n);
-  const stems = ["drums", "bass", "other", "vocals"].map((k) => parts[k].map((ch) => {
+  const parts = twoStems(makeParts(n));
+  const stems = ["vocals", "accompaniment"].map((k) => parts[k].map((ch) => {
     const o = new Int16Array(n);
     for (let i = 0; i < n; i++) o[i] = Math.max(-32768, Math.min(32767, Math.round(ch[i] * 32767)));
     return o;
@@ -50,7 +50,7 @@ self.onmessage = async (e) => {
 // Minimal static server for public/ (the app needs http:// for its workers), with the stand-in
 const server = createServer(async (req, res) => {
   let path = decodeURIComponent(new URL(req.url, "http://x").pathname);
-  if (path === "/bandstemmixer/separator.js") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(STUB);
+  if (path === "/vocalharmonymaker/separator.js") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(STUB);
   if (path === "/__guide/guide-song.mjs") return res.writeHead(200, { "Content-Type": "text/javascript" }).end(await readFile(SONG_JS));
   if (path.endsWith("/")) path += "index.html";
   const file = normalize(join(PUBLIC, path));
@@ -111,14 +111,14 @@ async function addMarkers(page, targets) {
 async function open(page, lang) {
   await page.route("https://static.cloudflareinsights.com/**", (r) => r.fulfill({ status: 200, contentType: "text/javascript", body: "" }));
   await page.goto(origin + PATH[lang]);
+  // Choosing the file starts the separation (on a phone, after the question about the download)
   await page.setInputFiles("#fileInput", SONG[lang]);
-  await page.waitForFunction(() => !document.getElementById("runBtn").disabled);
 }
-// Separate (the chords and the harmony follow on their own), then set up the mixer like a bass player's practice: the bass muted, the vocals a little lower
-async function separate(page, { progressShot, started } = {}) {
-  if (!started) await page.click("#runBtn");
+// Separate (the chords and the harmony follow on their own), then set up the mixer to practice singing the harmony:
+// the harmony voice muted, the guide tone on, the vocals a little lower
+async function separate(page, { progressShot } = {}) {
   if (progressShot) {
-    await page.waitForFunction(() => /^36%/.test(document.getElementById("detail").textContent));
+    await page.waitForFunction(() => /^\d+%/.test(document.getElementById("detail").textContent) && !/^0%/.test(document.getElementById("detail").textContent));
     await progressShot();
   }
   // Before separating, the mixer is shown greyed out (.ghost)
@@ -126,9 +126,10 @@ async function separate(page, { progressShot, started } = {}) {
   await page.waitForFunction(() => !document.getElementById("progress").offsetParent);
   await page.waitForSelector("#harmView:not([hidden])", { timeout: 60000 });
   await page.waitForFunction(() => document.getElementById("harmProgress").hidden, null, { timeout: 60000 });
-  await page.locator(".strip").nth(1).locator(".ms .chip").first().click();
+  await page.locator(".strip").nth(2).locator(".ms .chip").first().click();
+  await page.locator(".strip").nth(3).locator(".ms .chip").first().click();
   await page.locator(".strip").nth(0).locator("input[type=range]").fill("0.8");
-  // From 0:20, where every part plays (the vocals start at 0:16)
+  // From 0:20, where every part plays (the vocals start at 0:08)
   await page.evaluate(() => { document.activeElement && document.activeElement.blur(); });
   for (let i = 0; i < 4; i++) await page.keyboard.press("ArrowRight");
   await page.click("#playBtn");
@@ -153,14 +154,16 @@ for (const lang of ["en", "ja"]) {
   const ctx = await browser.newContext({ serviceWorkers: "block", viewport: { width: 1100, height: 900 }, deviceScaleFactor: 2, locale });
   const page = await ctx.newPage();
   await open(page, lang);
-  await addMarkers(page, [["#drop", 1, "inside"], ["#songInfo", 2, "inside"], ["#runBtn", 3, "inside"], [".model", 4, "below"]]);
-  await shot(page, ".panel:not(.out)", `${lang}-song.png`, 12);
-  await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
-  await separate(page, { progressShot: () => shot(page, ".panel:not(.out)", `${lang}-progress.png`, 12) });
+  // The song panel while it separates (the file was just chosen)
+  await separate(page, { progressShot: async () => {
+    await addMarkers(page, [["#drop", 1, "inside"], ["#songInfo", 2, "inside"], ["#progress", 3, "inside"], ["#backend", 4, "below"]]);
+    await shot(page, ".panel:not(.out)", `${lang}-song.png`, 12);
+    await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
+  } });
   await addMarkers(page, [
-    ["#playBtn", 1, "left"], ["#timeNow", 2, "right"], [".strip .sname", 3, "left"], [".strip:nth-child(2) .ms .chip", 4, "left"],
-    [".strip .ms .chip + .chip", 5, "corner"], [".strip .vol input", 6, "below"], [".strip .save-btn", 7, "corner"],
-    [".mix-foot .vol > span", 8, "left"], ["#resetMix", 9, "corner"], ["#saveMix", 10, "corner"],
+    ["#playBtn", 1, "left"], ["#stopBtn", 2, "corner"], ["#timeNow", 3, "right"], [".strip .sname", 4, "left"], [".strip:nth-child(3) .ms .chip", 5, "left"],
+    [".strip .ms .chip + .chip", 6, "corner"], [".strip .vol input", 7, "below"], [".strip .save-btn", 8, "corner"],
+    [".mix-foot .vol > span", 9, "left"], ["#resetMix", 10, "corner"], ["#saveMix", 11, "corner"],
   ]);
   await shot(page, ".panel.out", `${lang}-mixer.png`);
   // Chords and harmony (the harmony article): the key, the button, the roll, and the two added parts
@@ -169,11 +172,11 @@ for (const lang of ["en", "ja"]) {
   await page.mouse.move(0, 0);
   await addMarkers(page, [
     ["#keyDown", 1, "corner"], ["#harmBtn", 2, "corner"], ["#harmDir", 3, "corner"], ["#bpmVal", 4, "right"],
-    ["#roll", 5, "left"], [".strip:nth-child(5) .sname", 6, "left"], [".strip:nth-child(6) .sname", 7, "left"],
+    ["#roll", 5, "left"], [".strip:nth-child(3) .sname", 6, "left"], [".strip:nth-child(4) .sname", 7, "left"],
   ]);
   await shot(page, ".panel.out", `${lang}-harmony.png`);
   await page.evaluate(() => document.querySelectorAll(".guide-marker").forEach((m) => m.remove()));
-  // The chord editor: stop, then tap the chord row at the play position
+  // The chord editor: pause, then tap the chord row at the play position
   await page.click("#playBtn");
   const rb = await page.locator("#roll").boundingBox();
   await page.mouse.click(rb.x + rb.width * 0.21, rb.y + 10);
@@ -189,13 +192,12 @@ for (const lang of ["en", "ja"]) {
   const phone = await browser.newContext({ ...devices["Pixel 7"], serviceWorkers: "block", locale });
   const pp = await phone.newPage();
   await open(pp, lang);
-  await pp.click("#runBtn");
   await pp.waitForSelector("#netDlg[open]");
   await pp.waitForTimeout(300);
   await pp.screenshot({ path: join(OUT, `${lang}-network.png`) });
   console.log(`Wrote images/guide/${lang}-network.png`);
   await pp.click("#netOk");
-  await separate(pp, { started: true });
+  await separate(pp);
   await pp.evaluate(() => {
     const top = document.querySelector(".panel.out").getBoundingClientRect().top + scrollY;
     const head = document.querySelector(".topbar").offsetHeight;

@@ -1,4 +1,4 @@
-// A made-up band song for the guide screenshots (scripts/render-guide-images.mjs): drums, bass,
+// A made-up band song for the guide screenshots (scripts/render-guide-images.mjs) and the tests: drums, bass,
 // chords (other), and a sung-like melody (vocals), at 120 BPM in A minor (Am F C G). Every sound is
 // generated here, so there is no copyright issue, and the four parts are known exactly: the
 // screenshot script plays the sum to the app and hands the parts back in place of the AI model.
@@ -100,4 +100,15 @@ export function mixParts(parts) {
     for (let i = 0; i < n; i++) { L[i] += l[i]; R[i] += r[i]; }
   }
   return [L, R];
+}
+
+// The two parts Vocal Harmony Maker separates: the vocals, and everything else (the accompaniment)
+export function twoStems(parts) {
+  const n = parts.drums[0].length;
+  const L = new Float32Array(n), R = new Float32Array(n);
+  for (const key of ["drums", "bass", "other"]) {
+    const [l, r] = parts[key];
+    for (let i = 0; i < n; i++) { L[i] += l[i]; R[i] += r[i]; }
+  }
+  return { vocals: parts.vocals, accompaniment: [L, R] };
 }

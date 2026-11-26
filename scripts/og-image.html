@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Source of public/bandstemmixer/og-image.png (1200x630). Regenerate with:
+<!-- Source of public/vocalharmonymaker/og-image.png (1200x630). Regenerate with:
      node scripts/render-og-image.mjs -->
 <html lang="en">
 <head>
@@ -14,8 +14,10 @@
   p { margin: 0 0 40px; font-size: 32px; color: #525252; line-height: 1.4; }
   .url { font-size: 26px; color: #737373; }
   .mixer { border: 2px solid #d4d4d4; border-radius: 20px; padding: 18px 26px; }
-  .row { display: grid; grid-template-columns: 120px 40px 40px 1fr; gap: 12px; align-items: center; height: 96px; border-bottom: 2px solid #e5e5e5; font-size: 22px; font-weight: 700; }
+  .row { display: grid; grid-template-columns: 110px 40px 40px 1fr; gap: 12px; align-items: center; height: 110px; border-bottom: 2px solid #e5e5e5; font-size: 22px; font-weight: 700; }
   .row:last-child { border-bottom: 0; }
+  .roll { display: block; width: 100%; height: auto; margin: 6px 0 10px; border-bottom: 2px solid #e5e5e5; padding-bottom: 12px; }
+  .row span:first-child { font-size: 20px; }
   .b { height: 36px; border: 2px solid #d4d4d4; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: "DejaVu Sans Mono", monospace; font-size: 18px; }
   .b.on { background: #000; color: #fff; border-color: #000; }
   .track { position: relative; height: 6px; border-radius: 3px; background: #e5e5e5; }
@@ -30,17 +32,21 @@
   <div class="wrap">
     <div>
       <div class="brand">
-        <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"><path d="M4.5 11.5v5M7.5 8.5v11"/><path d="M10.5 14C14 14 14.5 6.5 18.5 6.5H20M10.5 14C14 14 14.5 11.5 18.5 11.5H20M10.5 14C14 14 14.5 16.5 18.5 16.5H20M10.5 14C14 14 14.5 21.5 18.5 21.5H20"/></g><g fill="#fff"><circle cx="22.5" cy="6.5" r="2"/><circle cx="22.5" cy="11.5" r="2"/><circle cx="22.5" cy="16.5" r="2"/><circle cx="22.5" cy="21.5" r="2"/></g></svg>
-        <h1>Band Stem<br />Mixer</h1>
+        <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-linecap="round" fill="none"><path stroke-width="2" d="M5 20.5h3M10.5 18.5h3M16 16h2.5M21 18h2"/><path stroke-width="3" d="M5 13h3M10.5 11h3M16 8.5h2.5M21 10.5h2"/></g></svg>
+        <h1>Vocal Harmony<br />Maker</h1>
       </div>
-      <p>Split a song into vocals, drums, bass, and other with AI, and practice along.</p>
-      <div class="url">ktkwmr.com/bandstemmixer</div>
+      <p>Add a harmony to any song, in the singer's own voice, and practice singing it.</p>
+      <div class="url">ktkwmr.com/vocalharmonymaker</div>
     </div>
     <div class="mixer">
+      <svg class="roll" viewBox="0 0 400 145" aria-hidden="true">
+        <g font-family="DejaVu Sans Mono, monospace" font-size="18" font-weight="700"><text x="4" y="20">Am</text><text x="104" y="20">F</text><text x="204" y="20">C</text><text x="304" y="20">G</text></g>
+        <line x1="0" y1="32" x2="400" y2="32" stroke="#e5e5e5" stroke-width="2"/>
+        <g fill="#000"><rect x="4" y="62" width="70" height="10" rx="2"/><rect x="80" y="52" width="40" height="10" rx="2"/><rect x="126" y="70" width="70" height="10" rx="2"/><rect x="204" y="58" width="60" height="10" rx="2"/><rect x="270" y="78" width="50" height="10" rx="2"/><rect x="326" y="66" width="70" height="10" rx="2"/></g>
+        <path d="M4 112c10-3 20 3 30 0s20 3 30 0 M80 102c10-3 20 3 30 0 M126 124c12-3 24 3 36 0s24 3 32 0 M204 108c10-3 20 3 30 0s20 3 28 0 M270 132c10-3 20 3 30 0 M326 118c12-3 24 3 36 0s24 3 32 0" fill="none" stroke="#a3a3a3" stroke-width="4" stroke-linecap="round"/>
+      </svg>
       <div class="row"><span>Vocals</span><span class="b">M</span><span class="b">S</span><span class="track"><i style="width:80%"></i></span></div>
-      <div class="row off"><span>Bass</span><span class="b on">M</span><span class="b">S</span><span class="track"><i style="width:70%"></i></span></div>
-      <div class="row"><span>Drums</span><span class="b">M</span><span class="b">S</span><span class="track"><i style="width:75%"></i></span></div>
-      <div class="row"><span>Other</span><span class="b">M</span><span class="b">S</span><span class="track"><i style="width:60%"></i></span></div>
+      <div class="row"><span>Harmony</span><span class="b">M</span><span class="b">S</span><span class="track"><i style="width:75%"></i></span></div>
     </div>
   </div>
 </body>

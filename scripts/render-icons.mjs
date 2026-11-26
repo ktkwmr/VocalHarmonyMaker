@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Renders public/bandstemmixer/icons/icon.svg to the PNG icons:
+// Renders public/vocalharmonymaker/icons/icon.svg to the PNG icons:
 //   icon-192.png, icon-512.png, apple-touch-icon.png (180, no transparency),
 //   icon-maskable-512.png (the mark inside the 80% safe zone on black).
 // Requires Playwright, as for scripts/render-og-image.mjs.
@@ -7,8 +7,11 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-const { chromium } = await import("playwright").catch(() => import("playwright-core"));
-const dir = new URL("../public/bandstemmixer/icons/", import.meta.url);
+import { createRequire } from "node:module";
+// require() (not import) so a globally installed Playwright is found too (WEBAPP_BASELINE.md §12-11)
+const requireCjs = createRequire(import.meta.url);
+const { chromium } = (() => { try { return requireCjs("playwright"); } catch (e) { return requireCjs("playwright-core"); } })();
+const dir = new URL("../public/vocalharmonymaker/icons/", import.meta.url);
 const svg = await readFile(new URL("icon.svg", dir), "utf8");
 const dataUrl = "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
 

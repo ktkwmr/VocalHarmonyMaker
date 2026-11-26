@@ -1,8 +1,8 @@
 // App screenshots in the articles (made by scripts/render-guide-images.mjs)
 import { readFileSync } from "node:fs";
 
-const IMAGES = new URL("../../public/bandstemmixer/images/guide/", import.meta.url);
-const SRC = "/bandstemmixer/images/guide/";
+const IMAGES = new URL("../../public/vocalharmonymaker/images/guide/", import.meta.url);
+const SRC = "/vocalharmonymaker/images/guide/";
 
 // Width and height from the PNG header, so the page reserves the right space before the image loads
 function size(file) {

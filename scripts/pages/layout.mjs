@@ -1,9 +1,9 @@
-// Shared HTML template for the guide and info pages (public/bandstemmixer/<slug>/ and ja/<slug>/).
+// Shared HTML template for the guide and info pages (public/vocalharmonymaker/<slug>/ and ja/<slug>/).
 // Used by scripts/build-pages.mjs.
 
 export const ORIGIN = "https://ktkwmr.com";
-export const APP_PATH = { en: "/bandstemmixer/", ja: "/bandstemmixer/ja/" };
-export const PUBLISHED = "2026-10-28";
+export const APP_PATH = { en: "/vocalharmonymaker/", ja: "/vocalharmonymaker/ja/" };
+export const PUBLISHED = "2026-11-25";
 
 export const pagePath = (lang, slug) => APP_PATH[lang] + slug + "/";
 
@@ -23,9 +23,9 @@ const UI = {
     openApp: "Open the app",
     other: { lang: "ja", label: "日本語" },
     guides: "Guides",
-    cta: "Split a song into parts and practice with your band",
-    ctaBody: "Separate vocals, drums, bass, and other with AI in your browser, then mute or solo each part. Free, no upload, no sign-up.",
-    footer: "Band Stem Mixer · © 2026 ktkwmr",
+    cta: "Add a harmony to a song and practice singing it",
+    ctaBody: "Separate the vocals with AI in your browser and add a harmony in the singer's own voice, with a guide tone to practice. Free, no upload, no sign-up.",
+    footer: "Vocal Harmony Maker · © 2026 ktkwmr",
     source: "Source code on GitHub",
     feedback: "Feedback",
     home: "More apps by ktkwmr",
@@ -36,9 +36,9 @@ const UI = {
     openApp: "アプリを開く",
     other: { lang: "en", label: "English" },
     guides: "ガイド",
-    cta: "曲をパートに分離してバンド練習に",
-    ctaBody: "ボーカル・ドラム・ベース・その他を AI でブラウザの中で分離し、パートごとにミュート・ソロできます。無料・アップロードなし・登録不要。",
-    footer: "Band Stem Mixer · © 2026 ktkwmr",
+    cta: "曲にハモリを付けて、ハモリの練習に",
+    ctaBody: "AI でボーカルを分離して、歌っている人の声のままのハモリと練習用のガイド音を作ります。無料・アップロードなし・登録不要。",
+    footer: "Vocal Harmony Maker · © 2026 ktkwmr",
     source: "GitHub のソースコード",
     feedback: "ご意見・ご質問",
     home: "ktkwmr のほかのアプリ",
@@ -47,7 +47,7 @@ const UI = {
 };
 
 const MARK =
-  '<svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"><path d="M4.5 11.5v5M7.5 8.5v11"/><path d="M10.5 14C14 14 14.5 6.5 18.5 6.5H20M10.5 14C14 14 14.5 11.5 18.5 11.5H20M10.5 14C14 14 14.5 16.5 18.5 16.5H20M10.5 14C14 14 14.5 21.5 18.5 21.5H20"/></g><g fill="#fff"><circle cx="22.5" cy="6.5" r="2"/><circle cx="22.5" cy="11.5" r="2"/><circle cx="22.5" cy="16.5" r="2"/><circle cx="22.5" cy="21.5" r="2"/></g></svg>';
+  '<svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/><g stroke="#fff" stroke-linecap="round" fill="none"><path stroke-width="2" d="M5 20.5h3M10.5 18.5h3M16 16h2.5M21 18h2"/><path stroke-width="3" d="M5 13h3M10.5 11h3M16 8.5h2.5M21 10.5h2"/></g></svg>';
 
 const CSS = `
     :root {
@@ -173,7 +173,7 @@ export function renderPage({ lang, page, pages, infoPages = [], body, jsonLd }) 
   const url = ORIGIN + pagePath(lang, page.slug);
   const enUrl = ORIGIN + pagePath("en", page.slug);
   const jaUrl = ORIGIN + pagePath("ja", page.slug);
-  const fullTitle = `${t.title} | Band Stem Mixer`;
+  const fullTitle = `${t.title} | Vocal Harmony Maker`;
 
   const nav = pages
     .map((p) => {
@@ -189,8 +189,8 @@ export function renderPage({ lang, page, pages, infoPages = [], body, jsonLd }) 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
-  <link rel="icon" type="image/svg+xml" href="/bandstemmixer/icons/icon.svg" />
-  <link rel="apple-touch-icon" href="/bandstemmixer/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="/vocalharmonymaker/icons/icon.svg" />
+  <link rel="apple-touch-icon" href="/vocalharmonymaker/icons/apple-touch-icon.png" />
   <title>${escapeHtml(fullTitle)}</title>
   <meta name="description" content="${escapeHtml(t.description)}" />
   <link rel="canonical" href="${url}" />
@@ -198,13 +198,13 @@ export function renderPage({ lang, page, pages, infoPages = [], body, jsonLd }) 
   <link rel="alternate" hreflang="ja" href="${jaUrl}" />
   <link rel="alternate" hreflang="x-default" href="${enUrl}" />
   <meta property="og:type" content="${page.info ? "website" : "article"}" />
-  <meta property="og:site_name" content="Band Stem Mixer" />
+  <meta property="og:site_name" content="Vocal Harmony Maker" />
   <meta property="og:title" content="${escapeHtml(t.title)}" />
   <meta property="og:description" content="${escapeHtml(t.description)}" />
   <meta property="og:locale" content="${ui.locale}" />
   <meta property="og:locale:alternate" content="${UI[otherLang].locale}" />
   <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${ORIGIN}/bandstemmixer/og-image.png" />
+  <meta property="og:image" content="${ORIGIN}/vocalharmonymaker/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -217,7 +217,7 @@ ${JSON.stringify(jsonLd, null, 2).replace(/</g, "\\u003c").replace(/^/gm, "  ")}
 <body>
   <header class="site-head">
     <div class="inner">
-      <a class="brand" href="${APP_PATH[lang]}">${MARK}<span>Band Stem Mixer</span></a>
+      <a class="brand" href="${APP_PATH[lang]}">${MARK}<span>Vocal Harmony Maker</span></a>
       <nav class="head-links" aria-label="${lang === "ja" ? "サイト" : "Site"}">
         <a class="lang" href="${pagePath(otherLang, page.slug)}" hreflang="${otherLang}" lang="${otherLang}">${ui.other.label}</a>
         <a class="btn" href="${APP_PATH[lang]}">${ui.openApp}</a>
@@ -246,8 +246,8 @@ ${nav}
 ` : ""}      <p class="meta">
         <span>${ui.footer}</span>
 ${infoPages.map((p) => `        <a href="${pagePath(lang, p.slug)}"${p.slug === page.slug ? ' aria-current="page"' : ""}>${escapeHtml(p[lang].nav)}</a>`).join("\n")}
-        <a href="https://github.com/ktkwmr/BandStemMixer" rel="noopener">${ui.source}</a>
-        <a href="https://github.com/ktkwmr/BandStemMixer/issues" rel="noopener">${ui.feedback}</a>
+        <a href="https://github.com/ktkwmr/VocalHarmonyMaker" rel="noopener">${ui.source}</a>
+        <a href="https://github.com/ktkwmr/VocalHarmonyMaker/issues" rel="noopener">${ui.feedback}</a>
         <a href="${ui.homeUrl}">${ui.home}</a>
       </p>
     </div>
