@@ -61,6 +61,7 @@
 | 9-12 | iOS 26 のステータスバーのにじみ | ⚠️ | Band Stem Mixer と同じ作り。iPhone 実機では未確認 |
 | 9-13 | 大きなダウンロードの前の通信の確認 | ✅ | |
 | 9-14〜9-16 | フッター・再生コントロール・自動スクロール | ✅ | Band Stem Mixer と同じ |
+| 9-18 | 関連アプリへのリンク | ✅ | メイン機能の下の `<nav class="related">` に 2 つ（定義は webapp-baseline の `related-apps.json`、文言は `I18N` の `rel.*`） |
 | 10-1〜10-5 | 記事 | ✅ | 5 本（`guide`・`harmony`・`chords-and-key`・`how-it-works`・`faq`） |
 | 10-7 | 記事の人間確認 | 👤 | `docs/article-review.md`。PR のプレビューで確認してからマージ |
 | 10-8 | 再生成できる画面写真と値 | ✅ | |
