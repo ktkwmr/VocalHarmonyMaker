@@ -59,7 +59,7 @@
 | 9-8・9-10・9-11 | アクセシビリティ・ボタンの反応・ダイアログ | ✅ | Band Stem Mixer と同じ |
 | 9-9 | 自動テスト | ⚠️ | `scripts/test/e2e.mjs`・`quality.mjs`（手で動かす。CI には入れていない） |
 | 9-12 | iOS 26 のステータスバーのにじみ | ⚠️ | Band Stem Mixer と同じ作り。iPhone 実機では未確認 |
-| 9-13 | 大きなダウンロードの前の通信の確認 | ✅ | |
+| 9-13 | 大きなダウンロードの前の通信の確認 | ✅ | モデルが保存済みなら案内の行（`modelBox`）を隠す |
 | 9-14〜9-16 | フッター・再生コントロール・自動スクロール | ✅ | Band Stem Mixer と同じ |
 | 9-18 | 関連アプリへのリンク | ✅ | メイン機能の下の `<nav class="related">` に 2 つ（定義は webapp-baseline の `related-apps.json`、文言は `I18N` の `rel.*`） |
 | 10-1〜10-5 | 記事 | ✅ | 5 本（`guide`・`harmony`・`chords-and-key`・`how-it-works`・`faq`） |
