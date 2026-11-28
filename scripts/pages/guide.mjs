@@ -43,13 +43,13 @@ export default {
   <li><b>Choose a song file</b> – Any format your browser can play: MP3, WAV, M4A (AAC), FLAC, Ogg, and others, and videos such as MP4 and MOV (their sound is used). Songs up to ${MAX_MIN} minutes (${MAX_MIN_LOW_MEM} minutes on phones and tablets, which have less memory). The file is read in your browser and never uploaded. <b>Separation starts as soon as you choose the file</b>; there is no button to press. To separate another song, choose another file.</li>
   <li><b>The song</b> – The file name, the length, and whether it is stereo or mono.</li>
   <li><b>Progress</b> – How far the separation is (in %) and about how long is left, with Cancel. The song is split into the vocals and the backing (everything else); then the chords and the harmony are made.</li>
-  <li><b>How it runs</b> – On the <b>GPU (WebGPU)</b> when the browser supports it, otherwise on the CPU. Above it, whether the AI model is already saved on this device.</li>
+  <li><b>How it runs</b> – On the <b>GPU (WebGPU)</b> when the browser supports it, otherwise on the CPU. Above it, before the first separation, the size of the AI model that will be downloaded (this line no longer appears once the model is saved on this device).</li>
 </ol>
 <p>On a recent computer it usually takes well under the length of the song; on a phone, longer.</p>
 <div class="note"><p>Keep the screen open until it finishes. On a phone, separation stops when the screen turns off or you switch to another app. If it stops with a memory error, the app tries again with settings that use less memory.</p></div>
 
 <h2 id="first">The first time: downloading the AI model</h2>
-<p>The first time you separate a song, the browser downloads the AI model (about ${MODEL_MB} MB, from this site) and the separation engine (about ${ENGINE_MB.cpu} MB, or ${ENGINE_MB.gpu} MB with the GPU). They are kept on your device, so the next time there is no download and the song panel says “The AI model is saved on this device”.</p>
+<p>The first time you separate a song, the browser downloads the AI model (about ${MODEL_MB} MB, from this site) and the separation engine (about ${ENGINE_MB.cpu} MB, or ${ENGINE_MB.gpu} MB with the GPU). They are kept on your device, so the next time there is no download.</p>
 <figure class="shot phone">
   ${img("en", "network", `On a phone, a dialog asks: Are you on Wi-Fi? This browser does not tell the app whether you are on Wi-Fi or mobile data. Download: about ${FIRST_MB} MB, only the first time. Buttons: Not now, and Download and separate.`, { half: true })}
   <figcaption>On a phone or tablet, the app asks before the first download.</figcaption>
@@ -180,13 +180,13 @@ export default {
   <li><b>曲のファイルを選ぶ</b> – MP3・WAV・M4A（AAC）・FLAC・Ogg など、ブラウザで再生できる形式と、MP4・MOV などの動画（音声を使います）に対応しています。曲の長さは ${MAX_MIN} 分まで（メモリの少ないスマホ・タブレットでは ${MAX_MIN_LOW_MEM} 分まで）。ファイルはブラウザの中で読み込み、アップロードしません。<b>ファイルを選ぶとすぐに分離が始まります</b>（押すボタンはありません）。別の曲にするときは、別のファイルを選びます。</li>
   <li><b>曲</b> – ファイル名、長さ、ステレオかモノラルか。</li>
   <li><b>進み具合</b> – 分離の進み具合（%）と残り時間の目安、キャンセル。曲をボーカルと伴奏（それ以外のすべて）に分け、続けてコードとハモリを作ります。</li>
-  <li><b>分離のしかた</b> – ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。その上に、AI モデルがこの端末に保存済みかどうかが出ます。</li>
+  <li><b>分離のしかた</b> – ブラウザが対応していれば <b>GPU（WebGPU）</b>、そうでなければ CPU で処理します。その上には、最初の分離の前に、ダウンロードする AI モデルの大きさが出ます（この端末に保存したあとは出ません）。</li>
 </ol>
 <p>最近のパソコンなら、たいてい曲の長さよりかなり短い時間で終わります。スマホではもっとかかります。</p>
 <div class="note"><p>終わるまで画面を開いたままにしてください。スマホでは、画面が消えたりほかのアプリに切り替えたりすると分離が止まります。メモリ不足で止まったときは、メモリを節約する設定で自動的にやり直します。</p></div>
 
 <h2 id="first">初回：AI モデルのダウンロード</h2>
-<p>初めて分離するときは、ブラウザが AI モデル（約 ${MODEL_MB} MB。このサイトから）と分離のプログラム（約 ${ENGINE_MB.cpu} MB、GPU を使うときは約 ${ENGINE_MB.gpu} MB）をダウンロードします。どちらも端末に保存するので、次からはダウンロードせず、曲の欄に「AI モデルはこの端末に保存済みです」と出ます。</p>
+<p>初めて分離するときは、ブラウザが AI モデル（約 ${MODEL_MB} MB。このサイトから）と分離のプログラム（約 ${ENGINE_MB.cpu} MB、GPU を使うときは約 ${ENGINE_MB.gpu} MB）をダウンロードします。どちらも端末に保存するので、次からはダウンロードしません。</p>
 <figure class="shot phone">
   ${img("ja", "network", `スマホで出る確認のダイアログ。「Wi-Fi に接続していますか？」このブラウザでは、Wi-Fi とモバイルデータ通信のどちらに接続しているかを確かめられません。ダウンロード：約 ${FIRST_MB} MB（初回だけ）。ボタンは「やめておく」と「ダウンロードして分離する」。`, { half: true })}
   <figcaption>スマホ・タブレットでは、初回のダウンロードの前に確認します。</figcaption>

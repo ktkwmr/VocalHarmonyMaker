@@ -54,7 +54,7 @@ await page.waitForSelector("#mixer.ghost");
 check(await page.evaluate(() => crossOriginIsolated), "cross-origin isolated");
 check((await page.$$("#strips .strip")).length === 4, "the demo shows 4 strips");
 await page.waitForFunction(() => /MB/.test(document.querySelector("#modelState").textContent));
-ok("model note: " + (await page.textContent("#modelState")));
+if (!(await page.isHidden("#modelBox"))) ok("model note: " + (await page.textContent("#modelState"))); else fail("model note hidden before the download");
 if (SHOTS) await page.screenshot({ path: join(SHOTS, "1-start.png") });
 
 // ---- Separate, chords, harmony
@@ -105,8 +105,7 @@ ok("remade the harmony 3rd below");
 
 // ---- Second visit: model cached, Service Worker in control
 await page.reload();
-await page.waitForFunction(() => /saved on this device/.test(document.querySelector("#modelState").textContent), null, { timeout: 20000 });
-ok("after reload: " + (await page.textContent("#modelState")));
+await page.waitForSelector("#modelBox", { state: "hidden", timeout: 20000 }).then(() => ok("after reload: no model note (model on this device)"), () => fail("model note shown with the model on this device"));
 check(await page.evaluate(() => !!navigator.serviceWorker.controller), "Service Worker in control");
 
 // ---- The Japanese page (workers and fetches resolved against <base>)
