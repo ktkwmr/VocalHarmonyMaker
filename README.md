@@ -37,10 +37,12 @@ The separation (`separator.js`, `dsp.js`, `scripts/fetch-model.mjs`) is copied f
 - The browser downloads the AI model from this site, and ONNX Runtime Web and (when saving) lamejs from **jsDelivr** (they receive the IP address and browser information, as with any download; nothing about the song).
 - Saved in the browser: the model, mixer settings, and the app files for offline use.
 - The site is hosted on Cloudflare (standard access logs). Page views are counted with Cloudflare Web Analytics, which uses no cookies.
+- Only if you choose “Accept all” in the cookie banner, Google Analytics (through Cloudflare Zaraz, sent from Cloudflare's servers with a shortened IP address) records how the app is used: pages viewed and for how long, buttons tapped and settings changed, playing time, the kind and length of the songs opened, how the separation went, and the harmony settings. File names, the music itself, and the chords are never sent. Change your choice from “Cookie settings” at the bottom of the page. See [docs/analytics.md](docs/analytics.md).
 - 曲の読み込み・分離・解析・再生はブラウザ内だけで行い、アップロードしません。アカウント・Cookie・マイクはありません。
 - ブラウザがこのサイトから AI モデルを、**jsDelivr** から ONNX Runtime Web と（保存するときは）lamejs をダウンロードします（IP アドレス等が届きます。曲の情報は送りません）。
 - ブラウザに保存するもの: AI モデル、ミキサーの設定、オフライン用のアプリのファイル。
 - サイトは Cloudflare で配信（標準的なアクセスログ）。閲覧数は Cookie を使わない Cloudflare Web Analytics で集計しています。
+- Cookie のバナーで「すべて同意」を選んだ場合に限り、Google アナリティクス（Cloudflare Zaraz 経由。Cloudflare のサーバーから IP アドレスの末尾を削って送信）でアプリの使われ方（見たページと時間、押したボタンと変えた設定、再生した時間、開いた曲の種類と長さ、分離の結果、ハモリの設定）を記録します。ファイル名・曲そのもの・コードは送りません。選択はページ下の「Cookie の設定」から変えられます。
 
 Full policy: `/vocalharmonymaker/privacy/` (`/vocalharmonymaker/ja/privacy/`). Operator: `/vocalharmonymaker/about/`.
 

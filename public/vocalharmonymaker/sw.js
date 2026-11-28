@@ -3,7 +3,7 @@
 const PREFIX = "vocalharmonymaker-";
 const CACHE = PREFIX + "cache";
 const CORE = ["./", "index.html", "ja/", "manifest.json", "THIRD_PARTY_LICENSES.md", "icons/icon.svg",
-  "separator.js", "dsp.js", "mixer.js", "harmony.js", "keyshift.js", "encoder.js"];
+  "separator.js", "dsp.js", "mixer.js", "harmony.js", "keyshift.js", "encoder.js", "usage-events.js"];
 // The AI model is kept by separator.js in its own cache (vocalharmonymaker-model-v2), which activate below leaves
 // alone; its files (models/) are not cached here a second time (WEBAPP_BASELINE.md §2-20).
 const KEEP = ["vocalharmonymaker-model-v2"];

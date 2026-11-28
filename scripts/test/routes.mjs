@@ -13,5 +13,7 @@ export async function routeCdn(context, ortDir, lameFile) {
     route.fulfill({ status: 200, body: readFileSync(file), headers: { "content-type": file.endsWith(".wasm") ? "application/wasm" : "text/javascript", ...CORS } });
   });
   await context.route(LAME_URL, (route) => route.fulfill({ status: 200, body: readFileSync(lameFile), headers: { "content-type": "text/javascript", ...CORS } }));
+  // Cloudflare Zaraz (analytics) is there only on the real site: a stand-in that keeps the events (docs/analytics.md)
+  await context.route("**/cdn-cgi/zaraz/i.js", (route) => route.fulfill({ status: 200, body: "window.__events = []; window.zaraz = { track(n, p) { window.__events.push([n, p]); }, showConsentModal() {} };", headers: { "content-type": "text/javascript" } }));
   await context.route("https://static.cloudflareinsights.com/**", (route) => route.fulfill({ status: 200, body: "", headers: { "content-type": "text/javascript", ...CORS } }));
 }

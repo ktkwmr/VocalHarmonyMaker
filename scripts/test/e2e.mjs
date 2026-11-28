@@ -65,6 +65,12 @@ const bpm = await page.textContent("#bpmVal");
 ok("tempo: " + bpm);
 check(!(await page.isHidden("#harmView")), "piano roll shown");
 check((await page.getAttribute("#harmBtn", "class")) === "chip", "harmony button is grey once made");
+{
+  // Usage events (Zaraz stand-in): open, separate, harmony; never the file name
+  const ev = await page.evaluate(() => window.__events || []);
+  const sep = ev.find(([n, p]) => n === "vhm_separate" && p.result === "ok"), harm = ev.find(([n]) => n === "vhm_harmony");
+  check(ev.some(([n, p]) => n === "vhm_open" && p.result === "ok") && sep && harm && harm[1].first === "yes" && !JSON.stringify(ev).includes("song.wav"), "usage events: open, separate, harmony", JSON.stringify(ev.filter(([n]) => n !== "vhm_tap")));
+}
 if (SHOTS) await page.screenshot({ path: join(SHOTS, "2-harmony.png") });
 
 // ---- Play (▶), pause (❚❚) keeps the position, stop (■) goes back to the start (WEBAPP_BASELINE §9-15)
