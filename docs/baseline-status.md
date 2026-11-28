@@ -68,6 +68,7 @@
 | 10-9 | 一般知識の校閲 | ✅ | `docs/article-review.md` の表 |
 | 11-1〜11-3 | Web Analytics | ✅ | |
 | 11-4 | beacon の本番確認 | 👤 | |
+| 17 | Zaraz + GA4（同意したときだけ） | ⚠️ | 2026-11-28 に実装（`docs/analytics.md`）。本番での確認・Configuration Rule の削除（17-13）・GA4 のカスタム定義の登録は 👤 待ち |
 | 12-1・12-2 | Actions | ✅ | |
 | 12-12 | Artifact で見せる | ✅ | 上の URL |
 | 12-13 | 人間がやる動作確認の方法 | ✅ | PR 本文 |

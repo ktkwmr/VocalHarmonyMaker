@@ -264,6 +264,9 @@
     @media (hover: hover) { .related a:hover { border-color: var(--ink); background: var(--hover-fill); } }
     @media (prefers-reduced-motion: reduce) { .related a { transition: none; } .related a:active { transform: none; } }
 </style>
+  <!-- Usage analytics: Cloudflare Zaraz → Google Analytics 4, only after consent (see usage-events.js) -->
+  <script src="/cdn-cgi/zaraz/i.js" referrerpolicy="origin"></script>
+  <script src="/vocalharmonymaker/usage-events.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -398,6 +401,7 @@
       <p class="meta" data-i18n-html="foot.meta"><span>Vocal Harmony Maker · © 2026 ktkwmr</span>
 <a href="/vocalharmonymaker/privacy/" target="_blank" rel="noopener">Privacy policy</a>
 <a href="/vocalharmonymaker/about/" target="_blank" rel="noopener">About this site</a>
+<a href="#" class="cookie-settings">Cookie settings</a>
 <a href="https://github.com/ktkwmr/VocalHarmonyMaker" target="_blank" rel="noopener">Source code on GitHub</a>
 <a href="https://github.com/ktkwmr/VocalHarmonyMaker/issues" target="_blank" rel="noopener">Feedback</a>
 <a href="https://ktkwmr.com/" target="_blank" rel="noopener">More apps by ktkwmr</a></p>
@@ -441,8 +445,10 @@
 <li><b>Downloads</b> – To separate, your browser downloads the AI model from this site and the ONNX Runtime library (and, when you save, the lamejs MP3 encoder) from jsDelivr (a CDN). Like any download, they receive your IP address and browser information. Nothing about your song is sent.</li>
 <li><b>Data saved in your browser</b> – The AI model (so it is downloaded only once), the mixer settings (fader levels, mute, master volume), and the app itself (to work offline) are saved in your browser. Reset the mixer with “Reset mixer”, delete the model with ⚙ → “Delete the AI model”, or clear this site's data in your browser settings.</li>
 <li><b>Server logs and page views</b> – This site is hosted on Cloudflare. Standard access logs (such as IP address, time, and the requested page) are kept for operation and security. Cloudflare Web Analytics counts page views without cookies (the page URL, referrer, browser information, and page load time).</li>
+<li><b>Google Analytics, only if you agree</b> – Only if you choose “Accept all” in the cookie banner, Google Analytics (through Cloudflare Zaraz, sent from Cloudflare's servers with a shortened IP address) records how the app is used: pages viewed and for how long, buttons tapped and settings changed, playing time, the kind and length of the songs opened, how the separation went, and the harmony settings. File names, the music itself, and the chords are never sent. Change your choice from “Cookie settings” at the bottom of the page.</li>
 <li><b>Contact</b> – Questions and feedback: <a href="https://github.com/ktkwmr/VocalHarmonyMaker/issues" target="_blank" rel="noopener">GitHub Issues</a>.</li>
-<li><b>Full policy</b> – See the <a href="/vocalharmonymaker/privacy/" target="_blank" rel="noopener">privacy policy</a> and <a href="/vocalharmonymaker/about/" target="_blank" rel="noopener">about this site</a>.</li></ul>
+<li><b>Full policy</b> – See the <a href="/vocalharmonymaker/privacy/" target="_blank" rel="noopener">privacy policy</a> and <a href="/vocalharmonymaker/about/" target="_blank" rel="noopener">about this site</a>.</li>
+</ul>
     </div>
     <div class="dlg-actions">
       <button class="primary" id="privacyClose" type="button" data-i18n="close">Close</button>
@@ -630,10 +636,10 @@
           "rel.2.text": "Warm up before you harmonize",
           "rel.2.href": "/vocalladder/",
           "home.url": "https://ktkwmr.com/",
-          "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>\n<a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">About this site</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">Source code on GitHub</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">Feedback</a>\n<a href=\"https://ktkwmr.com/\" target=\"_blank\" rel=\"noopener\">More apps by ktkwmr</a>",
+          "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>\n<a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">About this site</a>\n<a href=\"#\" class=\"cookie-settings\">Cookie settings</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">Source code on GitHub</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">Feedback</a>\n<a href=\"https://ktkwmr.com/\" target=\"_blank\" rel=\"noopener\">More apps by ktkwmr</a>",
           "menu.model": "Delete the AI model",
           "help.body": "<li><b>Choose a song</b> – Tap the box and choose an audio or video file, or drop it on the box. MP3, WAV, M4A (AAC), FLAC, MP4 and MOV videos (their sound is used), and most formats your browser can play work, up to 12 minutes.</li>\n<li><b>Separate</b> – Separation starts as soon as the file is read. The first time, the AI model (about 75 MB) is downloaded and kept on your device. If you are not on Wi-Fi, the app asks first. The bar shows how far it is and about how long is left.</li>\n<li><b>Harmony</b> – Right after separating, the app finds the key and chords and makes a harmony a 3rd or a 5th above (or below) the vocal melody: the part chosen in the menu (3rd above at first). To change the part, choose it and press “Remake the harmony”. If it could not be made, press “Find chords &amp; make harmony”. “Harmony (voice)” is the vocals shifted to the harmony notes and pitch-corrected (like Auto-Tune); “Harmony guide tone” plays the same notes as a plain tone, to practice singing the harmony.</li>\n<li><b>Chords</b> – The tempo (BPM) and the beats are found too, and each beat (quarter note) can have its own chord: tap a beat in the chord row and type a chord (it lasts until the next chord; bars like | C | G | Am | F | fill the beats from there), then press “Remake the harmony” to use your chords. Drag the chords and notes sideways to look ahead or back. Everything is estimated automatically and can be wrong.</li>\n<li><b>Mix</b> – Play, then use each part's fader. <b>M</b> mutes a part; <b>S</b> plays only the parts with S on. To practice the harmony, mute “Harmony (voice)” and sing it with the guide tone.</li>\n<li><b>Key</b> – − / + moves every part up or down a semitone (up to an octave), with the chords and the harmony.</li>\n<li><b>Save</b> – The ↓ button on each part saves that part as an MP3 file. “Save this mix (MP3)” saves what you hear now (faders, mute, and solo).</li>\n<li><b>Good to know</b> – The parts are not saved in the app: when you reload or choose another song, separate again or use the MP3 files you saved. A computer is faster than a phone. Keep the screen on while separating.</li>\n<li><b>Use songs you may use</b> – Use your own recordings, or songs you have the rights to use. Do not publish separated or harmonized versions of songs by others without permission.</li>",
-          "privacy.body": "<li><b>Your song stays on your device</b> – The audio file you choose is read, separated, and analyzed (chords, harmony, key change) only in your browser. It is never sent to a server. Saving MP3 files only saves them on your device. This app has no accounts and does not use cookies or the microphone.</li>\n<li><b>Downloads</b> – To separate, your browser downloads the AI model from this site and the ONNX Runtime library (and, when you save, the lamejs MP3 encoder) from jsDelivr (a CDN). Like any download, they receive your IP address and browser information. Nothing about your song is sent.</li>\n<li><b>Data saved in your browser</b> – The AI model (so it is downloaded only once), the mixer settings (fader levels, mute, master volume), and the app itself (to work offline) are saved in your browser. Reset the mixer with “Reset mixer”, delete the model with ⚙ → “Delete the AI model”, or clear this site's data in your browser settings.</li>\n<li><b>Server logs and page views</b> – This site is hosted on Cloudflare. Standard access logs (such as IP address, time, and the requested page) are kept for operation and security. Cloudflare Web Analytics counts page views without cookies (the page URL, referrer, browser information, and page load time).</li>\n<li><b>Contact</b> – Questions and feedback: <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a>.</li>\n<li><b>Full policy</b> – See the <a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">privacy policy</a> and <a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">about this site</a>.</li>",
+          "privacy.body": "<li><b>Your song stays on your device</b> – The audio file you choose is read, separated, and analyzed (chords, harmony, key change) only in your browser. It is never sent to a server. Saving MP3 files only saves them on your device. This app has no accounts and does not use cookies or the microphone.</li>\n<li><b>Downloads</b> – To separate, your browser downloads the AI model from this site and the ONNX Runtime library (and, when you save, the lamejs MP3 encoder) from jsDelivr (a CDN). Like any download, they receive your IP address and browser information. Nothing about your song is sent.</li>\n<li><b>Data saved in your browser</b> – The AI model (so it is downloaded only once), the mixer settings (fader levels, mute, master volume), and the app itself (to work offline) are saved in your browser. Reset the mixer with “Reset mixer”, delete the model with ⚙ → “Delete the AI model”, or clear this site's data in your browser settings.</li>\n<li><b>Server logs and page views</b> – This site is hosted on Cloudflare. Standard access logs (such as IP address, time, and the requested page) are kept for operation and security. Cloudflare Web Analytics counts page views without cookies (the page URL, referrer, browser information, and page load time).</li>\n<li><b>Google Analytics, only if you agree</b> – Only if you choose “Accept all” in the cookie banner, Google Analytics (through Cloudflare Zaraz, sent from Cloudflare's servers with a shortened IP address) records how the app is used: pages viewed and for how long, buttons tapped and settings changed, playing time, the kind and length of the songs opened, how the separation went, and the harmony settings. File names, the music itself, and the chords are never sent. Change your choice from “Cookie settings” at the bottom of the page.</li>\n<li><b>Contact</b> – Questions and feedback: <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a>.</li>\n<li><b>Full policy</b> – See the <a href=\"/vocalharmonymaker/privacy/\" target=\"_blank\" rel=\"noopener\">privacy policy</a> and <a href=\"/vocalharmonymaker/about/\" target=\"_blank\" rel=\"noopener\">about this site</a>.</li>",
           "model.del.title": "Delete the AI model?",
           "model.del.body": "This deletes the AI model (about 75 MB) saved in this browser, to free up space. It is downloaded again the next time you separate a song.",
           "model.del.ok": "Delete",
@@ -774,10 +780,10 @@
           "rel.2.text": "ハモる前に発声練習",
           "rel.2.href": "/vocalladder/ja/",
           "home.url": "https://ktkwmr.com/ja/",
-          "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>\n<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">GitHub のソースコード</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">フィードバック</a>\n<a href=\"https://ktkwmr.com/ja/\" target=\"_blank\" rel=\"noopener\">ktkwmr のほかのアプリ</a>",
+          "foot.meta": "<span>Vocal Harmony Maker · © 2026 ktkwmr</span>\n<a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>\n<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>\n<a href=\"#\" class=\"cookie-settings\">Cookie の設定</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker\" target=\"_blank\" rel=\"noopener\">GitHub のソースコード</a>\n<a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">フィードバック</a>\n<a href=\"https://ktkwmr.com/ja/\" target=\"_blank\" rel=\"noopener\">ktkwmr のほかのアプリ</a>",
           "menu.model": "AI モデルを削除",
           "help.body": "<li><b>曲を選ぶ</b> – 枠をタップして音声ファイルを選ぶか、枠にドロップします。MP3・WAV・M4A（AAC）・FLAC など、ブラウザで再生できる形式の 12 分までの曲に対応しています。</li>\n<li><b>分離する</b> – ファイルを読み込むと、すぐに分離が始まります。初回は AI モデル（約 75 MB）をダウンロードして端末に保存します。Wi-Fi でないときは先に確認します。バーに進み具合と残り時間の目安が出ます。</li>\n<li><b>ハモリ</b> – 分離が終わると続けて、キーとコードを推定し、メニューで選んだパート（最初は 3 度上）のハモリを作ります。パートを変えたら「ハモリを再生成」を押してください。作れなかったときは「コード推定＆ハモリ生成」を押します。「ハモリ（声）」はボーカルの音程をハモリの音に変えて音程補正（Auto-Tune のような）をかけたもの、「ハモリのガイド音」は同じ音を単純な音で鳴らすもので、ハモリを歌う練習に使えます。</li>\n<li><b>コード</b> – テンポ（BPM）と拍も推定し、拍（4 分音符）ごとにコードを持てます。上の段（コード）の拍をタップしてコード名を入力すると、次のコードまでそのコードになります（| C | G | Am | F | のように小節で書くと、その拍から流し込みます）。「ハモリを再生成」で入力したコードを使います。コードと音符は横にドラッグして先や前を見られます。どれも自動の推定なので、間違うこともあります。</li>\n<li><b>ミックス</b> – 再生して、パートごとのフェーダーを動かします。<b>M</b> でミュート、<b>S</b> を押したパートだけを鳴らします。ハモリを練習するときは「ハモリ（声）」をミュートして、ガイド音に合わせて歌ってみてください。</li>\n<li><b>キー</b> – − / + で全パートを半音ずつ（1 オクターブまで）上げ下げします。コードとハモリも一緒に変わります。</li>\n<li><b>保存</b> – 各パートの ↓ ボタンでそのパートを MP3 で保存します。「このミックスを保存（MP3）」は、いま聞こえている状態（フェーダー・ミュート・ソロ）で保存します。</li>\n<li><b>知っておくこと</b> – 分離したパートはアプリに保存されません。再読み込みしたり別の曲を選んだりしたら、もう一度分離するか、保存した MP3 を使ってください。スマホよりパソコンのほうが速く終わります。分離中は画面を消さないでください。</li>\n<li><b>使ってよい曲で</b> – 自分の録音や、使う権利のある曲でお使いください。他人の曲を分離・ハモリを付けたものを、許可なく公開しないでください。</li>",
-          "privacy.body": "<li><b>曲は端末の中だけ</b> – 選んだ音声ファイルの読み込み・分離・解析（コード・ハモリ・キーの変更）は、ブラウザの中だけで行います。サーバーには送りません。MP3 の保存も端末に保存するだけです。アカウントはなく、Cookie とマイクも使いません。</li>\n<li><b>ダウンロード</b> – 分離のために、ブラウザがこのサイトから AI モデルを、jsDelivr（CDN）から ONNX Runtime のライブラリ（保存するときは MP3 を作る lamejs も）をダウンロードします。通常のダウンロードと同じく、IP アドレスとブラウザの情報が相手に届きます。曲の情報は送りません。</li>\n<li><b>ブラウザに保存するもの</b> – AI モデル（ダウンロードを 1 回で済ませるため）、ミキサーの設定（フェーダー・ミュート・全体の音量）、オフラインで使うためのアプリ本体。ミキサーは「ミキサーを元に戻す」、モデルは ⚙ →「AI モデルを削除」で消せます。ブラウザの設定でこのサイトのデータを消すこともできます。</li>\n<li><b>サーバーのログとアクセス数</b> – このサイトは Cloudflare で配信しています。運用とセキュリティのため、標準的なアクセスログ（IP アドレス・日時・ページなど）が残ります。閲覧数は Cookie を使わない Cloudflare Web Analytics で数えています（ページの URL・参照元・ブラウザの情報・読み込み時間）。</li>\n<li><b>お問い合わせ</b> – ご質問・ご意見は <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a> へ。</li>\n<li><b>詳しくは</b> – <a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>と<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>をご覧ください。</li>",
+          "privacy.body": "<li><b>曲は端末の中だけ</b> – 選んだ音声ファイルの読み込み・分離・解析（コード・ハモリ・キーの変更）は、ブラウザの中だけで行います。サーバーには送りません。MP3 の保存も端末に保存するだけです。アカウントはなく、Cookie とマイクも使いません。</li>\n<li><b>ダウンロード</b> – 分離のために、ブラウザがこのサイトから AI モデルを、jsDelivr（CDN）から ONNX Runtime のライブラリ（保存するときは MP3 を作る lamejs も）をダウンロードします。通常のダウンロードと同じく、IP アドレスとブラウザの情報が相手に届きます。曲の情報は送りません。</li>\n<li><b>ブラウザに保存するもの</b> – AI モデル（ダウンロードを 1 回で済ませるため）、ミキサーの設定（フェーダー・ミュート・全体の音量）、オフラインで使うためのアプリ本体。ミキサーは「ミキサーを元に戻す」、モデルは ⚙ →「AI モデルを削除」で消せます。ブラウザの設定でこのサイトのデータを消すこともできます。</li>\n<li><b>サーバーのログとアクセス数</b> – このサイトは Cloudflare で配信しています。運用とセキュリティのため、標準的なアクセスログ（IP アドレス・日時・ページなど）が残ります。閲覧数は Cookie を使わない Cloudflare Web Analytics で数えています（ページの URL・参照元・ブラウザの情報・読み込み時間）。</li>\n<li><b>同意した場合のみ Google アナリティクス</b> – Cookie のバナーで「すべて同意」を選んだ場合に限り、Google アナリティクス（Cloudflare Zaraz 経由。Cloudflare のサーバーから IP アドレスの末尾を削って送信）でアプリの使われ方（見たページと時間、押したボタンと変えた設定、再生した時間、開いた曲の種類と長さ、分離の結果、ハモリの設定）を記録します。ファイル名・曲そのもの・コードは送りません。選択はページ下の「Cookie の設定」から変えられます。</li>\n<li><b>お問い合わせ</b> – ご質問・ご意見は <a href=\"https://github.com/ktkwmr/VocalHarmonyMaker/issues\" target=\"_blank\" rel=\"noopener\">GitHub Issues</a> へ。</li>\n<li><b>詳しくは</b> – <a href=\"/vocalharmonymaker/ja/privacy/\" target=\"_blank\" rel=\"noopener\">プライバシーポリシー</a>と<a href=\"/vocalharmonymaker/ja/about/\" target=\"_blank\" rel=\"noopener\">運営者情報</a>をご覧ください。</li>",
           "model.del.title": "AI モデルを削除しますか？",
           "model.del.body": "このブラウザに保存した AI モデル（約 75 MB）を削除して、容量を空けます。次に分離するときに、もう一度ダウンロードします。",
           "model.del.ok": "削除する",
@@ -1002,6 +1008,11 @@
         return { left: left, right: right, duration: buf.duration, channels: buf.numberOfChannels, rate: buf.sampleRate };
       }
 
+      // ---------- Usage events (usage-events.js: Cloudflare Zaraz → GA4, only after consent) ----------
+      // Never the file name, the sound, the melody, or the chords typed: only kinds, lengths, counts, and results
+      function track(name, params) { try { if (window.usage) window.usage.track(name, params); } catch (e) {} }
+      const extOf = (f) => ((/\.([a-z0-9]{1,8})$/i.exec((f && f.name) || "") || [, "other"])[1]).toLowerCase();
+      const minutesOf = (sec) => Math.round(sec / 6) / 10;
       async function chooseFile(f) {
         if (!f) return;
         if (busy) return;
@@ -1018,8 +1029,10 @@
           $("songMeta").textContent = t("file.meta", { time: fmtTime(d.duration), ch: t(d.channels > 1 ? "file.stereo" : "file.mono") });
           if (d.duration > (LOW_MEM ? MAX_SEC_LOW_MEM : MAX_SEC)) {
             showError(t("err.tooLong", { time: fmtTime(d.duration), max: (LOW_MEM ? MAX_SEC_LOW_MEM : MAX_SEC) / 60 }));
+            track("open", { kind: extOf(f), result: "too-long", minutes: minutesOf(d.duration) });
             return;
           }
+          track("open", { kind: extOf(f), result: "ok", minutes: minutesOf(d.duration) });
           mix = d;
           fileOk = true;
           songSec = d.duration;
@@ -1029,6 +1042,7 @@
           if (file !== f) return;
           $("songMeta").textContent = "";
           showError(t("err.decode"));
+          track("open", { kind: extOf(f), result: "decode-error" });
         }
       }
 
@@ -1148,8 +1162,9 @@
         if (!fileOk || busy) return;
         showError("");
         await checkModel();
-        if (!modelCached && navigator.onLine === false) { showError(t("err.offline")); return; }
-        if (!(await askNetwork())) { showError(t("net.later.note")); return; }
+        if (!modelCached && navigator.onLine === false) { showError(t("err.offline")); track("separate", { result: "offline" }); return; }
+        if (!(await askNetwork())) { showError(t("net.later.note")); track("separate", { result: "later" }); return; }
+        sepInfo = { cached: modelCached ? "yes" : "no", tries: 0, backend: "" };
         stopPlayback();
         releaseStems();
         setBusy(true);
@@ -1190,10 +1205,13 @@
         return left.length ? left : [LADDER[LADDER.length - 1]];
       }
       let runMode = "";
+      let sepInfo = { cached: "", tries: 0, backend: "" };
+      const sepDone = (result, extra) => track("separate", Object.assign({ result: result, mode: runMode, backend: sepInfo.backend, tries: sepInfo.tries, model_cached: sepInfo.cached, seconds: Math.round((Date.now() - startedAt) / 1000), minutes: minutesOf(songSec || 0) }, extra || {}));
 
       function attempt(mode, rest) {
         const opts = MODES[mode];
         runMode = mode;
+        sepInfo.tries++;
         recordRun({ stage: "download" });
         try {
           worker = new Worker("separator.js", { type: "module" });
@@ -1206,12 +1224,14 @@
           const m = e.data;
           if (m.type === "progress") onProgress(m);
           else if (m.type === "backend") {
+            sepInfo.backend = m.name === "webgpu" ? "webgpu" : "wasm" + (m.threads || 1) + (m.safe ? "-safe" : "");
             $("backend").textContent = t("backend.used", { name: m.name === "webgpu" ? t("backend.webgpu") : m.safe ? t("backend.safe", { n: m.threads }) : m.threads > 1 ? t("backend.wasm", { n: m.threads }) : t("backend.wasm1") });
             $("backend").hidden = false;
             checkModel();
           } else if (m.type === "done") {
             stopWorker();
             setBusy(false);
+            sepDone("ok");
             toast(t("done", { time: fmtTime((Date.now() - startedAt) / 1000) }));
             loadStems(m.stems);
             // Then the chords and the harmony at once, with the part chosen in the menu (3rd above by default)
@@ -1225,6 +1245,7 @@
               return;
             }
             setBusy(false);
+            sepDone(m.code || "error", { stage: m.stage || "separate" });
             const where = t("where." + (m.stage || "separate"));
             const key = "err." + m.code;
             showError(I18N.en[key] ? t(key, { msg: m.message, where: where }) : t("err.run", { msg: m.message, where: where }));
@@ -1235,6 +1256,7 @@
           stopWorker();
           setBusy(false);
           showError(t("err.worker"));
+          sepDone("worker");
           console.error("Separation worker error", e);
           if (e && e.preventDefault) e.preventDefault();
         };
@@ -1259,6 +1281,7 @@
         return decode(file);
       }
       $("cancelBtn").addEventListener("click", function () {
+        if (busy) sepDone("cancel");
         stopWorker();
         setBusy(false);
         toast(t("canceled"));
@@ -1400,6 +1423,7 @@
       }
 
       function setPlaying(on) {
+        if (on !== playing) { try { if (window.usage) window.usage.playing(on); } catch (e) {} }
         playing = on;
         // toggleAttribute: SVG elements have no .hidden property (setting it does nothing)
         $("playIcon").toggleAttribute("hidden", on);
@@ -1628,7 +1652,9 @@
           }
           const blob = await encodeMp3(pcm.left, pcm.right, key === "mix");
           await saveBlob((baseName() + " - " + label + keyNote).replace(/[\\/:*?"<>|]+/g, "_") + ".mp3", blob);
+          track("mp3", { part: key, result: "ok", semis: semis, minutes: minutesOf(pcm.left.length / SR) });
         } catch (e) {
+          track("mp3", { part: key, result: "error" });
           console.error("MP3 export failed", e);
           toast(t("err.save"));
         } finally {
@@ -1709,7 +1735,7 @@
       function rebuild() {
         if (!orig) return;
         cancelJobs();
-        const id = jobId, target = semis, makeNew = wantHarm;
+        const id = jobId, target = semis, makeNew = wantHarm, harmFirst = !harm;
         const tasks = [], done = {};
         let stage = null;
         const show = function () {
@@ -1758,6 +1784,9 @@
           if (parts) shifted = { semis: target, parts: parts };
           applyStems();
           if (makeNew) {
+            // first: right after the separation (no chords yet) or "Remake the harmony"
+            if (made) track("harmony", { first: harmFirst ? "yes" : "no", dir: made.dir, interval: made.interval, semis: target, edited: made.edited ? "yes" : "no", notes: made.notes.length, bpm: Math.round(made.bpm || 0), key_minor: made.key && made.key.minor ? "yes" : "no" });
+            else track("harmony", { result: "error" });
             wantHarm = false;
             toast(made && made.notes.length ? t("harm.done") : t("harm.none"));
           } else if (parts) {
@@ -2048,6 +2077,8 @@
           harm.edited = true;
           harm.stale = true;
         }
+        // The chords typed are not sent: only that they were edited and how
+        track("chord_edit", { changed: changed ? "yes" : "no", chords: r.until ? 1 : r.list ? r.list.length : 0 });
         chordDlg.close();
       }
       $("chordOk").addEventListener("click", applyChordText);
